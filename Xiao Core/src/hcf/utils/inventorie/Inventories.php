@@ -63,7 +63,7 @@ final class Inventories
 
     public static array $players = [];
 
-    public function openBountyMenu(Player $player): void {
+    public static function BountyMenu(Player $player): void {
         $menu = InvMenu::create(InvMenu::TYPE_DOUBLE_CHEST);
         $inventory = $menu->getInventory();
 

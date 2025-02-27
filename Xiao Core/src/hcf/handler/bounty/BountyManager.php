@@ -2,6 +2,8 @@
 
 namespace hcf\handler\bounty;
 
+use hcf\handler\bounty\commands\BountyCommand;
+use hcf\handler\bounty\commands\SetBountyCommand;
 use hcf\Loader;
 use hcf\player\Player;
 use pocketmine\utils\Config;
@@ -12,7 +14,11 @@ class BountyManager {
     public $trackedBounties;
 
     public function __construct() {
-        $this->bounties = new Config(Loader::getInstance()->getDataFolder(). "bounties.json", Config::JSON);
+        $this->bounties = new Config(Loader::getInstance()->getDataFolder(). "bountys.json", Config::JSON);
+        Loader::getInstance()->getServer()->getCommandMap()->registerAll("bountys", [
+            new BountyCommand(),
+            new SetBountyCommand(),
+        ]);
     }
 
     /**
@@ -22,7 +28,7 @@ class BountyManager {
      * @return void
      * @throws \JsonException
      */
-    public function setBounty(string $target, string $player, int $amount) {
+    public function addBounty(string $target, string $player, int $amount) {
         if ($this->bounties->exists($target)) return;
         $data = [
             "Player" => $player,
