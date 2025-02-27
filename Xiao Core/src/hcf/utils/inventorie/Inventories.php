@@ -84,13 +84,15 @@ final class Inventories
             $inventory->setItem($slot++, $paper);
         }
 
-        $menu->setListener(function (InvMenuTransaction $transaction) use ($target): InvMenuTransactionResult {
+        $menu->setListener(function (InvMenuTransaction $transaction) use ($bounties): InvMenuTransactionResult {
             $item = $transaction->getItemClicked();
             $player = $transaction->getPlayer();
 
-            if($target !== "") {
-                Loader::getInstance()->getBountyManager()->trackBounty($player, $target);
-                $player->sendMessage(TextFormat::colorize("&aBounty is activated"));
+            foreach ($bounties as $target => $data) {
+                if ($target !== "" && $target instanceof Player && $player instanceof Player) {
+                    Loader::getInstance()->getBountyManager()->trackBounty($player, $target);
+                    $player->sendMessage(TextFormat::colorize("&aBounty is activated"));
+                }
             }
 
             return $transaction->discard();
