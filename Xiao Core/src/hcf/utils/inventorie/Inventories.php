@@ -63,16 +63,40 @@ final class Inventories
 
     public static array $players = [];
 
-    public static array $bountis = [];
-
-    public static function DailyMenu(Player $player): void
-    {
+    public function openBountyMenu(Player $player): void {
         $menu = InvMenu::create(InvMenu::TYPE_DOUBLE_CHEST);
-        $daily1 = VanillaItems::DYE()->setColor(DyeColor::GREEN())->setCustomName(TE::colorize("&aDaily 1"));
-        $daily2 = VanillaItems::DYE()->setColor(DyeColor::GREEN())->setCustomName(TE::colorize("&cDaily 2"));
-        $daily3 = VanillaItems::DYE()->setColor(DyeColor::GREEN())->setCustomName(TE::colorize("&bDaily 3"));
-        $daily4 = VanillaItems::DYE()->setColor(DyeColor::GREEN())->setCustomName(TE::colorize("&dDaily 4"));
-        $daily5 = VanillaItems::DYE()->setColor(DyeColor::GREEN())->setCustomName(TE::colorize("&9Daily 5"));
+        $inventory = $menu->getInventory();
+
+        $bounties = Loader::getInstance()->getBountyManager()->getAllBountys();
+        $slot = 0;
+
+        foreach($bounties as $target => $data) {
+            $paper = VanillaItems::PAPER();
+            $paper->setCustomName(TextFormat::colorize("&r&l&6" . $target));
+
+            $paper->setLore([
+                TextFormat::colorize("&r&7▶ &aBounty Amount: &f$" . $data["Amount"]),
+                TextFormat::colorize("&r&7▶ &aSet by: &f" . $data["Player"]),
+                "",
+                TextFormat::colorize("&r&7Click to track this bounty")
+            ]);
+
+            $inventory->setItem($slot++, $paper);
+        }
+
+        $menu->setListener(function (InvMenuTransaction $transaction) use ($target): InvMenuTransactionResult {
+            $item = $transaction->getItemClicked();
+            $player = $transaction->getPlayer();
+
+            if($target !== "") {
+                Loader::getInstance()->getBountyManager()->trackBounty($player, $target);
+                $player->sendMessage(TextFormat::colorize("&aBounty is activated"));
+            }
+
+            return $transaction->discard();
+        });
+
+        $menu->send($player, TextFormat::colorize("&l&aBounties"));
     }
 
     public static function createCrateContent(Player $player, array $data): void

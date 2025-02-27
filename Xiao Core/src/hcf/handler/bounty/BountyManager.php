@@ -9,6 +9,7 @@ use pocketmine\utils\TextFormat;
 
 class BountyManager {
     private Config $bounties;
+    public $trackedBounties;
 
     public function __construct() {
         $this->bounties = new Config(Loader::getInstance()->getDataFolder(). "bounties.json", Config::JSON);
@@ -73,5 +74,36 @@ class BountyManager {
             return false;
         }
         return true;
+    }
+
+    public function trackBounty(Player $player, Player $target)
+    {
+        if (!$this->hasBounty($target->getName())) {
+            $player->sendMessage(TextFormat::colorize("&cThis player doesn't have a bounty"));
+            return;
+        }
+
+        $this->trackedBounties[$player->getName()] = [
+            "target" => $target->getName(),
+            "amount" => $this->bounties->get($target->getName())["Amount"]
+        ];
+
+        $player->sendMessage(TextFormat::colorize("&aYou are now tracking " . $target->getName()));
+    }
+
+    public function getAllBountys(): array {
+        $bounties = $this->bounties->getAll();
+        $formattedBounties = [];
+
+        foreach ($bounties as $target => $data) {
+            if (isset($data["Player"]) && isset($data["Amount"])) {
+                $formattedBounties[$target] = [
+                    "Player" => $data["Player"],
+                    "Amount" => $data["Amount"]
+                ];
+            }
+        }
+
+        return $formattedBounties;
     }
 }
