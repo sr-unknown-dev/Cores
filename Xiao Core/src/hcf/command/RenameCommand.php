@@ -42,18 +42,42 @@ class RenameCommand extends Command
             return;
         
         if (count($args) < 1) {
-            $sender->sendMessage(TextFormat::colorize('&cUse /rename [name]'));
+            $sender->sendMessage(TextFormat::colorize('&cUse: /rename <name>'));
             return;
         }
-        $item = clone $sender->getInventory()->getItemInHand();
+
         $name = implode(' ', $args);
         
-        if (!$item instanceof Tool && !$item instanceof Armor) {
-            $sender->sendMessage(TextFormat::colorize('You have no armor and no tools in your hand'));
+        if (strtolower(end($args)) === "all") {
+            $name = implode(' ', array_slice($args, 0, -1));
+            $count = 0;
+            
+            foreach ($sender->getInventory()->getContents() as $slot => $item) {
+                if ($item instanceof Tool || $item instanceof Armor) {
+                    $newItem = clone $item;
+                    $newItem->setCustomName(TextFormat::colorize($name));
+                    $sender->getInventory()->setItem($slot, $newItem);
+                    $count++;
+                }
+            }
+            
+            if ($count > 0) {
+                $sender->sendMessage(TextFormat::colorize("&aSuccessfully renamed {$count} items"));
+            } else {
+                $sender->sendMessage(TextFormat::colorize('&cNo valid items found to rename'));
+            }
             return;
         }
-        $item->setCustomName(TextFormat::colorize($name));
-        $sender->getInventory()->setItemInHand($item);
+
+        $item = $sender->getInventory()->getItemInHand();
+        if (!$item instanceof Tool && !$item instanceof Armor) {
+            $sender->sendMessage(TextFormat::colorize('&cYou have no armor and no tools in your hand'));
+            return;
+        }
+
+        $newItem = clone $item;
+        $newItem->setCustomName(TextFormat::colorize($name));
+        $sender->getInventory()->setItemInHand($newItem);
         $sender->sendMessage(TextFormat::colorize('&aYou have successfully renamed the item'));
     }
 }

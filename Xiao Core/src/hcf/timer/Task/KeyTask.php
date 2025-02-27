@@ -36,22 +36,12 @@ class KeyTask extends task {
             }
         }
         if(TimerKey::getTime() === 0){
-            foreach (Server::getInstance()->getOnlinePlayers() as $player) {
-                $starter = Loader::getInstance()->getHandlerManager()->getCrateManager()->getCrate("Starter");
-                $starter->giveKey($player, 35);
-                $ability = Loader::getInstance()->getHandlerManager()->getCrateManager()->getCrate("Ability");
-                $ability->giveKey($player, 20);
-                $partner = Loader::getInstance()->getHandlerManager()->getCrateManager()->getCrate("Partner");
-                $partner->giveKey($player, 15);
-                $staff = Loader::getInstance()->getHandlerManager()->getCrateManager()->getCrate("Staff");
-                $staff->giveKey($player, 15);
-                $ghostly = Loader::getInstance()->getHandlerManager()->getCrateManager()->getCrate("ghostly");
-                $ghostly->giveKey($player, 10);
-                $koth = Loader::getInstance()->getHandlerManager()->getCrateManager()->getCrate("Koth");
-                $koth->giveKey($player, 5);
-                $kits = Loader::getInstance()->getHandlerManager()->getCrateManager()->getCrate("Kits");
-                $kits->giveKey($player, 5);
+            foreach (Server::getInstance()->getOnlinePlayers() as $player){
+            foreach (Loader::getInstance()->getConfig()->get("events")["keyall"]["keys"] as $name => $amount) {
+                $starter = Loader::getInstance()->getHandlerManager()->getCrateManager()->getCrate($name);
+                $starter->giveKey($player, $amount);
             }
+        }
             TimerKey::setEnable(false);
             $this->getHandler()->cancel();
         }else{

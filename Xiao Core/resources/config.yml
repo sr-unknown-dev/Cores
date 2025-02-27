@@ -80,3 +80,19 @@ checks:
 alerts:
   webhook: "https://discord.com/api/webhooks/1338035760120598529/ArXhDL33IrbduU2j42D_y3LBn-8nYUzQHp9yKG-Fk1dy-T1IoYC2nX8csw61MOKfPC0f"
   max_alerts_ban: 200
+
+events:
+  keyall:
+    keys:
+      Xiao: 15
+      Dark: 15
+      Ability: 15
+      White: 15
+      Starter: 15
+  keyallop:
+    keys:
+      Xiao: 15
+      Dark: 15
+      Ability: 15
+      White: 15
+      Starter: 15

@@ -3,12 +3,10 @@
 namespace hcf\module\staffmode;
 
 use hcf\Loader;
-use hcf\module\staffmode\PlayersForm;
 use hcf\player\Player;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
-use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerItemUseEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerLoginEvent;

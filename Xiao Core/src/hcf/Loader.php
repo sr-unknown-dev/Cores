@@ -13,6 +13,7 @@ namespace hcf;
 *                             |___/                       
  */
 
+use hcf\handler\bounty\BountyManager;
 use hcf\Tasks\AutoClickTask;
 use CortexPE\Commando\PacketHooker;
 use hcf\abilities\AbilitiesManager;
@@ -89,6 +90,7 @@ use hcf\module\rollback\RollbackManager;
 use hcf\module\staffmode\commands\StaffChatCommand;
 use hcf\module\staffmode\MuteAndBansTask;
 use hcf\module\staffmode\StaffModeManager;
+use hcf\utils\cooldowns\cdCmd;
 
 /**
  * Class Loader
@@ -160,7 +162,10 @@ class Loader extends PluginBase implements Listener
 
     /** @var AntiCheatManager */
     public AntiCheatManager $anticheatManager;
-    
+
+    /** @var BountyManager  */
+    public BountyManager $bountyManager;
+
     /** @var array */
     public static array $enderPearl = [];
 
@@ -238,6 +243,7 @@ class Loader extends PluginBase implements Listener
         $this->anticheatManager = new AntiCheatManager($this);
         $this->knockBackManager = new KnockBackManager();
         $this->StaffModeManager = new StaffModeManager();
+        $this->bountyManager = new BountyManager();
         $this->autoClick = new AutoClick();
         $this->reach = new Reach($this, $this->getServer());
         #Register addons
@@ -325,6 +331,7 @@ class Loader extends PluginBase implements Listener
             }
 
             # Events
+            # $this->getServer()->getCommandMap()->register("z", new cdCmd());
             $this->getTimerManager()->getSotw()->update();
             $this->getTimerManager()->getEotw()->update();
             $this->getTimerManager()->getPurge()->update();
@@ -350,10 +357,6 @@ class Loader extends PluginBase implements Listener
             foreach ($this->getFactionManager()->getFactions() as $faction)
                 $faction->onUpdate();
         }), 20);
-
-        /*$cooldowns = new Cooldowns();
-        $cooldowns->comprimirYEnviar();
-        $cooldowns->eliminarCarpetas();*/
     }
 
     public function onPacketReceive(DataPacketReceiveEvent $event) : void {
@@ -513,6 +516,10 @@ class Loader extends PluginBase implements Listener
 
     public function getAntiCheatManager(): AntiCheatManager{
         return $this->anticheatManager;
+    }
+
+    public function getBountyManager(): BountyManager{
+        return $this->bountyManager;
     }
 
     public function getAutoClick(): AutoClick {

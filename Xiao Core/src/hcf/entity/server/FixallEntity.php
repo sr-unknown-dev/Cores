@@ -6,6 +6,7 @@ namespace hcf\entity\server;
 
 use hcf\command\moderador\TopKDREntity;
 use hcf\Loader;
+use hcf\player\Player;
 use hcf\utils\inventorie\Inventories;
 use Himbeer\LibSkin\SkinConverter;
 use JetBrains\PhpStorm\Pure;
@@ -18,7 +19,6 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\ListTag;
-use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
 
 class FixallEntity extends Human

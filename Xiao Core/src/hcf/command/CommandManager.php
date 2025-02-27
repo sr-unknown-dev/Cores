@@ -10,6 +10,7 @@ use hcf\command\moderador\GodCommand;
 use hcf\command\moderador\NickCommand;
 use hcf\command\moderador\TpallCommand;
 use hcf\command\moderador\CooldownCommand as ModeradorCooldownCommand;
+use hcf\command\moderador\EnchantAllCommand;
 use hcf\command\moderador\PortableKitsCommand;
 use hcf\Loader;
 
@@ -59,6 +60,7 @@ class CommandManager
             new PortableKitsCommand(),
             new NickCommand(),
             new ModeradorCooldownCommand(),
+            new EnchantAllCommand(),
         ]);
     }
 }
