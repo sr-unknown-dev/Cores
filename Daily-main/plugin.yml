@@ -1,0 +1,9 @@
+name: Daily
+api: 5.0.0
+author: Idk
+main: daily\Loader
+version: 0.0.1
+
+permissions:
+  player.command:
+    default: true
