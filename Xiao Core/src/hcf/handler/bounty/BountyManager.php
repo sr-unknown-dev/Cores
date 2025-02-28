@@ -19,6 +19,7 @@ class BountyManager {
             new BountyCommand(),
             new SetBountyCommand(),
         ]);
+        Loader::getInstance()->getServer()->getPluginManager()->registerEvents(new BountyListener(), Loader::getInstance());
     }
 
     /**
@@ -29,7 +30,7 @@ class BountyManager {
      * @throws \JsonException
      */
     public function addBounty(Player $target, string $player, int $amount) {
-        if ($this->bounties->exists($target)) return;
+        if ($this->bounties->exists($target->getName())) return;
         $data = [
             "Player" => $player,
             "Amount" => $amount
@@ -45,7 +46,7 @@ class BountyManager {
      */
     public function removeBounty(Player $target)
     {
-        if (!$this->bounties->exists($target)) return;
+        if (!$this->bounties->exists($target->getName())) return;
 
         $this->bounties->remove($target->getName());
         $this->bounties->save();
@@ -59,27 +60,21 @@ class BountyManager {
      * @param Player $killer
      * @return void
      */
-    public function claimBounty(Player $target, Player $killer) {
-        $player = $this->bounties->get($target->getName())["Player"];
-        if (!$this->bounties->exists($target->getName())) return;
+    public function claimBounty(Player $target, Player $killer): void
+    {
+        $targetName = $target->getName();
+        if (!$this->bounties->exists($targetName)) return;
 
-        if ($player instanceof Player){
-            $player->getSession()->setBalance($target->getSession()->getBalance() - $this->bounties->get($target->getName())["Amount"]);
-            $killer->getSession()->setBalance($killer->getSession()->getBalance() - $this->bounties->get($target->getName())["Amount"]);
-            $killer->sendMessage(TextFormat::colorize("&aYou have received &g".$this->bounties->get($target->getName())["Amount"]." &abounty for killing &g".$target->getName()));
-            $this->removeBounty($target);
-        }
+        $bountyData = $this->bounties->get($targetName);
+        $amount = $bountyData["Amount"];
+        $killer->getSession()->setBalance($killer->getSession()->getBalance() + $amount);
+        $killer->sendMessage(TextFormat::colorize("&aYou have received &g$" . $amount . " &abounty for killing &g" . $targetName));
+        $this->removeBounty($target);
     }
 
-    /**
-     * @param string $target
-     * @return bool
-     */
-    public function hasBounty(string $target):bool{
-        if (!$this->bounties->exists($target)){
-            return false;
-        }
-        return true;
+    public function hasBounty(string $target): bool
+    {
+        return $this->bounties->exists($target);
     }
 
     public function trackBounty(Player $player, Player $target)

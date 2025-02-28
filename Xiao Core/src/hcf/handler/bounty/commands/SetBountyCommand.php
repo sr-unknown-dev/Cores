@@ -8,6 +8,7 @@ use hcf\arguments\PlayersArgument;
 use hcf\Loader;
 use hcf\player\Player;
 use pocketmine\command\CommandSender;
+use pocketmine\utils\TextFormat;
 
 class SetBountyCommand extends BaseCommand
 {
@@ -29,7 +30,12 @@ class SetBountyCommand extends BaseCommand
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
     {
         if ($sender instanceof Player){
-            Loader::getInstance()->getBountyManager()->addBounty($args["player"], $sender->getName(), $args["amount"]);
+            if ($sender->getSession()->getBalance() >= $args["amount"]){
+                Loader::getInstance()->getBountyManager()->addBounty($args["player"], $sender->getName(), $args["amount"]);
+                $sender->getSession()->setBalance($sender->getSession()->getBalance() - $args["amount"]);
+            }else{
+                $sender->sendMessage(TextFormat::RED."Your balance is insufficient");
+            }
         }else{
             return;
         }

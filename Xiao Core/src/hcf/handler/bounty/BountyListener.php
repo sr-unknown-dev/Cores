@@ -4,20 +4,25 @@ namespace hcf\handler\bounty;
 
 use hcf\Loader;
 use hcf\player\Player;
+use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDeathEvent;
 
 class BountyListener implements Listener
 {
 
-    public  function onDeath(PlayerDeathEvent $event):void
+    public function onDeath(PlayerDeathEvent $event): void
     {
         $player = $event->getPlayer();
-        $target = $event->getEntity();
+        $cause = $player->getLastDamageCause();
 
-        if ($player instanceof Player && $target instanceof Player){
-            if (Loader::getInstance()->bountyManager->hasBounty($target->getName())){
-                Loader::getInstance()->getBountyManager()->claimBounty($target, $player);
+        if ($cause instanceof EntityDamageByEntityEvent) {
+            $killer = $cause->getDamager();
+
+            if ($killer instanceof Player && $player instanceof Player) {
+                if (Loader::getInstance()->getBountyManager()->hasBounty($player->getName())) {
+                    Loader::getInstance()->getBountyManager()->claimBounty($player, $killer);
+                }
             }
         }
     }
