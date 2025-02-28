@@ -29,6 +29,7 @@ class SetBountyCommand extends BaseCommand
 
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
     {
+        if ($args["player"] === $sender->getName()) return;
         if ($sender instanceof Player){
             if ($sender->getSession()->getBalance() >= $args["amount"]){
                 Loader::getInstance()->getBountyManager()->addBounty($args["player"], $sender->getName(), $args["amount"]);

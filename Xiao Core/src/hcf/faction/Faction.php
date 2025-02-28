@@ -479,8 +479,25 @@ class Faction
 
                 # Setup scoretag for team members
                 foreach ($this->getOnlineMembers() as $member){
-                    # $member->setNameTag(TextFormat::colorize('&7[&a' . $this->getName() . " &7| &a" . $this->getDtr() . " &7]\n&a" . $member->getN));
-                    $member->setScoreTag(TextFormat::colorize('&8(&aTeam&8)'));
+                    $faction = $member->getSession()->getFaction();
+                    $FName = $faction ? Loader::getInstance()->getFactionManager()->getFaction($faction)->getName() : "";
+
+                    $data = [];
+                    foreach (Loader::getInstance()->getFactionManager()->getFactions() as $name => $factionObj) {
+                        if (!in_array($factionObj->getName(), ['Spawn', 'North Road', 'South Road', 'East Road', 'West Road', 'Nether Spawn', 'End Spawn'])) {
+                            $data[$name] = $factionObj->getPoints();
+                        }
+                    }
+                    arsort($data);
+                    $topFactions = array_slice($data, 0, 3, true);
+
+                    $position = "";
+                    $factionPosition = array_search($FName, array_keys($topFactions)) + 1;
+                    if ($factionPosition >= 1 && $factionPosition <= 3) {
+                        $position = $factionPosition;
+                    }
+                    $dtr = Loader::getInstance()->getFactionManager()->getFaction($member->getSession()->getFaction());
+                    $member->setNameTag(TextFormat::colorize("&c" . $member->getName() . "\n&7&8[&a#".$position."&8] &r&c" . $member->getSession()->getFaction() . " &7| &c" . $dtr->getDtr() . " &7]"));
                 }
             }
         }

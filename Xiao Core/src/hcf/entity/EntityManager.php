@@ -13,7 +13,6 @@ use hcf\entity\server\DailyEntity;
 use hcf\entity\server\FixallEntity;
 use hcf\entity\server\GkitEntity;
 use hcf\entity\server\InfoEntity;
-use hcf\entity\server\PortableKitsEntity;
 use hcf\entity\server\SupportEntity;
 use hcf\entity\tops\TopFactionsEntity;
 use hcf\entity\tops\TopKDREntity;
@@ -76,6 +75,9 @@ class EntityManager
             return new SupportEntity(EntityDataHelper::parseLocation($nbt, $world), SupportEntity::parseSkinNBT($nbt), $nbt);
         }, ['SupportEntity']);
 
+        EntityFactory::getInstance()->register(BountyEntity::class, function (World $world, CompoundTag $nbt): BountyEntity {
+            return new BountyEntity(EntityDataHelper::parseLocation($nbt, $world), BountyEntity::parseSkinNBT($nbt), $nbt);
+        }, ['BountyEntity']);
 
         EntityFactory::getInstance()->register(FixallEntity::class, function (World $world, CompoundTag $nbt): FixallEntity {
             return new FixallEntity(EntityDataHelper::parseLocation($nbt, $world), FixallEntity::parseSkinNBT($nbt), $nbt);

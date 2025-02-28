@@ -74,7 +74,7 @@ class BlockShopCommand extends Command
             if($transaction->getItemClicked()->getCustomName() === "§gServer NPC"){
                 $menu->getInventory()->clearAll();
                 $menu->getInventory()->setContents([
-                    10 => VanillaItems::PAPER()->setCustomName("§gShop NPC")->setLore(["§r§7settings to spawn the type of§cnpc", "§r§7currently available", "§r§7configure npc"]),
+                    11 => VanillaItems::PAPER()->setCustomName("§gShop NPC")->setLore(["§r§7settings to spawn the type of§cnpc", "§r§7currently available", "§r§7configure npc"]),
                     12 => VanillaItems::PAPER()->setCustomName("§gFixall NPCS")->setLore(["§r§7settings to spawn the type of§cnpc", "§r§7currently available", "§r§7configure npc"]),
                     13 => VanillaItems::PAPER()->setCustomName("§gInfo NPC")->setLore(["§r§7settings to spawn the type of§cnpc", "§r§7currently available", "§r§7configure npc"]),
                     14 => VanillaItems::PAPER()->setCustomName("§gAbilitys NPC")->setLore(["§r§7settings to spawn the type of§cnpc", "§r§7currently available", "§r§7configure npc"]),

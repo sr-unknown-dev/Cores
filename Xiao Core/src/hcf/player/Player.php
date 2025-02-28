@@ -155,8 +155,25 @@ class Player extends BasePlayer
 
         # Scoretag & Nametag setup
         if ($this->getSession()->getFaction() !== null) {
+            $faction = $this->getSession()->getFaction();
+            $FName = $faction ? Loader::getInstance()->getFactionManager()->getFaction($faction)->getName() : "";
+
+            $data = [];
+            foreach (Loader::getInstance()->getFactionManager()->getFactions() as $name => $factionObj) {
+                if (!in_array($factionObj->getName(), ['Spawn', 'North Road', 'South Road', 'East Road', 'West Road', 'Nether Spawn', 'End Spawn'])) {
+                    $data[$name] = $factionObj->getPoints();
+                }
+            }
+            arsort($data);
+            $topFactions = array_slice($data, 0, 3, true);
+
+            $position = "";
+            $factionPosition = array_search($FName, array_keys($topFactions)) + 1;
+            if ($factionPosition >= 1 && $factionPosition <= 3) {
+                $position = $factionPosition;
+            }
             $dtr = Loader::getInstance()->getFactionManager()->getFaction($this->getSession()->getFaction());
-            $this->setNameTag(TextFormat::colorize('&7[&c' . $this->getSession()->getFaction() . " &7| &c" . $dtr->getDtr() . " &7]\n&c" . $this->getName()));
+            $this->setNameTag(TextFormat::colorize("&c" . $this->getName() . "\n&7&8[&a#".$position."&8] &r&c" . $this->getSession()->getFaction() . " &7| &c" . $dtr->getDtr() . " &7]"));
         } else {
             $this->setNameTag(TextFormat::colorize('&c' . $this->getName()));
         }

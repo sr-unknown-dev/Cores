@@ -281,15 +281,50 @@ class HCFListener implements Listener
             }
 
             # Setup scoretag for team members
-            if ($faction->getDtr() < 0.00 && $faction->isRaidable()) {
+            if ($faction->getDtr() <= 0.00 && $faction->isRaidable()) {
                 foreach ($faction->getOnlineMembers() as $member) {
-                    # $member->setNameTag(TextFormat::colorize('&7[&a' . $faction->getName() . " &7| &a" . $faction->getDtr() . " &7]\n&a" . $player->getName()));
-                    $member->setScoreTag(TextFormat::colorize('&8(&gRaid&8)'));
+                    $faction = $member->getSession()->getFaction();
+                    $FName = $faction ? Loader::getInstance()->getFactionManager()->getFaction($faction)->getName() : "";
+
+                    $data = [];
+                    foreach (Loader::getInstance()->getFactionManager()->getFactions() as $name => $factionObj) {
+                        if (!in_array($factionObj->getName(), ['Spawn', 'North Road', 'South Road', 'East Road', 'West Road', 'Nether Spawn', 'End Spawn'])) {
+                            $data[$name] = $factionObj->getPoints();
+                        }
+                    }
+                    arsort($data);
+                    $topFactions = array_slice($data, 0, 3, true);
+
+                    $position = "";
+                    $factionPosition = array_search($FName, array_keys($topFactions)) + 1;
+                    if ($factionPosition >= 1 && $factionPosition <= 3) {
+                        $position = $factionPosition;
+                    }
+                    $dtr = Loader::getInstance()->getFactionManager()->getFaction($member->getSession()->getFaction());
+                    $member->setNameTag(TextFormat::colorize("&c" . $member->getName() . "\n&7&8[&a#".$position."&8] &r&c" . $member->getSession()->getFaction() . " &7| &c" . $dtr->getDtr() . " &7]"));
+                    # $member->setScoreTag(TextFormat::RED."Raidable");
                 }
             }else{
                 foreach ($faction->getOnlineMembers() as $member) {
-                    # $member->setNameTag(TextFormat::colorize('&7[&a' . $faction->getName() . " &7| &a" . $faction->getDtr() . " &7]\n&a" . $player->getName()));
-                    $member->setScoreTag(TextFormat::colorize(''));
+                    $faction = $member->getSession()->getFaction();
+                    $FName = $faction ? Loader::getInstance()->getFactionManager()->getFaction($faction)->getName() : "";
+
+                    $data = [];
+                    foreach (Loader::getInstance()->getFactionManager()->getFactions() as $name => $factionObj) {
+                        if (!in_array($factionObj->getName(), ['Spawn', 'North Road', 'South Road', 'East Road', 'West Road', 'Nether Spawn', 'End Spawn'])) {
+                            $data[$name] = $factionObj->getPoints();
+                        }
+                    }
+                    arsort($data);
+                    $topFactions = array_slice($data, 0, 3, true);
+
+                    $position = "";
+                    $factionPosition = array_search($FName, array_keys($topFactions)) + 1;
+                    if ($factionPosition >= 1 && $factionPosition <= 3) {
+                        $position = $factionPosition;
+                    }
+                    $dtr = Loader::getInstance()->getFactionManager()->getFaction($member->getSession()->getFaction());
+                    $member->setNameTag(TextFormat::colorize("&c" . $member->getName() . "\n&7&8[&a#".$position."&8] &r&c" . $member->getSession()->getFaction() . " &7| &c" . $dtr->getDtr() . " &7]"));
                 }
             }
         }

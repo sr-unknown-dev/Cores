@@ -1,20 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 namespace hcf\entity\server;
 
-use hcf\command\moderador\TopKDREntity;
-use hcf\Loader;
 use hcf\utils\inventorie\Inventories;
-use Himbeer\LibSkin\SkinConverter;
-use itoozh\bounties\session\SessionFactory;
-use JetBrains\PhpStorm\Pure;
 use pocketmine\entity\Human;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
-use pocketmine\item\Armor;
-use pocketmine\item\Durable;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\FloatTag;
@@ -24,7 +15,6 @@ use pocketmine\utils\TextFormat;
 
 class BountyEntity extends Human
 {
-
     public bool $canCollide = false;
     protected bool $immobile = true;
 
@@ -37,7 +27,7 @@ class BountyEntity extends Human
     /**
      * @param Player $player
      *
-     * @return TopKDREntity
+     * @return BountyEntity
      */
     public static function create(Player $player): self
     {
@@ -72,7 +62,7 @@ class BountyEntity extends Human
      */
     public function onUpdate(int $currentTick): bool
     {
-        $text = TextFormat::colorize("--------------------\n&bBounty\n--------------------");
+        $text = TextFormat::colorize("--------------------\n&aBounty\n--------------------");
 
         $this->setNameTagAlwaysVisible();
         $this->setNameTag($text);
@@ -94,8 +84,8 @@ class BountyEntity extends Human
                     $this->kill();
                     return;
                 }
+                Inventories::BountyMenu($damager);
             }
-            SessionFactory::getInstance()->get($damager)->openMenu($damager);
         }
 
     }
