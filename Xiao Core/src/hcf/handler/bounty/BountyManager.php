@@ -28,13 +28,13 @@ class BountyManager {
      * @return void
      * @throws \JsonException
      */
-    public function addBounty(string $target, string $player, int $amount) {
+    public function addBounty(Player $target, string $player, int $amount) {
         if ($this->bounties->exists($target)) return;
         $data = [
             "Player" => $player,
             "Amount" => $amount
         ];
-        $this->bounties->set($target, $data);
+        $this->bounties->set($target->getName(), $data);
         $this->bounties->save();
     }
 
@@ -43,11 +43,11 @@ class BountyManager {
      * @return void
      * @throws \JsonException
      */
-    public function removeBounty(string $target)
+    public function removeBounty(Player $target)
     {
         if (!$this->bounties->exists($target)) return;
 
-        $this->bounties->remove($target);
+        $this->bounties->remove($target->getName());
         $this->bounties->save();
     }
 
@@ -67,7 +67,7 @@ class BountyManager {
             $player->getSession()->setBalance($target->getSession()->getBalance() - $this->bounties->get($target->getName())["Amount"]);
             $killer->getSession()->setBalance($killer->getSession()->getBalance() - $this->bounties->get($target->getName())["Amount"]);
             $killer->sendMessage(TextFormat::colorize("&aYou have received &g".$this->bounties->get($target->getName())["Amount"]." &abounty for killing &g".$target->getName()));
-            $this->removeBounty($target->getName());
+            $this->removeBounty($target);
         }
     }
 
@@ -95,6 +95,14 @@ class BountyManager {
         ];
 
         $player->sendMessage(TextFormat::colorize("&aYou are now tracking " . $target->getName()));
+    }
+
+    public function hasTrackedBounty(Player $player): bool {
+        return isset($this->trackedBounties[$player->getName()]);
+    }
+
+    public function getTrackedBountyData(Player $player): ?array {
+        return $this->trackedBounties[$player->getName()] ?? null;
     }
 
     public function getAllBountys(): array {

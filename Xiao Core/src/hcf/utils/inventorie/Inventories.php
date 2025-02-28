@@ -88,10 +88,15 @@ final class Inventories
             $item = $transaction->getItemClicked();
             $player = $transaction->getPlayer();
 
-            foreach ($bounties as $target => $data) {
-                if ($target !== "" && $target instanceof Player && $player instanceof Player) {
-                    Loader::getInstance()->getBountyManager()->trackBounty($player, $target);
+            $clickedName = TextFormat::clean($item->getCustomName());
+
+            if(isset($bounties[$clickedName])) {
+                $targetPlayer = Loader::getInstance()->getServer()->getPlayerByPrefix($clickedName);
+                if($targetPlayer instanceof Player) {
+                    Loader::getInstance()->getBountyManager()->trackBounty($player, $targetPlayer);
                     $player->sendMessage(TextFormat::colorize("&aBounty is activated"));
+                } else {
+                    $player->sendMessage(TextFormat::colorize("&cTarget player is offline"));
                 }
             }
 

@@ -4,42 +4,35 @@ declare(strict_types=1);
 
 namespace hcf\player;
 
-use hcf\faction\Faction;
-use hcf\faction\FactionManager;
 use hcf\cooldown\Cooldown;
-use pocketmine\world\Position;
-use pocketmine\math\Vector3;
-use hcf\module\enchantment\Enchantment;
-use hcf\Loader;
 use hcf\handler\kit\classes\ClassFactory;
 use hcf\handler\kit\classes\HCFClass;
-use hcf\Server\Rally;
+use hcf\Loader;
+use hcf\module\enchantment\Enchantment;
 use hcf\session\Session;
+use hcf\StaffMode\Chat;
+use hcf\StaffMode\Good;
+use hcf\StaffMode\Staff;
+use hcf\StaffMode\Vanish;
+use hcf\timer\types\TimerAirdrop;
 use hcf\timer\types\TimerCustom;
 use hcf\timer\types\TimerFFA;
+use hcf\timer\types\TimerFreeKits;
+use hcf\timer\types\TimerMystery;
 use hcf\utils\time\Timer;
 use pocketmine\entity\effect\VanillaEffects;
 use pocketmine\entity\Location;
-use pocketmine\network\mcpe\protocol\SetActorDataPacket;
-use pocketmine\network\mcpe\protocol\types\entity\EntityMetadataFlags;
-use pocketmine\player\Player as BasePlayer;
-use pocketmine\player\PlayerInfo;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\network\mcpe\protocol\GameRulesChangedPacket;
+use pocketmine\network\mcpe\protocol\SetActorDataPacket;
 use pocketmine\network\mcpe\protocol\types\BoolGameRule;
+use pocketmine\network\mcpe\protocol\types\entity\EntityMetadataFlags;
+use pocketmine\network\mcpe\protocol\types\entity\PropertySyncData;
+use pocketmine\player\Player as BasePlayer;
+use pocketmine\player\PlayerInfo;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
-use pocketmine\network\mcpe\protocol\types\entity\PropertySyncData;
-use DateTime;
-use DateTimeZone;
-use hcf\StaffMode\Chat;
-use hcf\StaffMode\Good;
-use hcf\timer\types\TimerAirdrop;
-use hcf\timer\types\TimerMystery;
-use hcf\StaffMode\Staff;
-use hcf\StaffMode\Vanish;
-use hcf\timer\types\TimerFreeKits;
 
 /**
  * Class Player
@@ -51,7 +44,7 @@ class Player extends BasePlayer
     public bool $scoreboardMode = true;
     private int $titleId = 0;
 
-    /** @var int|float  */
+    /** @var int|float */
     private int|float $lastCheck = -1;
 
     protected $movementTime = 0;
@@ -217,7 +210,7 @@ class Player extends BasePlayer
         $current = Server::getInstance()->getTicksPerSecond();
         $lines[] = TextFormat::colorize('💋');
 
-        $god = Loader::getInstance()->getStaffModeManager()->isGod($this) ?  " §l§7×§r &aGood: §aEnable": "";
+        $god = Loader::getInstance()->getStaffModeManager()->isGod($this) ? " §l§7×§r &aGood: §aEnable" : "";
         $lines[] = TextFormat::colorize('💋');
         $lines[] = TextFormat::colorize($god);
         $lines[] = TextFormat::colorize('💋');
@@ -232,6 +225,24 @@ class Player extends BasePlayer
             $lines[] = TextFormat::colorize($vanish);
             $lines[] = TextFormat::colorize(" §l§7×§r &aOnline: &f" . $online);
             $lines[] = TextFormat::colorize('💋');
+        }
+
+        # Bounty
+        $bountyManager = Loader::getInstance()->getBountyManager();
+        if ($bountyManager->hasTrackedBounty($this)) {
+            $bounty = $bountyManager->getTrackedBountyData($this);
+            $target = Loader::getInstance()->getServer()->getPlayerByPrefix($bounty["target"]);
+
+            if ($target !== null) {
+                $pos = $target->getPosition();
+                $x = (int)$pos->getX();
+                $z = (int)$pos->getZ();
+                $lines[] = TextFormat::colorize('💋');
+                $lines[] = TextFormat::colorize("         &l&aBounty");
+                $lines[] = TextFormat::colorize(" §l§7×§r &aTarget: &f" . $bounty["target"]);
+                $lines[] = TextFormat::colorize(" §l§7×§r &aCoords: &7(" . $x . ", " . $z . "&7)");
+                $lines[] = TextFormat::colorize('💋');
+            }
         }
 
         # Claims
@@ -340,10 +351,10 @@ class Player extends BasePlayer
                 $x = (int)$pos->getX();
                 $z = (int)$pos->getZ();
                 $faction = Loader::getInstance()->getFactionManager()->getFaction($this->getSession()->getFaction());
-                if ($faction->getOnlineMembers()){
+                if ($faction->getOnlineMembers()) {
                     $lines[] = TextFormat::colorize('💋');
                     $lines[] = TextFormat::colorize(' §l§7×§r &aRally&r&7: &7' . $rally[0]);
-                    $lines[] = TextFormat::colorize(' §l§7×§r &aCoords&r&7: &7(' . $x. ', '.$z.'&7)');
+                    $lines[] = TextFormat::colorize(' §l§7×§r &aCoords&r&7: &7(' . $x . ', ' . $z . '&7)');
                 }
             }
         }
@@ -382,7 +393,7 @@ class Player extends BasePlayer
     public function onUpdate(int $currentTick): bool
     {
         $update = parent::onUpdate($currentTick);
-        
+
         if ($update) {
             if ($currentTick % 20 === 0) {
 
@@ -395,17 +406,17 @@ class Player extends BasePlayer
                             $type->giveEffect($this);
                     }
                 }
-                
+
                 # Update scoreboard
                 $this->updateScoreboard();
-                
+
                 # Update invisibility 
                 $this->loadInvisibility();
 
                 if ($this->getClass() !== null)
                     $this->getClass()->onRun($this);
                 else {
-                    foreach(ClassFactory::getClasses() as $class) {
+                    foreach (ClassFactory::getClasses() as $class) {
                         if ($class->isActive($this)) {
                             $this->class = $class;
                             break;
@@ -413,9 +424,9 @@ class Player extends BasePlayer
                     }
                 }
             }
-            
+
             if ($currentTick % 40 === 0) {
-                
+
                 # Update last line
                 if ($this->lastLine >= 2) {
                     $this->lastLine = 0;
