@@ -24,7 +24,7 @@ class ForceDisbandSubCommand extends BaseSubCommand
     protected function prepare(): void
     {
         $this->setPermission($this->getPermission());
-        $this->registerArgument(0, new RawStringArgument("factionName", false));
+        $this->registerArgument(0, new RawStringArgument("factionName", true));
     }
 
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void

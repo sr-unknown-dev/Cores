@@ -4,7 +4,6 @@ motd: '§r§l§aXiao'
 
 server: '§r§l§aXiao§r'
 tebex: '§7xiao.tebex.io'
-tebex: 'xiao.tebex.io'
 ip: '§r§7xiao.ddns.net'
 tebex-crates: 'xiao.tebex.io'
 
@@ -15,7 +14,7 @@ feather.motion: 2
 #webhooks settings
 kills.webhook: ''
 koth.webhook: 'https://discord.com/api/webhooks/1338035795810058290/fIvFAARDbW9dmwepuRr9AJnd1xtwmGEza8u167F1ks3pATXOvPtUfz1B36y4pJd-Us4j'
-admin.webhook: 'https://discord.com/api/webhooks/1338035792278327339/h8wx2cuE_tbxBgSOuL2p7VMy9bh9kbzstvGZ57ErMmRqXpv0YRAFX8KCA-wWmndc6E2V'
+admin.webhook: 'https://discord.com/api/webhooks/1344886872085631007/PnMYeMjHv2TaSeXaRcun0yfk4lk5cKR6GE0nwrEs19WU-baIDH9SfFoPAQ5NovBaKOpo'
 hcf.webhook: 'https://discord.com/api/webhooks/1338035792278327339/h8wx2cuE_tbxBgSOuL2p7VMy9bh9kbzstvGZ57ErMmRqXpv0YRAFX8KCA-wWmndc6E2V'
 report.webhook: 'https://discord.com/api/webhooks/1338035782685818890/zwJAjLQPBSh2CgP0bCpwthYzn9s4s4eSVOAnTLfa_AlMtgvVFWwSz7RjDm6FdZX-Qicj'
 discord-link: 'https://discord.gg/79Afx5Seu3'
@@ -78,7 +77,7 @@ checks:
     max_reach_alerts: 6.5
     max_reach_ban: 7.5
 alerts:
-  webhook: "https://discord.com/api/webhooks/1338035760120598529/ArXhDL33IrbduU2j42D_y3LBn-8nYUzQHp9yKG-Fk1dy-T1IoYC2nX8csw61MOKfPC0f"
+  webhook: "https://discord.com/api/webhooks/1344886043517911061/NMR1QRe-9qWXG3MXPX4A6Ap1ItrFeTnvCMf5ZN3ofaFyZmu2O9IQd9PWDP957saBKZNN"
   max_alerts_ban: 200
 
 events:

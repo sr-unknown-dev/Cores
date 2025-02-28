@@ -2,6 +2,7 @@
 
 namespace hcf\command\faction\subcommands;
 
+use CortexPE\Commando\args\FloatArgument;
 use CortexPE\Commando\args\RawStringArgument;
 use CortexPE\Commando\BaseCommand;
 use CortexPE\Commando\BaseSubCommand;
@@ -22,8 +23,8 @@ class AddPointsSubCommand extends BaseSubCommand
     protected function prepare(): void
     {
         $this->setPermission($this->getPermission());
-        $this->registerArgument(0, new RawStringArgument("factionName", false));
-        $this->registerArgument(1, new RawStringArgument("Dtr", false));
+        $this->registerArgument(0, new RawStringArgument("factionName", true));
+        $this->registerArgument(1, new FloatArgument("Dtr", true));
     }
 
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
@@ -39,11 +40,6 @@ class AddPointsSubCommand extends BaseSubCommand
 
 		if ($faction === null) {
 			$sender->sendMessage(TextFormat::colorize('&cFaction not exists.'));
-			return;
-		}
-
-		if (!is_numeric($args["Dtr"])) {
-			$sender->sendMessage(TextFormat::colorize('&cInvalid number.'));
 			return;
 		}
 		$points = (int) $args["Dtr"];

@@ -25,8 +25,8 @@ class AddStrikesSubCommand extends BaseSubCommand
     protected function prepare(): void
     {
         $this->setPermission($this->getPermission());
-        $this->registerArgument(0, new RawStringArgument("factionName", false));
-        $this->registerArgument(1, new RawStringArgument("reason", false));
+        $this->registerArgument(0, new RawStringArgument("factionName", true));
+        $this->registerArgument(1, new RawStringArgument("reason", true));
     }
 
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void

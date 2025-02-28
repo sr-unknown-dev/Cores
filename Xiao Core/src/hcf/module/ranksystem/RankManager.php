@@ -27,7 +27,7 @@ class RankManager
             "default" => "Guest",
             "Guest" => [
                 "format" => "&l&aGeneral",
-                "chatFormat" => "&8[&c{faction}&8]&r {prefix} &8[&l&aGeneral&8] &r&f{player}: &7{message}",
+                "chatFormat" => "&8[&a#{top}&8]&r &8[&c{faction}&8]&r {prefix} &8[&l&aGeneral&8] &r&f{player}: &7{message}",
                 "permissions" => []
             ]
         ]);
@@ -52,7 +52,7 @@ class RankManager
         }
         $data = [
             "format" => $format,
-            "chatFormat" => "&8[&c{faction}&8]&r {prefix} &8[{$format}&r&8] &r&f{player}: &7{message}",
+            "chatFormat" => "&8[&a#{top}&8]&r &8[&c{faction}&8]&r {prefix} &8[{$format}&r&8] &r&f{player}: &7{message}",
             "permissions" => []
         ];
         $this->ranks->setNested($name, $data);
@@ -156,7 +156,7 @@ class RankManager
      * @return string
      */
     public function getChatFormat(string $rank): string {
-        return $this->ranks->get($rank)["chatFormat"] ?? '&8[&c{faction}&8]&r {prefix} &8[&aGuest&8]&r &a{player}&f: &7{message}';
+        return $this->ranks->get($rank)["chatFormat"] ?? '&8[&a#{top}&8]&r &8[&c{faction}&8]&r {prefix} &8[&aGuest&8]&r &a{player}&f: &7{message}';
     }
 
     /**

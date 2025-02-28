@@ -23,7 +23,7 @@ class PromoteSubCommand extends BaseSubCommand
     protected function prepare(): void
     {
         $this->setPermission($this->getPermission());
-        $this->registerArgument(0, new PlayersArgument("player", false));
+        $this->registerArgument(0, new PlayersArgument("player", true));
     }
 
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void

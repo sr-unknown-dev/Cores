@@ -24,7 +24,7 @@ class WithdrawSubCommand extends BaseSubCommand
     protected function prepare(): void
     {
         $this->setPermission($this->getPermission());
-        $this->registerArgument(0, new RawStringArgument("amount", false));
+        $this->registerArgument(0, new RawStringArgument("amount", true));
     }
 
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void

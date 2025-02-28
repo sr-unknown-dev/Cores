@@ -17,8 +17,8 @@ class RemoveDtrSubCommand extends BaseSubCommand
     public function __construct(string $name, string $description = "", array $aliases = [])
     {
         parent::__construct($name, $description, $aliases);
-        $this->registerArgument(0, new RawStringArgument("factionName", false));
-        $this->registerArgument(1, new RawStringArgument("Dtr", false));
+        $this->registerArgument(0, new RawStringArgument("factionName", true));
+        $this->registerArgument(1, new RawStringArgument("Dtr", true));
     }
 
     protected function prepare(): void
