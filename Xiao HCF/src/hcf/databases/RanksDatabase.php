@@ -5,8 +5,8 @@ namespace hcf\databases;
 use hcf\Loader;
 use mysqli;
 
-class Database {
-    private static ?Database $instance = null;
+class RanksDatabase {
+    private static ?RanksDatabase $instance = null;
     private mysqli $connection;
 
     public function __construct() {
@@ -32,7 +32,7 @@ class Database {
 
             $this->init();
         } catch (\Exception $e) {
-            Loader::getInstance()->getLogger()->critical("Database connection error: " . $e->getMessage());
+            Loader::getInstance()->getLogger()->critical("RanksDatabase connection error: " . $e->getMessage());
             Loader::getInstance()->getServer()->shutdown();
         }
     }
@@ -45,14 +45,14 @@ class Database {
                 expiration_time INT DEFAULT 0
             )");
         } catch (\Exception $e) {
-            Loader::getInstance()->getLogger()->critical("Database initialization error: " . $e->getMessage());
+            Loader::getInstance()->getLogger()->critical("RanksDatabase initialization error: " . $e->getMessage());
             Loader::getInstance()->getServer()->shutdown();
         }
     }
 
-    public static function getInstance(): Database {
+    public static function getInstance(): RanksDatabase {
         if(self::$instance === null) {
-            self::$instance = new Database();
+            self::$instance = new RanksDatabase();
         }
         return self::$instance;
     }

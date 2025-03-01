@@ -2,7 +2,7 @@
 
 namespace hcf\module\ranksystem;
 
-use hcf\databases\Database;
+use hcf\databases\RanksDatabase;
 use hcf\Loader;
 use hcf\module\ranksystem\commands\RankCommands;
 use hcf\player\Player;
@@ -17,10 +17,10 @@ class RankManager
      */
     public Config $ranks;
     private array $attachments = [];
-    private Database $database;
+    private RanksDatabase $database;
 
     public function __construct() {
-        $this->database = Database::getInstance();
+        $this->database = RanksDatabase::getInstance();
         $this->ranks = new Config(Loader::getInstance()->getDataFolder() . "ranks.yml", Config::YAML, [
             "default" => "Guest",
             "Guest" => [

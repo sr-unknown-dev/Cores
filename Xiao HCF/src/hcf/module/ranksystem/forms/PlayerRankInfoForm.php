@@ -2,7 +2,7 @@
 
 namespace hcf\module\ranksystem\forms;
 
-use hcf\databases\Database;
+use hcf\databases\RanksDatabase;
 use hcf\Loader;
 use jojoe77777\FormAPI\SimpleForm;
 use pocketmine\player\Player;
@@ -22,7 +22,7 @@ class PlayerRankInfoForm extends SimpleForm {
         });
 
         $rankManager = Loader::getInstance()->getRankManager();
-        $conn = Database::getInstance()->getConnection();
+        $conn = RanksDatabase::getInstance()->getConnection();
         
         // Get rank info from database
         $stmt = $conn->prepare("SELECT rank_name, expiration_time FROM player_ranks WHERE player_name = ?");

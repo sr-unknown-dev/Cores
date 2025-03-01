@@ -325,7 +325,12 @@ class StaffModeManager {
             if ($s !== null) {
                 $s->sendMessage("§aHas baneado a: §6".$tName." §apor: §6".$reason." §adurante: §6".$time);
             }
-            $t->kick("§4Has sido baneado\nRazón: §6".$reason."\n§4Expira en: §6".$this->formatTime($timeSeconds));
+            $t->kick(TextFormat::colorize(
+                "&7Haz sido BANEADO\n" .
+                "Razón: &6{$reason}\n" .
+                "&7Expira en: " . $this->formatTime($time - time()) . "\n" .
+                "&7Si deseas apelar el ban: &6" . Loader::getInstance()->getConfig()->get("discord-link")
+            ));
         }
         $stmt->close();
     }
