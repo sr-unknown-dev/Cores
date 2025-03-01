@@ -3,6 +3,8 @@
 namespace hcf\module\staffmode;
 
 use hcf\Loader;
+use hcf\databases\BansDatabase;
+use hcf\databases\MutesDatabase;
 use hcf\player\Player;
 use muqsit\invmenu\InvMenu;
 use pocketmine\block\utils\DyeColor;
@@ -27,13 +29,13 @@ class StaffModeManager {
     public array $staffchat = [];
     public Config $mutes;
     public Config $bans;
-
+    private BansDatabase $bansDatabase;
+    private MutesDatabase $mutesDatabase;
     public function __construct() {
-        $dataFolder = Loader::getInstance()->getDataFolder();
-        $this->mutes = new Config($dataFolder . "mutes.json", Config::JSON);
-        $this->bans = new Config($dataFolder . "bans.json", Config::JSON);
+        $this->bansDatabase = BansDatabase::getInstance();
+        $this->mutesDatabase = MutesDatabase::getInstance();
     }
-
+    
     public function addStaff(Player $p): void {
         $pName = $p->getName();
         $this->staff[$pName] = true;
@@ -219,82 +221,130 @@ class StaffModeManager {
 
     public function addMute(Player $s, Player $t, string $reason, string $time): void {
         $tName = $t->getName();
-        $p = $s ?? "AntiCheat";
-        if(!($timeSeconds = $this->parseTime($time)) || $this->mutes->exists($tName)) {
-            $p->sendMessage($timeSeconds === null ? "§4Invalid time format" : "§4Player §6$tName §4is already muted");
+        $sName = $s->getName();
+        $timeSeconds = $this->parseTime($time);
+
+        if ($timeSeconds === null) {
+            $s->sendMessage("§4Formato de tiempo inválido");
             return;
         }
-        $this->mutes->set($tName, ['reason' => $reason, 'time' => time() + $timeSeconds]);
-        $this->mutes->save();
-        $p->sendMessage("§aMuted §6$tName §afor: §6$reason §afor: §6$time");
-        $t->sendMessage("§4You have been muted\nReason: §6$reason\n§4Expires in: §6" . $this->formatTime($timeSeconds));
+
+        $conn = $this->mutesDatabase->getConnection();
+        $stmt = $conn->prepare("REPLACE INTO mutes (player_name, reason, muted_by, expiration_time) VALUES (?, ?, ?, ?)");
+        $expirationTime = time() + $timeSeconds;
+        $stmt->bind_param("sssi", $tName, $reason, $sName, $expirationTime);
+
+        if ($stmt->execute()) {
+            $s->sendMessage("§aMuted §6$tName §afor: §6$reason §afor: §6$time");
+            $t->sendMessage("§4You have been muted\nReason: §6$reason\n§4Expires in: §6" . $this->formatTime($timeSeconds));
+        }
+        $stmt->close();
     }
 
-    public function removeMute(Player $p, Player $t): void {
+    public function removeMute(Player $s, Player $t): void {
         $tName = $t->getName();
-        if(!$this->mutes->exists($tName)) {
-            $p->sendMessage("§4Player §6$tName §4is not muted");
-            return;
+        $conn = $this->mutesDatabase->getConnection();
+        $stmt = $conn->prepare("DELETE FROM mutes WHERE player_name = ?");
+        $stmt->bind_param("s", $tName);
+
+        if ($stmt->execute() && $stmt->affected_rows > 0) {
+            $s->sendMessage("§aUnmuted §6$tName");
+        } else {
+            $s->sendMessage("§4Player §6$tName §4is not muted");
         }
-        $this->mutes->remove($tName);
-        $this->mutes->save();
-        $p->sendMessage("§aUnmuted §6$tName");
+        $stmt->close();
     }
 
     public function isMute(Player $p): bool {
-        return $this->mutes->exists($p->getName());
+        $conn = $this->mutesDatabase->getConnection();
+        $name = $p->getName();
+        $currentTime = time();
+
+        $stmt = $conn->prepare("SELECT player_name FROM mutes WHERE player_name = ? AND (expiration_time > ? OR expiration_time = 0)");
+        $stmt->bind_param("si", $name, $currentTime);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $exists = $result->num_rows > 0;
+        $stmt->close();
+
+        return $exists;
     }
 
     public function addBanAntiCheat(Player $target, string $reason, string $time): void {
         $tName = $target->getName();
-        if(!($timeSeconds = $this->parseTime($time)) || $this->bans->exists($tName)) {
+        if(!($timeSeconds = $this->parseTime($time))) {
             return;
         }
 
-        $this->bans->set($tName, ['reason' => $reason, 'time' => time() + $timeSeconds]);
-        $this->bans->save();
+        $conn = $this->bansDatabase->getConnection();
+        $stmt = $conn->prepare("REPLACE INTO bans (player_name, reason, banned_by, expiration_time) VALUES (?, ?, ?, ?)");
+        $bannedBy = "AntiCheat";
+        $expirationTime = time() + $timeSeconds;
+        $stmt->bind_param("sssi", $tName, $reason, $bannedBy, $expirationTime);
 
-        foreach(Server::getInstance()->getOnlinePlayers() as $op) {
-            if($op->hasPermission("staff.perms")) {
-                $op->sendMessage("§8[§cAntiCheat§8] §aBanned §6$tName §afor: §6$reason §afor: §6$time");
+        if ($stmt->execute()) {
+            foreach(Server::getInstance()->getOnlinePlayers() as $op) {
+                if($op->hasPermission("staff.perms")) {
+                    $op->sendMessage("§8[§cAntiCheat§8] §aBanned §6$tName §afor: §6$reason §afor: §6$time");
+                }
             }
-        }
 
-        $target->kick("§4You have been banned\nReason: §6$reason\n§4Expires in: §6" .
-            $this->formatTime($timeSeconds) . " §7Appeal at: §6" .
-            Loader::getInstance()->getConfig()->get("discord-link"));
+            $target->kick("§4You have been banned\nReason: §6$reason\n§4Expires in: §6" .
+                $this->formatTime($timeSeconds) . " §7Appeal at: §6" .
+                Loader::getInstance()->getConfig()->get("discord-link"));
+        }
+        $stmt->close();
     }
 
-    public function addBan(Player $s, Player $t, string $rason, string $time)
-    {
+    public function addBan(Player $s, Player $t, string $reason, string $time): void {
         $tName = $t->getName();
-        $time = $this->parseTime($time);
-        if ($time === null){$s->sendMessage("§4Formato d tiempo invalido");}
-        if ($this->bans->exists($tName)){$s->sendMessage("§4El player: §6".$tName." §4ya a sido baneado");}
+        $sName = $s->getName();
+        $timeSeconds = $this->parseTime($time);
 
-        $this->bans->set($tName, [
-            'reazon' => $rason,
-            'time' => time() + $time
-        ]);
-        $this->bans->save();
-        $rTime = time() + $time - time();
-        $s->sendMessage("§aHas baneado a: §6".$tName." §apor: §6".$rason." §adurante: §6".$time);
-        $t->kick("§4Has sido baneado\nRazon: §6".$rason."\n§4Expira en: §6".$this->formatTime($rTime)." §7Si deseas apelar el ban: §6".Loader::getInstance()->getConfig()->get("discord-link"));
+        if ($timeSeconds === null) {
+            $s->sendMessage("§4Formato de tiempo inválido");
+            return;
+        }
+
+        $conn = $this->bansDatabase->getConnection();
+        $stmt = $conn->prepare("REPLACE INTO bans (player_name, reason, banned_by, expiration_time) VALUES (?, ?, ?, ?)");
+        $expirationTime = time() + $timeSeconds;
+        $stmt->bind_param("sssi", $tName, $reason, $sName, $expirationTime);
+
+        if ($stmt->execute()) {
+            $s->sendMessage("§aHas baneado a: §6".$tName." §apor: §6".$reason." §adurante: §6".$time);
+            $t->kick("§4Has sido baneado\nRazón: §6".$reason."\n§4Expira en: §6".$this->formatTime($timeSeconds));
+        }
+        $stmt->close();
+    }
+
+    public function isBan(Player $p): bool {
+        $conn = $this->bansDatabase->getConnection();
+        $name = $p->getName();
+        $currentTime = time();
+
+        $stmt = $conn->prepare("SELECT player_name FROM bans WHERE player_name = ? AND (expiration_time > ? OR expiration_time = 0)");
+        $stmt->bind_param("si", $name, $currentTime);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $exists = $result->num_rows > 0;
+        $stmt->close();
+
+        return $exists;
     }
 
     public function removeBan(Player $s, Player $t): void {
         $tName = $t->getName();
-        if(!$this->bans->exists($tName)) {
-            $s->sendMessage("§4El player: §6".$tName." §4no esta baneado");
-            return;
-        }
-        $this->bans->remove($tName);
-        $this->bans->save();
-        $s->sendMessage("§aHas desbaneado a: §6".$tName);
-    }
+        $conn = $this->bansDatabase->getConnection();
+        $stmt = $conn->prepare("DELETE FROM bans WHERE player_name = ?");
+        $stmt->bind_param("s", $tName);
 
-    public function isBan(Player $p): bool {
-        return $this->bans->exists($p->getName());
+        if ($stmt->execute() && $stmt->affected_rows > 0) {
+            $s->sendMessage("§aHas desbaneado a: §6$tName");
+        } else {
+            $s->sendMessage("§4El player: §6$tName §4no esta baneado");
+        }
+        $stmt->close();
     }
 
     public function parseTime(string $duration): ?int {
@@ -307,17 +357,23 @@ class StaffModeManager {
 
     public function checkExpiration(): void {
         $currentTime = time();
-        foreach(['mutes', 'bans'] as $type) {
-            foreach($this->{$type}->getAll() as $player => $data) {
-                if($data['time'] <= $currentTime) {
-                    $this->{$type}->remove($player);
-                    $this->{$type}->save();
-                    if($type === 'mutes' && ($target = Server::getInstance()->getPlayerExact($player))) {
-                        $target->sendMessage("§aYour mute has expired");
-                    }
-                }
+
+        $conn = $this->bansDatabase->getConnection();
+        $conn->query("DELETE FROM bans WHERE expiration_time > 0 AND expiration_time <= $currentTime");
+
+        $conn = $this->mutesDatabase->getConnection();
+        $stmt = $conn->prepare("SELECT player_name FROM mutes WHERE expiration_time <= ? AND expiration_time > 0");
+        $stmt->bind_param("i", $currentTime);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        while($row = $result->fetch_assoc()) {
+            if($player = Server::getInstance()->getPlayerExact($row["player_name"])) {
+                $player->sendMessage("§aYour mute has expired");
             }
         }
+
+        $conn->query("DELETE FROM mutes WHERE expiration_time > 0 AND expiration_time <= $currentTime");
     }
 
     public function formatTime(int $seconds): string {
