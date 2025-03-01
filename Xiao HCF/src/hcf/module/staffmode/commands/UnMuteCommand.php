@@ -2,37 +2,37 @@
 
 namespace hcf\module\staffmode\commands;
 
+use CortexPE\Commando\BaseCommand;
+use hcf\arguments\PlayersArgument;
 use hcf\Loader;
 use hcf\player\Player;
-use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\utils\TextFormat;
 
-class UnMuteCommand extends Command
+class UnMuteCommand extends BaseCommand
 {
     public function __construct()
     {
-        parent::__construct("unmute", "unmutear a un player");
-        $this->setPermission("staff.cmds");
+        parent::__construct(Loader::getInstance(), "unmute", "unmutear a un player");
+    }
+
+    protected function prepare(): void
+    {
+        $this->setPermission($this->getPermission());
+        $this->registerArgument(0, new PlayersArgument("player", true));
     }
 
     /**
      * @inheritDoc
      */
-    public function execute(CommandSender $sender, string $commandLabel, array $args)
+    public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
     {
-        if (!$sender instanceof Player) {
-            $sender->sendMessage(TextFormat::colorize("&cEste comando solo puede ser ejecutado por un jugador."));
-            return;
-        }
-
-        if ($args[0] === null) {
-            $sender->sendMessage(TextFormat::colorize("&cUso: /unmute <player>"));
-            return;
-        }
-
-        $t = Loader::getInstance()->getServer()->getPlayerExact($args[0]);
+        $t = $args["player"];
         if ($sender instanceof Player && $t instanceof Player)
-        Loader::getInstance()->getStaffModeManager()->removeMute($sender, $t);
+            Loader::getInstance()->getStaffModeManager()->removeMute($sender, $t);
+    }
+
+    public function getPermission(): ?string
+    {
+        return "staff.cmds";
     }
 }

@@ -5,6 +5,7 @@ namespace hcf\module\staffmode\commands;
 use CortexPE\Commando\BaseSubCommand;
 use CortexPE\Commando\args\RawStringArgument;
 use CortexPE\Commando\BaseCommand;
+use hcf\arguments\PlayersArgument;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use pocketmine\Server;
@@ -20,7 +21,7 @@ class MuteCommand extends BaseCommand {
 
     protected function prepare(): void {
         $this->setPermission($this->getPermission());
-        $this->registerArgument(0, new RawStringArgument("player", true));
+        $this->registerArgument(0, new PlayersArgument("player", true));
         $this->registerArgument(1, new RawStringArgument("time", true));
         $this->registerArgument(2, new RawStringArgument("reason", true));
     }

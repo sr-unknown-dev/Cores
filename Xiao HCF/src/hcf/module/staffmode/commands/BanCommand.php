@@ -21,9 +21,9 @@ class BanCommand extends BaseCommand {
 
     protected function prepare(): void {
         $this->setPermission($this->getPermission());
-        $this->registerArgument(0, new PlayersArgument("player", false));
-        $this->registerArgument(1, new RawStringArgument("time", false));
-        $this->registerArgument(2, new RawStringArgument("reason", false));
+        $this->registerArgument(0, new PlayersArgument("player", true));
+        $this->registerArgument(1, new RawStringArgument("time", true));
+        $this->registerArgument(2, new RawStringArgument("reason", true));
     }
 
     public function onRun(CommandSender $sender, string $label, array $args): void {

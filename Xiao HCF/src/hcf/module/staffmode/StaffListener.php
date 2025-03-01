@@ -23,21 +23,26 @@ class StaffListener implements Listener {
 
     public function onLogin(PlayerLoginEvent $event): void {
         $player = $event->getPlayer();
-        if (!$player instanceof Player || !$this->staffManager->bans->exists($player->getName())) return;
+        if (!$player instanceof Player) return;
 
-        $banData = $this->staffManager->bans->get($player->getName());
-        if ($banData["time"] <= time()) {
-            $this->staffManager->bans->remove($player->getName());
-            $this->staffManager->bans->save();
-            return;
+        $conn = $this->staffManager->bansDatabase->getConnection();
+        $stmt = $conn->prepare("SELECT reason, expiration_time FROM bans WHERE player_name = ? AND (expiration_time > ? OR expiration_time = 0)");
+        $name = $player->getName();
+        $currentTime = time();
+        $stmt->bind_param("si", $name, $currentTime);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $banData = $result->fetch_assoc();
+            $player->kick(TextFormat::colorize(
+                "&7Estás baneado\n" .
+                "Razón: &6{$banData['reason']}\n" .
+                "&7Expira en: " . $this->staffManager->formatTime($banData['expiration_time'] - time()) . "\n" .
+                "&7Si deseas apelar el ban: &6" . Loader::getInstance()->getConfig()->get("discord-link")
+            ));
         }
-
-        $player->kick(TextFormat::colorize(
-            "&7Estás baneado\n" .
-            "Razón: &6{$banData['reazon']}\n" .
-            "&7Expira en: " . $this->staffManager->formatTime($banData['time'] - time()) . "\n" .
-            "&76Si deseas apelar el ban: &6" . Loader::getInstance()->getConfig()->get("discord-link")
-        ));
+        $stmt->close();
     }
 
     public function onJoin(PlayerJoinEvent $event): void {

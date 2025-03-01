@@ -29,8 +29,8 @@ class StaffModeManager {
     public array $staffchat = [];
     public Config $mutes;
     public Config $bans;
-    private BansDatabase $bansDatabase;
-    private MutesDatabase $mutesDatabase;
+    public BansDatabase $bansDatabase;
+    public MutesDatabase $mutesDatabase;
     public function __construct() {
         $this->bansDatabase = BansDatabase::getInstance();
         $this->mutesDatabase = MutesDatabase::getInstance();
