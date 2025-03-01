@@ -26,7 +26,6 @@ class ModalitysForm extends SimpleForm{
                 $objective->sendMessage("Soon");
             }
 
-
             if ($data === 3){
                 $objective->sendMessage("Soon");
             }
