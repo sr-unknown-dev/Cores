@@ -4,11 +4,11 @@ namespace hcf\module\ranksystem\commands\subcommands;
 
 use CortexPE\Commando\BaseSubCommand;
 use CortexPE\Commando\args\RawStringArgument;
+use hcf\player\Player;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 use hcf\Loader;
 use hcf\module\ranksystem\forms\RankCreateForm;
-use hcf\player\Player;
 
 class CreateSubCommand extends BaseSubCommand {
 

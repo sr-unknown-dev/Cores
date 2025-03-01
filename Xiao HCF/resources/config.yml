@@ -95,3 +95,10 @@ events:
       Ability: 15
       White: 15
       Starter: 15
+
+database:
+  host: "buf5w3dduwoovwsdpzeh-mysql.services.clever-cloud.com"
+  username: "uztblh187mfyfccj"
+  password: "RuQkxYWPgbjpeD6DmIBJ"
+  database: "buf5w3dduwoovwsdpzeh"
+  port: 3306

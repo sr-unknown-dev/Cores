@@ -2,6 +2,7 @@
 
 namespace hcf\module\ranksystem;
 
+use hcf\databases\Database;
 use hcf\Loader;
 use hcf\module\ranksystem\commands\RankCommands;
 use hcf\player\Player;
@@ -15,29 +16,31 @@ class RankManager
      * @var Config
      */
     public Config $ranks;
-    public Config $playerRanks;
-    public Config $rankExpirations;
     private array $attachments = [];
+    private Database $database;
 
-    /**
-     *
-     */
     public function __construct() {
+        $this->database = Database::getInstance();
         $this->ranks = new Config(Loader::getInstance()->getDataFolder() . "ranks.yml", Config::YAML, [
             "default" => "Guest",
             "Guest" => [
                 "format" => "&l&aGeneral",
-                "chatFormat" => "&8[&a#{top}&8]&r &8[&c{faction}&8]&r {prefix} &8[&l&aGeneral&8] &r&f{player}: &7{message}",
+                "chatFormat" => "&8[&l&aGeneral&8] &r&f{player}: &7{message}",
                 "permissions" => []
             ]
         ]);
-        $this->playerRanks = new Config(Loader::getInstance()->getDataFolder() . "player_ranks.yml", Config::YAML);
-        $this->rankExpirations = new Config(Loader::getInstance()->getDataFolder() . "rank_expirations.yml", Config::YAML);
+        
+        // Crear tabla para rangos de jugadores
+        $this->database->getConnection()->query("CREATE TABLE IF NOT EXISTS player_ranks (
+            player_name VARCHAR(32) PRIMARY KEY,
+            rank_name VARCHAR(32),
+            expiration_time INT DEFAULT 0
+        )");
+        
         $commandMap = Loader::getInstance()->getServer()->getCommandMap();
         $commandMap->register("ranks", new RankCommands("ranks", "Ranks Command"));
         Loader::getInstance()->getServer()->getPluginManager()->registerEvents(new RanksListener(), Loader::getInstance());
     }
-
     /**
      * @param Player $s
      * @param string $name
@@ -52,7 +55,7 @@ class RankManager
         }
         $data = [
             "format" => $format,
-            "chatFormat" => "&8[&a#{top}&8]&r &8[&c{faction}&8]&r {prefix} &8[{$format}&r&8] &r&f{player}: &7{message}",
+            "chatFormat" => "&8[{$format}&r&8] &r&f{player}: &7{message}",
             "permissions" => []
         ];
         $this->ranks->setNested($name, $data);
@@ -81,18 +84,24 @@ class RankManager
      * @param int $duration
      * @return void
      */
-    public function setPlayerRank(Player $player, string $rank, int $duration = 0) {
-        $this->playerRanks->set($player->getName(), $rank);
-        $this->playerRanks->save();
+    public function setPlayerRank(Player $player, string $rank, int $duration = 0): void {
+        $conn = $this->database->getConnection();
+        $playerName = $player->getName();
+        $expirationTime = $duration > 0 ? time() + $duration : 0;
+        
+        $stmt = $conn->prepare("REPLACE INTO player_ranks (player_name, rank_name, expiration_time) VALUES (?, ?, ?)");
+        $stmt->bind_param("ssi", $playerName, $rank, $expirationTime);
+        $stmt->execute();
+        
         $this->applyPermissions($player);
+        
         if ($duration > 0) {
-            $expirationTime = time() + $duration;
-            $this->rankExpirations->set($player->getName(), $expirationTime);
-            $this->rankExpirations->save();
-            Loader::getInstance()->getScheduler()->scheduleDelayedTask(new ClosureTask(function() use ($player) {
-                $this->removePlayerRank($player);
-                $player->sendMessage(TextFormat::colorize("&8[&6Ranks&8] &cTu rank ha expirado"));
-            }), $duration * 20);
+            Loader::getInstance()->getScheduler()->scheduleDelayedTask(new ClosureTask(
+                function() use ($player) {
+                    $this->removePlayerRank($player);
+                    $player->sendMessage(TextFormat::colorize("&8[&6Ranks&8] &cTu rank ha expirado"));
+                }
+            ), $duration * 20);
         }
     }
 
@@ -101,14 +110,27 @@ class RankManager
      * @return string
      */
     public function getPlayerRank(Player $player): string {
-        return $this->playerRanks->get($player->getName(), $this->ranks->get("default"));
+        $conn = $this->database->getConnection();
+        $playerName = $player->getName();
+        
+        $stmt = $conn->prepare("SELECT rank_name FROM player_ranks WHERE player_name = ?");
+        $stmt->bind_param("s", $playerName);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if($result->num_rows > 0) {
+            return $result->fetch_assoc()["rank_name"];
+        }
+        
+        return $this->ranks->get("default");
     }
 
     /**
      * @param Player $player
      * @return void
      */
-    public function applyPermissions(Player $player) {
+    public function applyPermissions(Player $player): void {
+        if(!$player instanceof Player) return;
         $this->removePlayerAttachments($player);
         $rank = $this->getPlayerRank($player);
         $permissions = $this->getRankPermissions($rank);
@@ -135,11 +157,14 @@ class RankManager
      * @param Player $player
      * @return void
      */
-    public function removePlayerRank(Player $player) {
-        $this->playerRanks->remove($player->getName());
-        $this->playerRanks->save();
-        $this->rankExpirations->remove($player->getName());
-        $this->rankExpirations->save();
+    public function removePlayerRank(Player $player): void {
+        $conn = $this->database->getConnection();
+        $playerName = $player->getName();
+        
+        $stmt = $conn->prepare("DELETE FROM player_ranks WHERE player_name = ?");
+        $stmt->bind_param("s", $playerName);
+        $stmt->execute();
+        
         $this->applyPermissions($player);
     }
 
@@ -156,7 +181,7 @@ class RankManager
      * @return string
      */
     public function getChatFormat(string $rank): string {
-        return $this->ranks->get($rank)["chatFormat"] ?? '&8[&a#{top}&8]&r &8[&c{faction}&8]&r {prefix} &8[&aGuest&8]&r &a{player}&f: &7{message}';
+        return $this->ranks->get($rank)["chatFormat"] ?? '&8[&aGuest&8]&r &a{player}&f: &7{message}';
     }
 
     /**
@@ -186,54 +211,78 @@ class RankManager
      * @param Player $u
      * @return void
      */
-    public function userInfo(Player $s, Player $u) {
+    public function userInfo(Player $s, Player $u): void {
+        $conn = $this->database->getConnection();
+        $playerName = $u->getName();
+        
+        $stmt = $conn->prepare("SELECT rank_name, expiration_time FROM player_ranks WHERE player_name = ?");
+        $stmt->bind_param("s", $playerName);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
         $rank = $this->getPlayerRank($u);
-        $expirationTime = $this->rankExpirations->get($u->getName(), null);
-        $message = "§7Player Information §6 " . $u->getName() . ":\n";
+        $message = "§7Player Information §6" . $playerName . ":\n";
         $message .= "§7Rank§6: " . $rank . "\n";
-        if ($expirationTime !== null) {
-            $remainingTime = $expirationTime - time();
-            if ($remainingTime > 0) {
-                $message .= "§7Expiratión: §6" . $this->parseDuration($remainingTime) . "\n";
+        
+        if($result->num_rows > 0) {
+            $data = $result->fetch_assoc();
+            $expirationTime = $data["expiration_time"];
+            
+            if($expirationTime > 0) {
+                $remainingTime = $expirationTime - time();
+                if($remainingTime > 0) {
+                    $message .= "§7Expiración: §6" . $this->formatTime($remainingTime) . "\n";
+                } else {
+                    $message .= "§7Expiración: §cYa expiró\n";
+                }
             } else {
-                $message .= "Its has already expire.\n";
+                $message .= "§7Expiración: §6Permanente\n";
             }
         } else {
-            $message .= "§7Expiratión: §6Permanente.\n";
+            $message .= "§7Expiración: §6Permanente\n";
         }
+        
         $s->sendMessage(TextFormat::colorize($message));
     }
 
     /**
      * @return void
      */
-    public function checkExpiredRanks() {
+    public function checkExpiredRanks(): void {
+        $conn = $this->database->getConnection();
         $currentTime = time();
-        foreach ($this->rankExpirations->getAll() as $playerName => $expirationTime) {
-            if ($currentTime >= $expirationTime) {
-                $player = Loader::getInstance()->getServer()->getPlayerExact($playerName);
-                if ($player !== null) {
-                    $this->removePlayerRank($player);
-                } else {
-                    $this->removeRankData($playerName);
-                }
+        
+        $stmt = $conn->prepare("SELECT player_name FROM player_ranks WHERE expiration_time > 0 AND expiration_time <= ?");
+        $stmt->bind_param("i", $currentTime);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        while($row = $result->fetch_assoc()) {
+            $player = Loader::getInstance()->getServer()->getPlayerExact($row["player_name"]);
+            if($player !== null) {
+                $this->removePlayerRank($player);
+                $player->sendMessage(TextFormat::colorize("&8[&6Ranks&8] &cTu rank ha expirado"));
             }
         }
-    }
-
-    /**
-     * @param string $playerName
-     * @return void
-     */
-    private function removeRankData(string $playerName) {
-        $this->playerRanks->remove($playerName);
-        $this->playerRanks->save();
-        $this->rankExpirations->remove($playerName);
-        $this->rankExpirations->save();
+        
+        $conn->query("DELETE FROM player_ranks WHERE expiration_time > 0 AND expiration_time <= $currentTime");
     }
 
     public function getAll(){
         return $this->ranks->getAll();
+    }
+
+    private function formatTime(int $seconds): string {
+        $days = floor($seconds / 86400);
+        $hours = floor(($seconds % 86400) / 3600);
+        $minutes = floor(($seconds % 3600) / 60);
+        
+        $parts = [];
+        if($days > 0) $parts[] = $days . "d";
+        if($hours > 0) $parts[] = $hours . "h";
+        if($minutes > 0) $parts[] = $minutes . "m";
+        
+        return empty($parts) ? "menos de 1m" : implode(" ", $parts);
     }
 
     /**
