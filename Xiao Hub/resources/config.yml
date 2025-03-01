@@ -1,0 +1,97 @@
+# Main config
+prefix: '§r§l§2Xiao » §r'
+motd: '§r§l§2Xiao'
+
+server: '§r§l§2Xiao§r'
+tebex: '§7xiao.tebex.io'
+ip: '§r§7xiao.ddns.net'
+tebex-crates: 'xiao.tebex.io'
+
+camp.timer: 30
+amethyst.motion: 2
+feather.motion: 2
+
+#webhooks settings
+kills.webhook: ''
+koth.webhook: 'https://discord.com/api/webhooks/1338035795810058290/fIvFAARDbW9dmwepuRr9AJnd1xtwmGEza8u167F1ks3pATXOvPtUfz1B36y4pJd-Us4j'
+admin.webhook: 'https://discord.com/api/webhooks/1344886872085631007/PnMYeMjHv2TaSeXaRcun0yfk4lk5cKR6GE0nwrEs19WU-baIDH9SfFoPAQ5NovBaKOpo'
+hcf.webhook: 'https://discord.com/api/webhooks/1338035792278327339/h8wx2cuE_tbxBgSOuL2p7VMy9bh9kbzstvGZ57ErMmRqXpv0YRAFX8KCA-wWmndc6E2V'
+report.webhook: 'https://discord.com/api/webhooks/1338035782685818890/zwJAjLQPBSh2CgP0bCpwthYzn9s4s4eSVOAnTLfa_AlMtgvVFWwSz7RjDm6FdZX-Qicj'
+discord-link: 'https://discord.gg/79Afx5Seu3'
+
+# Messages
+join.message: '§8[§a+§8] §f{player}'
+quit.message: '§8[§c-§8] §f{player}'
+
+# Factions
+faction.max.members: 8
+faction.regeneration.offline: true
+
+# Scoreboard Config
+scoreboard.title:
+- '§r'
+- '§r§l§2X'
+- '§r§l§2X'
+- '§r§l§2Xi'
+- '§r§l§2Xi'
+- '§r§l§2Xia'
+- '§r§l§2Xia'
+- '§r§l§2Xiao'
+- '§r§l§2Xiao'
+- '§r§l§fXiao'
+- '§r§l§fXiao'
+- '§r§l§2Xiao'
+- '§r§l§2Xiao'
+- '§r§l§a'
+
+scoreboard.placeholder:
+- '            §r§7xiao.ddns.net'
+- '            §r§7xiao.ddns.net'
+- '            §r§7xiao.tebex.io'
+- '            §r§7xiao.tebex.io'
+
+# Messages Config
+messages:
+  - "§7Use the §b/daily §7command to receive daily rewards remember you can only rerun the command every 24 hours."
+  - "§7Remember to log out inside your base to avoid losing items"
+  - "§7 vote for your favorite partner using §d/support"
+  - "&7 Do you want to buy a range? check out our store at c§r§7xiao.tebex.io"
+  - "&7 Join our Discord server §dhttps://discord.gg/xiao"
+  - "§7 Don't use §bHACKS"
+
+# Checks Configuration
+checks:
+  speed:
+    enabled: true
+    max_speed: 5.0
+    max_speed_alerts: 0.8
+    max_speed_ban: 5.2
+  autoclick:
+    enabled: true
+    max_cps: 20
+    max_cps_alerts: 5
+    max_cps_ban: 25
+  reach:
+    enabled: true
+    max_reach: 6.0
+    max_reach_alerts: 6.5
+    max_reach_ban: 7.5
+alerts:
+  webhook: "https://discord.com/api/webhooks/1344886043517911061/NMR1QRe-9qWXG3MXPX4A6Ap1ItrFeTnvCMf5ZN3ofaFyZmu2O9IQd9PWDP957saBKZNN"
+  max_alerts_ban: 200
+
+events:
+  keyall:
+    keys:
+      Xiao: 15
+      Dark: 15
+      Ability: 15
+      White: 15
+      Starter: 15
+  keyallop:
+    keys:
+      Xiao: 15
+      Dark: 15
+      Ability: 15
+      White: 15
+      Starter: 15
