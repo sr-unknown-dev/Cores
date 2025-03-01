@@ -219,13 +219,15 @@ class StaffModeManager {
         return $p->hasPermission("staff.perms");
     }
 
-    public function addMute(Player $s, Player $t, string $reason, string $time): void {
+    public function addMute(?Player $s, Player $t, string $reason, string $time): void {
         $tName = $t->getName();
-        $sName = $s->getName();
+        $sName = $s !== null ? $s->getName() : "Console";
         $timeSeconds = $this->parseTime($time);
 
         if ($timeSeconds === null) {
-            $s->sendMessage("§4Formato de tiempo inválido");
+            if ($s !== null) {
+                $s->sendMessage("§4Formato de tiempo inválido");
+            }
             return;
         }
 
@@ -235,22 +237,28 @@ class StaffModeManager {
         $stmt->bind_param("sssi", $tName, $reason, $sName, $expirationTime);
 
         if ($stmt->execute()) {
-            $s->sendMessage("§aMuted §6$tName §afor: §6$reason §afor: §6$time");
+            if ($s !== null) {
+                $s->sendMessage("§aMuted §6$tName §afor: §6$reason §afor: §6$time");
+            }
             $t->sendMessage("§4You have been muted\nReason: §6$reason\n§4Expires in: §6" . $this->formatTime($timeSeconds));
         }
         $stmt->close();
     }
 
-    public function removeMute(Player $s, Player $t): void {
+    public function removeMute(?Player $s, Player $t): void {
         $tName = $t->getName();
         $conn = $this->mutesDatabase->getConnection();
         $stmt = $conn->prepare("DELETE FROM mutes WHERE player_name = ?");
         $stmt->bind_param("s", $tName);
 
         if ($stmt->execute() && $stmt->affected_rows > 0) {
-            $s->sendMessage("§aUnmuted §6$tName");
+            if ($s !== null) {
+                $s->sendMessage("§aUnmuted §6$tName");
+            }
         } else {
-            $s->sendMessage("§4Player §6$tName §4is not muted");
+            if ($s !== null) {
+                $s->sendMessage("§4Player §6$tName §4is not muted");
+            }
         }
         $stmt->close();
     }
@@ -296,13 +304,15 @@ class StaffModeManager {
         $stmt->close();
     }
 
-    public function addBan(Player $s, Player $t, string $reason, string $time): void {
+    public function addBan(?Player $s, Player $t, string $reason, string $time): void {
         $tName = $t->getName();
-        $sName = $s->getName();
+        $sName = $s !== null ? $s->getName() : "Console";
         $timeSeconds = $this->parseTime($time);
 
         if ($timeSeconds === null) {
-            $s->sendMessage("§4Formato de tiempo inválido");
+            if ($s !== null) {
+                $s->sendMessage("§4Formato de tiempo inválido");
+            }
             return;
         }
 
@@ -312,7 +322,9 @@ class StaffModeManager {
         $stmt->bind_param("sssi", $tName, $reason, $sName, $expirationTime);
 
         if ($stmt->execute()) {
-            $s->sendMessage("§aHas baneado a: §6".$tName." §apor: §6".$reason." §adurante: §6".$time);
+            if ($s !== null) {
+                $s->sendMessage("§aHas baneado a: §6".$tName." §apor: §6".$reason." §adurante: §6".$time);
+            }
             $t->kick("§4Has sido baneado\nRazón: §6".$reason."\n§4Expira en: §6".$this->formatTime($timeSeconds));
         }
         $stmt->close();
@@ -333,16 +345,20 @@ class StaffModeManager {
         return $exists;
     }
 
-    public function removeBan(Player $s, Player $t): void {
+    public function removeBan(?Player $s, Player $t): void {
         $tName = $t->getName();
         $conn = $this->bansDatabase->getConnection();
         $stmt = $conn->prepare("DELETE FROM bans WHERE player_name = ?");
         $stmt->bind_param("s", $tName);
 
         if ($stmt->execute() && $stmt->affected_rows > 0) {
-            $s->sendMessage("§aHas desbaneado a: §6$tName");
+            if ($s !== null) {
+                $s->sendMessage("§aHas desbaneado a: §6$tName");
+            }
         } else {
-            $s->sendMessage("§4El player: §6$tName §4no esta baneado");
+            if ($s !== null) {
+                $s->sendMessage("§4El player: §6$tName §4no esta baneado");
+            }
         }
         $stmt->close();
     }

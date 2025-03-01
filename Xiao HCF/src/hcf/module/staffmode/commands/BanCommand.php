@@ -37,7 +37,7 @@ class BanCommand extends BaseCommand {
             return;
         }
 
-        $target = Server::getInstance()->getPlayerExact($args["player"]);
+        $target = $args["player"];
         $time = $args["time"];
         $reason = $args["reason"];
 
