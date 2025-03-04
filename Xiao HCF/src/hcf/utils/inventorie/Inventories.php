@@ -7,32 +7,17 @@ namespace hcf\utils\inventorie;
 use CortexPE\DiscordWebhookAPI\Embed;
 use CortexPE\DiscordWebhookAPI\Message;
 use CortexPE\DiscordWebhookAPI\Webhook;
-use hcf\abilities\items\NinjaStar;
-use hcf\command\moderador\EventsCommand;
-use hcf\entity\AbilityEntity;
-use hcf\handler\kit\classes\presets\Archer;
+use hcf\command\events\EventsCommand;
+use hcf\entity\server\AbilityEntity;
 use hcf\Loader;
-use hcf\kits\ArcherOp;
-use hcf\kits\BardOp;
-use hcf\kits\Extreme;
-use hcf\kits\Leviathan;
-use hcf\kits\RogueOp;
-use hcf\kits\Supreme;
-use hcf\kits\Xiao;
-use hcf\kits\XiaoPlus;
-use hcf\koth\command\subcommand\StartSubCommand;
 use hcf\player\Player;
 use hcf\timer\types\TimerAirdrop;
-use hcf\timer\types\TimerDeath;
 use hcf\timer\types\TimerFFA;
 use hcf\timer\types\TimerKey;
 use hcf\timer\types\TimerKeyOP;
 use hcf\timer\types\TimerLoobox;
 use hcf\timer\types\TimerMystery;
 use hcf\timer\types\TimerPackages;
-use hcf\timer\types\TimerPurge;
-use hcf\timer\types\TimerSotw;
-use hcf\timer\types\Timerx2Points;
 use hcf\utils\coldowns\Cooldowns;
 use hcf\utils\item\Items;
 use hcf\utils\time\Timer;
@@ -40,19 +25,15 @@ use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\transaction\InvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransactionResult;
 use pocketmine\block\utils\DyeColor;
-use pocketmine\block\utils\MobHeadType;
 use pocketmine\block\VanillaBlocks;
-use pocketmine\data\bedrock\EnchantmentIdMap;
 use pocketmine\inventory\Inventory;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\enchantment\VanillaEnchantments;
 use pocketmine\item\Item;
 use pocketmine\item\LegacyStringToItemParser;
 use pocketmine\item\VanillaItems;
-use pocketmine\utils\Config;
-use pocketmine\utils\TextFormat as TE;
 use pocketmine\utils\TextFormat;
-use xoapp\staffmode\items\Vanish;
+use pocketmine\utils\TextFormat as TE;
 
 /**
  * Class Inventories
@@ -63,14 +44,15 @@ final class Inventories
 
     public static array $players = [];
 
-    public static function BountyMenu(Player $player): void {
+    public static function BountyMenu(Player $player): void
+    {
         $menu = InvMenu::create(InvMenu::TYPE_DOUBLE_CHEST);
         $inventory = $menu->getInventory();
 
         $bounties = Loader::getInstance()->getBountyManager()->getAllBountys();
         $slot = 0;
 
-        foreach($bounties as $target => $data) {
+        foreach ($bounties as $target => $data) {
             $paper = VanillaItems::PAPER();
             $paper->setCustomName(TextFormat::colorize("&r&l&6" . $target));
 
@@ -90,9 +72,9 @@ final class Inventories
 
             $clickedName = TextFormat::clean($item->getCustomName());
 
-            if(isset($bounties[$clickedName])) {
+            if (isset($bounties[$clickedName])) {
                 $targetPlayer = Loader::getInstance()->getServer()->getPlayerByPrefix($clickedName);
-                if($targetPlayer instanceof Player) {
+                if ($targetPlayer instanceof Player) {
                     Loader::getInstance()->getBountyManager()->trackBounty($player, $targetPlayer);
                     $player->sendMessage(TextFormat::colorize("&aBounty is activated"));
                 } else {
@@ -111,7 +93,7 @@ final class Inventories
         $menu = InvMenu::create(InvMenu::TYPE_DOUBLE_CHEST);
         $menu->setInventoryCloseListener(function (Player $player, Inventory $inventory) use ($data): void {
             $data['items'] = $inventory->getContents();
-            Loader::getInstance()->getHandlerManager()->getCrateManager()->addCrate($data['crateName'], $data['key'], $data['keyFormat'], $data['color'], $data['nameFormat'], (array) $data['items']);
+            Loader::getInstance()->getHandlerManager()->getCrateManager()->addCrate($data['crateName'], $data['key'], $data['keyFormat'], $data['color'], $data['nameFormat'], (array)$data['items']);
 
             $chest = VanillaBlocks::SHULKER_BOX()->asItem();
             $chest->setCustomName(TE::colorize('Crate ' . $data['crateName']));
@@ -198,131 +180,127 @@ final class Inventories
             $player = $transaction->getPlayer();
             $item = $transaction->getItemClicked()->getCustomName();
 
+            switch ($item) {
+                case "&aKeyall":
+                    $player->sendMessage(TE::colorize("&aKeyall has starter"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7███&a█&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7██&a█&7██ &r&7[&2&lXiao &l&aKEYALL&r&7]"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a███&7███ &r&aKeyall &ghas starter for: &f" . Timer::Format($time)));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7██&a█&7██ "));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7███&a█&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7███&a█&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
+                    $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
+                    $msg = new Message();
+                    $msg->setContent('<@&1184267398501629962>');
+                    $embed = new Embed();
+                    $embed->setTitle("KeyAll has started");
+                    $embed->setColor(0xf9ff1a);
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
 
-            if ($item === TE::colorize("&aKeyall")) {
-                $player->sendMessage(TE::colorize("&aKeyall has starter"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7███&a█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7██&a█&7██ &r&7[&2&lXiao &l&aKEYALL&r&7]"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a███&7███ &r&aKeyall &ghas starter for: &f" . Timer::Format($time)));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7██&a█&7██ "));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7███&a█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7███&a█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
-                $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
-                $msg = new Message();
-                $msg->setContent('<@&1184267398501629962>');
-                $embed = new Embed();
-                $embed->setTitle("KeyAll has started");
-                $embed->setColor(0xf9ff1a);
-                $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                    $embed->setFooter("Xiao Network");
+                    $msg->addEmbed($embed);
 
-                $embed->setFooter("Xiao Network");
-                $msg->addEmbed($embed);
+                    $webHook->send($msg);
+                    TimerKey::start($time);
+                    break;
+                case "&9OpKeyall":
+                    $player->sendMessage(TE::colorize("&9OpKeyall &ahas starter"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7███&3█&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7██&3█&7██ &r&7[&2&lXiao &l&3OPKYEALL&r&7]"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3███&7███ &r&3OpKeyall &ghas starter for: &f" . Timer::Format($time)));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7██&3█&7██ "));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7███&3█&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7███&3█&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
+                    $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
+                    $msg = new Message();
+                    $msg->setContent('<@&1184267398501629962>');
+                    $embed = new Embed();
+                    $embed->setTitle("OpKeyAll has started");
+                    $embed->setColor(0xf9ff1a);
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
 
-                $webHook->send($msg);
-                TimerKey::start($time);
-            }
+                    $embed->setFooter("Xiao Network");
+                    $msg->addEmbed($embed);
 
-            if ($item === TE::colorize("&9OpKeyall")) {
-                $player->sendMessage(TE::colorize("&9OpKeyall &ahas starter"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7███&3█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7██&3█&7██ &r&7[&2&lXiao &l&3OPKYEALL&r&7]"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3███&7███ &r&3OpKeyall &ghas starter for: &f" . Timer::Format($time)));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7██&3█&7██ "));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7███&3█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7███&3█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
-                $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
-                $msg = new Message();
-                $msg->setContent('<@&1184267398501629962>');
-                $embed = new Embed();
-                $embed->setTitle("OpKeyAll has started");
-                $embed->setColor(0xf9ff1a);
-                $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                    $webHook->send($msg);
+                    TimerKeyOP::start($time);
+                    break;
+                case "&3Airdropall":
+                    $player->sendMessage(TE::colorize("&3Airdropall &ahas starter"));
+                    $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
+                    $msg = new Message();
+                    $msg->setContent('<@&1184267398501629962>');
+                    $embed = new Embed();
+                    $embed->setTitle("AirdropAll has started");
+                    $embed->setColor(0xf9ff1a);
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
 
-                $embed->setFooter("Xiao Network");
-                $msg->addEmbed($embed);
+                    $embed->setFooter("Xiao Network");
+                    $msg->addEmbed($embed);
 
-                $webHook->send($msg);
-                TimerKeyOP::start($time);
-            }
+                    $webHook->send($msg);
+                    TimerAirdrop::start($time);
+                    break;
+                case "&5Pkgall":
+                    $player->sendMessage(TE::colorize("&5Pkgall &ahas starter"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&5███&7█&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7██&5█&7██ &r&7[&2&lXiao &l&5PPALL&r&7]"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&5██&5█&7██ &r&5Ppall &ghas starter for: &f" . Timer::Format($time)));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7███&7█&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7███&7█&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
+                    $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
+                    $msg = new Message();
+                    $msg->setContent('<@&1184267398501629962>');
+                    $embed = new Embed();
+                    $embed->setTitle("PkgAll has started");
+                    $embed->setColor(0xf9ff1a);
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
 
-            if ($item === TE::colorize("&3Airdropall")) {
-                $player->sendMessage(TE::colorize("&3Airdropall &ahas starter"));
-                $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
-                $msg = new Message();
-                $msg->setContent('<@&1184267398501629962>');
-                $embed = new Embed();
-                $embed->setTitle("AirdropAll has started");
-                $embed->setColor(0xf9ff1a);
-                $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                    $embed->setFooter("Xiao Network");
+                    $msg->addEmbed($embed);
 
-                $embed->setFooter("Xiao Network");
-                $msg->addEmbed($embed);
+                    $webHook->send($msg);
+                    TimerPackages::start($time);
+                    break;
+                case "&9Lootboxall":
+                    $player->sendMessage(TE::colorize("&4Mysteryall &ahas starter"));
+                    $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
+                    $msg = new Message();
+                    $msg->setContent('<@&1184267398501629962>');
+                    $embed = new Embed();
+                    $embed->setTitle("MysteryAll has started");
+                    $embed->setColor(0xf9ff1a);
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
 
-                $webHook->send($msg);
-                TimerAirdrop::start($time);
-            }
+                    $embed->setFooter("Xiao Network");
+                    $msg->addEmbed($embed);
 
-            if ($item === TE::colorize("&5Pkgall")) {
-                $player->sendMessage(TE::colorize("&5Pkgall &ahas starter"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&5███&7█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7██&5█&7██ &r&7[&2&lXiao &l&5PPALL&r&7]"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&5██&5█&7██ &r&5Ppall &ghas starter for: &f" . Timer::Format($time)));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7███&7█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7███&7█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
-                $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
-                $msg = new Message();
-                $msg->setContent('<@&1184267398501629962>');
-                $embed = new Embed();
-                $embed->setTitle("PkgAll has started");
-                $embed->setColor(0xf9ff1a);
-                $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                    $webHook->send($msg);
+                    TimerMystery::start($time);
+                    break;
+                case "&4Mysteryall":
+                    $player->sendMessage(TE::colorize("&cLootboxall &ahas starter"));
+                    $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
+                    $msg = new Message();
+                    $msg->setContent('<@&1184267398501629962>');
+                    $embed = new Embed();
+                    $embed->setTitle("LootboxAll has started");
+                    $embed->setColor(0xf9ff1a);
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
 
-                $embed->setFooter("Xiao Network");
-                $msg->addEmbed($embed);
+                    $embed->setFooter("Xiao Network");
+                    $msg->addEmbed($embed);
 
-                $webHook->send($msg);
-                TimerPackages::start($time);
-            }
-
-            if ($item === TE::colorize("&4Mysteryall")) {
-                $player->sendMessage(TE::colorize("&4Mysteryall &ahas starter"));
-                $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
-                $msg = new Message();
-                $msg->setContent('<@&1184267398501629962>');
-                $embed = new Embed();
-                $embed->setTitle("MysteryAll has started");
-                $embed->setColor(0xf9ff1a);
-                $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
-
-                $embed->setFooter("Xiao Network");
-                $msg->addEmbed($embed);
-
-                $webHook->send($msg);
-                TimerMystery::start($time);
-            }
-
-            if ($item === TE::colorize("&cLootboxall")) {
-                $player->sendMessage(TE::colorize("&cLootboxall &ahas starter"));
-                $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
-                $msg = new Message();
-                $msg->setContent('<@&1184267398501629962>');
-                $embed = new Embed();
-                $embed->setTitle("LootboxAll has started");
-                $embed->setColor(0xf9ff1a);
-                $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
-
-                $embed->setFooter("Xiao Network");
-                $msg->addEmbed($embed);
-
-                $webHook->send($msg);
-                TimerLoobox::start($time);
+                    $webHook->send($msg);
+                    TimerLoobox::start($time);
+                    break;
             }
             return $transaction->discard();
         });
@@ -356,145 +334,127 @@ final class Inventories
             $player = $transaction->getPlayer();
             $item = $transaction->getItemClicked()->getCustomName();
 
+            switch ($item) {
+                case "&aSotw":
+                    $player->sendMessage(TE::colorize("&aSotw has starter"));
+                    Loader::getInstance()->getTimerManager()->getSotw()->setActive(true);
+                    Loader::getInstance()->getTimerManager()->getSotw()->setTime((int)$time);
+                    break;
 
-            if ($item === TE::colorize("&aSotw")) {
-                $player->sendMessage(TE::colorize("&aSotw has starter"));
-                Loader::getInstance()->getTimerManager()->getSotw()->setActive(true);
-                Loader::getInstance()->getTimerManager()->getSotw()->setTime((int) $time);
-            }
+                case "&4Eotw":
+                    $player->sendMessage(TE::colorize("&4Eotw &ahas starter"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█████&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7██&7█&7██ &r&7[&2&lXiao &l&4EOTW&r&7]"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█████&7█ &r&4EOTW &ghas starter for: &f" . Timer::Format($time)));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7██&7█&7██ "));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7███&7█&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█████&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
+                    $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
+                    $msg = new Message();
+                    $msg->setContent('<@&1184267398501629962>');
+                    $embed = new Embed();
+                    $embed->setTitle("Eotw Start");
+                    $embed->setColor(0xf9ff1a);
+                    $embed->setDescription("⏳ Duration: " . Timer::Format($time) . "\n⏳ Purge Durarion: 20m\nIp: \nStore: https://Xiao.tebex.io/");
 
-            if ($item === TE::colorize("&4Eotw")) {
-                $player->sendMessage(TE::colorize("&4Eotw &ahas starter"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█████&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7██&7█&7██ &r&7[&2&lXiao &l&4EOTW&r&7]"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█████&7█ &r&4EOTW &ghas starter for: &f" . Timer::Format($time)));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7██&7█&7██ "));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7███&7█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█████&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
-                $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
-                $msg = new Message();
-                $msg->setContent('<@&1184267398501629962>');
-                $embed = new Embed();
-                $embed->setTitle("Eotw Start");
-                $embed->setColor(0xf9ff1a);
-                $embed->setDescription("⏳ Duration: " . Timer::Format($time) . "\n⏳ Purge Durarion: 20m\nIp: \nStore: https://Xiao.tebex.io/");
-
-                $embed->setFooter("HCF");
-                $msg->addEmbed($embed);
+                    $embed->setFooter("HCF");
+                    $msg->addEmbed($embed);
 
 
-                $webHook->send($msg);
-                Loader::getInstance()->getTimerManager()->getEotw()->setActive(true);
-                Loader::getInstance()->getTimerManager()->getEotw()->setTime((int) $time);
-            }
+                    $webHook->send($msg);
+                    Loader::getInstance()->getTimerManager()->getEotw()->setActive(true);
+                    Loader::getInstance()->getTimerManager()->getEotw()->setTime((int)$time);
+                    break;
 
-            if ($item === TE::colorize("&4Purge")) {
-                $player->sendMessage(TE::colorize("&4Purge &ahas starter"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&4███&7█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7██&4█&7██ &r&7[&2&lXiao &l&4PURGE&r&7]"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&4██&4█&7██ &r&4Purge &ghas starter for: &f" . Timer::Format($time)));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7███&7█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7███&7█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
-                $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
-                $msg = new Message();
-                $msg->setContent('<@&1184267398501629962>');
-                $embed = new Embed();
-                $embed->setTitle("Purge Start");
-                $embed->setColor(0xf9ff1a);
-                $embed->setDescription("⏳ Duration: " . Timer::Format($time) . "\n\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                case "&4Purge":
+                    $player->sendMessage(TE::colorize("&4Purge &ahas starter"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&4███&7█&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7██&4█&7██ &r&7[&2&lXiao &l&4PURGE&r&7]"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&4██&4█&7██ &r&4Purge &ghas starter for: &f" . Timer::Format($time)));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7███&7█&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7███&7█&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
+                    $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
+                    $msg = new Message();
+                    $msg->setContent('<@&1184267398501629962>');
+                    $embed = new Embed();
+                    $embed->setTitle("Purge Start");
+                    $embed->setColor(0xf9ff1a);
+                    $embed->setDescription("⏳ Duration: " . Timer::Format($time) . "\n\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
 
-                $embed->setFooter("HCF");
-                $msg->addEmbed($embed);
-                Loader::getInstance()->getTimerManager()->getPurge()->setActive(true);
-                Loader::getInstance()->getTimerManager()->getPurge()->setTime((int) $time);
-            }
+                    $embed->setFooter("HCF");
+                    $msg->addEmbed($embed);
+                    Loader::getInstance()->getTimerManager()->getPurge()->setActive(true);
+                    Loader::getInstance()->getTimerManager()->getPurge()->setTime((int)$time);
+                    break;
 
-            if ($item === TE::colorize("&bDeath")) {
-                $player->sendMessage(TE::colorize("&bDeath &ahas starter"));
-                $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
-                $msg = new Message();
-                $msg->setContent('<@&1212177469231337484>');
-                $embed = new Embed();
-                $embed->setTitle("Death has started");
-                $embed->setColor(0xf9ff1a);
-                $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                case "&bDeath":
+                    $player->sendMessage(TE::colorize("&bDeath &ahas starter"));
+                    $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
+                    $msg = new Message();
+                    $msg->setContent('<@&1212177469231337484>');
+                    $embed = new Embed();
+                    $embed->setTitle("Death has started");
+                    $embed->setColor(0xf9ff1a);
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
 
-                $embed->setFooter("Xiao Network");
-                $msg->addEmbed($embed);
+                    $embed->setFooter("Xiao Network");
+                    $msg->addEmbed($embed);
 
-                $webHook->send($msg);
-                Loader::getInstance()->getTimerManager()->getDeath()->setActive(true);
-                Loader::getInstance()->getTimerManager()->getDeath()->setTime((int) $time);
-            }
+                    $webHook->send($msg);
+                    Loader::getInstance()->getTimerManager()->getDeath()->setActive(true);
+                    Loader::getInstance()->getTimerManager()->getDeath()->setTime((int)$time);
+                    break;
 
-            if ($item === TE::colorize("&3x2 Points")) {
-                $player->sendMessage(TE::colorize("&3x2 Points &ahas starter"));
-                $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
-                $msg = new Message();
-                $msg->setContent('<@&1184267398501629962>');
-                $embed = new Embed();
-                $embed->setTitle("X2Points has started");
-                $embed->setColor(0xf9ff1a);
-                $embed->setDescription("⏳Time: " . Timer::Format($time) . "\n\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                case "&3x2 Points":
+                    $player->sendMessage(TE::colorize("&3x2 Points &ahas starter"));
+                    $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
+                    $msg = new Message();
+                    $msg->setContent('<@&1184267398501629962>');
+                    $embed = new Embed();
+                    $embed->setTitle("X2Points has started");
+                    $embed->setColor(0xf9ff1a);
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\n\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
 
-                $embed->setFooter("Xiao Network");
-                $msg->addEmbed($embed);
+                    $embed->setFooter("Xiao Network");
+                    $msg->addEmbed($embed);
 
-                $webHook->send($msg);
-                Loader::getInstance()->getTimerManager()->getPoints()->setActive(true);
-                Loader::getInstance()->getTimerManager()->getPoints()->setTime((int) $time);
-            }
+                    $webHook->send($msg);
+                    Loader::getInstance()->getTimerManager()->getPoints()->setActive(true);
+                    Loader::getInstance()->getTimerManager()->getPoints()->setTime((int)$time);
+                    break;
 
-            if ($item === TE::colorize("&aFFA")) {
-                $player->sendMessage("§aFFA has been started");
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&a███&a█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7██&7█&7██ &r&7[&2&lXiao &l&aFFA&r&7]"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a███&a█&7██ &r&aFFA &ghas starter for: &f" . Timer::Format($time)));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7██&7█&7██ "));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7███&7█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7███&7█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
-                $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
-                $msg = new Message();
-                $msg->setContent('<@&1184267398501629962>');
-                $embed = new Embed();
-                $embed->setTitle("FFA has started");
-                $embed->setColor(0xf9ff1a);
-                $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                case "&aFFA":
+                    $player->sendMessage("§aFFA has been started");
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&a███&a█&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7██&7█&7██ &r&7[&2&lXiao &l&aFFA&r&7]"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a███&a█&7██ &r&aFFA &ghas starter for: &f" . Timer::Format($time)));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7██&7█&7██ "));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7███&7█&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7███&7█&7█"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
+                    $webHook = new Webhook(Loader::getInstance()->getConfig()->get('hcf.webhook'));
+                    $msg = new Message();
+                    $msg->setContent('<@&1184267398501629962>');
+                    $embed = new Embed();
+                    $embed->setTitle("FFA has started");
+                    $embed->setColor(0xf9ff1a);
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
 
-                $embed->setFooter("Xiao Network");
-                $msg->addEmbed($embed);
+                    $embed->setFooter("Xiao Network");
+                    $msg->addEmbed($embed);
 
-                $webHook->send($msg);
-                TimerFFA::start($time);
+                    $webHook->send($msg);
+                    TimerFFA::start($time);
+                    break;
             }
             return $transaction->discard();
         });
         $menu->send($player, TE::colorize('&9Map Events Menu'));
-    }
-
-    public static function Menu(Player $player)
-    {
-        $menu = InvMenu::create(InvMenu::TYPE_CHEST);
-        $sword = VanillaItems::DIAMOND_SWORD();
-        $sword->setCustomName("Message");
-        $menu->getInventory()->setItem(13, $sword);
-        $menu->setListener(function (InvMenuTransaction $transaction): InvMenuTransactionResult {
-            $player = $transaction->getPlayer();
-            $item = $transaction->getItemClicked()->getCustomName();
-
-            if ($item === "Message") {
-                $player->sendMessage("Moviste la espada");
-            }
-            return $transaction->discard();
-        });
-
-        $menu->send($player, TextFormat::colorize("&l&bMenu"));
     }
 
     /**
@@ -622,27 +582,27 @@ final class Inventories
                             $player->sendMessage(TE::colorize('&cYou have kit cooldown. Time remaining ' . Timer::convert($player->getSession()->getCooldown('kit.' . $kit->getName())->getTime())));
                             return $transaction->discard();
                         }
-    
+
                         $kit->giveTo($player);
-                        
+
                         if ($kit->getCooldown() !== 0)
                             $player->getSession()->addCooldown('kit.' . $kit->getName(), '', $kit->getCooldown(), false, false);
-                    }else {
-                        
+                    } else {
+
                         if ($kit->getPermission() !== null && !$player->hasPermission($kit->getPermission())) {
                             $player->sendMessage(TE::colorize('&cYou do not have permission to use the kit'));
                             return $transaction->discard();
                         }
-                        
+
                         # Cooldown
                         if ($player->getSession()->getCooldown('kit.' . $kit->getName()) !== null) {
                             $player->sendMessage(TE::colorize('&cYou have kit cooldown. Time remaining ' . Timer::convert($player->getSession()->getCooldown('kit.' . $kit->getName())->getTime())));
                             return $transaction->discard();
                         }
-    
+
                         # Give kit
                         $kit->giveTo($player);
-                        
+
                         # Add cooldown
                         if ($kit->getCooldown() !== 0)
                             $player->getSession()->addCooldown('kit.' . $kit->getName(), '', $kit->getCooldown(), false, false);
@@ -711,27 +671,27 @@ final class Inventories
                             $player->sendMessage(TE::colorize('&cYou have kit cooldown. Time remaining ' . Timer::convert($player->getSession()->getCooldown('kit.' . $kit->getName())->getTime())));
                             return $transaction->discard();
                         }
-    
+
                         $kit->giveTo($player);
-                        
+
                         if ($kit->getCooldown() !== 0)
                             $player->getSession()->addCooldown('kit.' . $kit->getName(), '', $kit->getCooldown(), false, false);
-                    }else {
-                        
+                    } else {
+
                         if ($kit->getPermission() !== null && !$player->hasPermission($kit->getPermission())) {
                             $player->sendMessage(TE::colorize('&cYou do not have permission to use the kit'));
                             return $transaction->discard();
                         }
-                        
+
                         # Cooldown
                         if ($player->getSession()->getCooldown('kit.' . $kit->getName()) !== null) {
                             $player->sendMessage(TE::colorize('&cYou have kit cooldown. Time remaining ' . Timer::convert($player->getSession()->getCooldown('kit.' . $kit->getName())->getTime())));
                             return $transaction->discard();
                         }
-    
+
                         # Give kit
                         $kit->giveTo($player);
-                        
+
                         # Add cooldown
                         if ($kit->getCooldown() !== 0)
                             $player->getSession()->addCooldown('kit.' . $kit->getName(), '', $kit->getCooldown(), false, false);
@@ -771,27 +731,27 @@ final class Inventories
                             $player->sendMessage(TE::colorize('&cYou have kit cooldown. Time remaining ' . Timer::convert($player->getSession()->getCooldown('kit.' . $kit->getName())->getTime())));
                             return $transaction->discard();
                         }
-    
+
                         $kit->giveTo($player);
-                        
+
                         if ($kit->getCooldown() !== 0)
                             $player->getSession()->addCooldown('kit.' . $kit->getName(), '', $kit->getCooldown(), false, false);
-                    }else {
-                        
+                    } else {
+
                         if ($kit->getPermission() !== null && !$player->hasPermission($kit->getPermission())) {
                             $player->sendMessage(TE::colorize('&cYou do not have permission to use the kit'));
                             return $transaction->discard();
                         }
-                        
+
                         # Cooldown
                         if ($player->getSession()->getCooldown('kit.' . $kit->getName()) !== null) {
                             $player->sendMessage(TE::colorize('&cYou have kit cooldown. Time remaining ' . Timer::convert($player->getSession()->getCooldown('kit.' . $kit->getName())->getTime())));
                             return $transaction->discard();
                         }
-    
+
                         # Give kit
                         $kit->giveTo($player);
-                        
+
                         # Add cooldown
                         if ($kit->getCooldown() !== 0)
                             $player->getSession()->addCooldown('kit.' . $kit->getName(), '', $kit->getCooldown(), false, false);
