@@ -54,11 +54,11 @@ class StaffModeManager {
         $this->setItems($p);
         $this->staffs[$pName] = ["gamemode" => $p->getGamemode(), "position" => $p->getPosition()];
 
-        $p->setNameTag("§8[§6StaffMode§8]\n§7$pName");
+        $p->setNameTag("§8[§2StaffMode§8]\n§7$pName");
         $p->setNameTagVisible(true);
         $p->setNameTagAlwaysVisible(true);
         $this->toggleVanish($p);
-        $p->sendMessage("§8[§6StaffMode§8]: §aEnable");
+        $p->sendMessage("§8[§2StaffMode§8]: §aEnable");
     }
 
     public function removeStaff(Player $p): void {
@@ -76,7 +76,7 @@ class StaffModeManager {
         $p->setNameTag($pName);
         $p->teleport($this->staffs[$pName]["position"] ?? $p->getPosition());
         $this->toggleVanish($p);
-        $p->sendMessage("§8[§6StaffMode§8]: §4Disable");
+        $p->sendMessage("§8[§2StaffMode§8]: §4Disable");
     }
 
     private function setItems(Player $p): void {
@@ -151,7 +151,7 @@ class StaffModeManager {
                     $player->showPlayer($p);
                 }
             }
-            $p->sendMessage("§8[§6StaffMode§8]: §fVanish disabled");
+            $p->sendMessage("§8[§2StaffMode§8]: §fVanish disabled");
         }else {
             $this->vanish[$p->getName()] = true;
             foreach (Server::getInstance()->getOnlinePlayers() as $player) {
@@ -159,7 +159,7 @@ class StaffModeManager {
                     $player->hidePlayer($p);
                 }
             }
-            $p->sendMessage("§8[§6StaffMode§8]: §fVanish enabled");
+            $p->sendMessage("§8[§2StaffMode§8]: §fVanish enabled");
         }
     }
 
@@ -190,10 +190,10 @@ class StaffModeManager {
     public function toggleFreeze(Player $p): void {
         if(isset($this->freeze[$p->getName()])){
             unset($this->freeze[$p->getName()]);
-            $p->sendMessage("§8[§6StaffMode§8]: §fHaz sido unfrozeado");
+            $p->sendMessage("§8[§2StaffMode§8]: §fHaz sido unfrozeado");
         }else {
             $this->freeze[$p->getName()] = true;
-            $p->sendMessage("§8[§6StaffMode§8]: §fHaz sido frozeado");
+            $p->sendMessage("§8[§2StaffMode§8]: §fHaz sido frozeado");
         }
     }
 
