@@ -13,11 +13,11 @@ feather.motion: 2
 
 #webhooks settings
 kills.webhook: ''
-koth.webhook: 'https://discord.com/api/webhooks/1338035795810058290/fIvFAARDbW9dmwepuRr9AJnd1xtwmGEza8u167F1ks3pATXOvPtUfz1B36y4pJd-Us4j'
+koth.webhook: 'https://discord.com/api/webhooks/1345792593077993512/lJwQTYgAW-7s0tffJL0mhOtNMkSLB3jGJ5FROfgwqM_pqOKXYkUucQI8DfwC4o6T6DpH'
 admin.webhook: 'https://discord.com/api/webhooks/1344886872085631007/PnMYeMjHv2TaSeXaRcun0yfk4lk5cKR6GE0nwrEs19WU-baIDH9SfFoPAQ5NovBaKOpo'
-hcf.webhook: 'https://discord.com/api/webhooks/1338035792278327339/h8wx2cuE_tbxBgSOuL2p7VMy9bh9kbzstvGZ57ErMmRqXpv0YRAFX8KCA-wWmndc6E2V'
+hcf.webhook: 'https://discord.com/api/webhooks/1345797101111607366/Ca2WV8wive9guDUycy4E22savoDN8Oil0eCRh5rzGXkyFoFpuncZERi9iM9SaZ8a0bEb'
 report.webhook: 'https://discord.com/api/webhooks/1338035782685818890/zwJAjLQPBSh2CgP0bCpwthYzn9s4s4eSVOAnTLfa_AlMtgvVFWwSz7RjDm6FdZX-Qicj'
-discord-link: 'https://discord.gg/79Afx5Seu3'
+discord-link: 'https://discord.gg/6shNVKEyeD'
 
 # Messages
 join.message: '§8[§a+§8] §f{player}'

@@ -39,9 +39,9 @@ class FreeRankCommand extends Command
 
         $rankManager = Loader::getInstance()->getRankManager();
 
-        $rankManager->setPlayerRank($sender, "Leviathan", 259200 );
+        $rankManager->setPlayerRank($sender, "Dark", 259200 );
         $sender->getSession()->addCooldown('freerank.cooldown', '', 604800, false, false);
-        $sender->sendMessage(TextFormat::colorize("&aHas recivido el rank &1Leviathan &apor &a3 Dias"));
+        $sender->sendMessage(TextFormat::colorize("&aHas recivido el rank &8Dark &apor &a3 Dias"));
 
     }
 

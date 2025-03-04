@@ -173,7 +173,7 @@ class Player extends BasePlayer
                 $position = $factionPosition;
             }
             $dtr = Loader::getInstance()->getFactionManager()->getFaction($this->getSession()->getFaction());
-            $this->setNameTag(TextFormat::colorize("&c" . $this->getName() . "\n&7&8[&a#".$position."&8] &r&c" . $this->getSession()->getFaction() . " &7| &c" . $dtr->getDtr() . " &7]"));
+            $this->setNameTag(TextFormat::colorize("&c" . $this->getName() . "\n&r&7[&c" . $this->getSession()->getFaction() . " &7| &c" . $dtr->getDtr() . " &7]"));
         } else {
             $this->setNameTag(TextFormat::colorize('&c' . $this->getName()));
         }

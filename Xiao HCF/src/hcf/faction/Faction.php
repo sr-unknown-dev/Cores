@@ -497,7 +497,7 @@ class Faction
                         $position = $factionPosition;
                     }
                     $dtr = Loader::getInstance()->getFactionManager()->getFaction($member->getSession()->getFaction());
-                    $member->setNameTag(TextFormat::colorize("&c" . $member->getName() . "\n&7&8[&a#".$position."&8] &r&c" . $member->getSession()->getFaction() . " &7| &c" . $dtr->getDtr() . " &7]"));
+                    $member->setNameTag(TextFormat::colorize("&c" . $member->getName() . "\n&r&7[&c" . $member->getSession()->getFaction() . " &7| &c" . $dtr->getDtr() . " &7]"));
                 }
             }
         }

@@ -2,26 +2,28 @@
 
 namespace hcf\module\staffmode\commands;
 
-use hcf\Loader;
-use hcf\player\Player;
-use pocketmine\command\Command;
+use CortexPE\Commando\BaseSubCommand;
+use CortexPE\Commando\args\RawStringArgument;
+use CortexPE\Commando\BaseCommand;
+use hcf\arguments\PlayersArgument;
 use pocketmine\command\CommandSender;
-use pocketmine\lang\Translatable;
+use hcf\player\Player;
 use pocketmine\utils\TextFormat;
+use hcf\Loader;
 
-class UnBanCommand extends Command
-{
-    public function __construct()
+class UnBanCommand extends BaseCommand {
+
+    public function __construct(string $name, string $description = "")
     {
-        parent::__construct("unban", "unbanear a un player");
-        $this->setPermission("staff.cmds");
+        parent::__construct(Loader::getInstance(), $name, $description);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function execute(CommandSender $sender, string $commandLabel, array $args)
-    {
+    protected function prepare(): void {
+        $this->setPermission($this->getPermission());
+        $this->registerArgument(0, new RawStringArgument("player", true));
+    }
+
+    public function onRun(CommandSender $sender, string $label, array $args): void {
         if (!$sender instanceof Player) {
             $sender->sendMessage(TextFormat::colorize("&cEste comando solo puede ser ejecutado por un jugador."));
             return;
@@ -32,8 +34,14 @@ class UnBanCommand extends Command
             return;
         }
 
-        $t = Loader::getInstance()->getServer()->getPlayerExact($args[0]);
-        if ($sender instanceof Player && $t instanceof Player)
-        Loader::getInstance()->getStaffModeManager()->removeBan($sender, $t);
+        $target = $args["player"];
+
+        if ($sender instanceof Player) {
+            Loader::getInstance()->getStaffModeManager()->removeBan($sender, $target);
+        }
+    }
+
+    public function getPermission(): ?string{
+        return "staff.cmds";
     }
 }

@@ -335,9 +335,9 @@ class StaffModeManager {
         $stmt->close();
     }
 
-    public function isBan(Player $p): bool {
+    public function isBan(string $p): bool {
         $conn = $this->bansDatabase->getConnection();
-        $name = $p->getName();
+        $name = $p;
         $currentTime = time();
 
         $stmt = $conn->prepare("SELECT player_name FROM bans WHERE player_name = ? AND (expiration_time > ? OR expiration_time = 0)");
@@ -350,8 +350,8 @@ class StaffModeManager {
         return $exists;
     }
 
-    public function removeBan(?Player $s, Player $t): void {
-        $tName = $t->getName();
+    public function removeBan(?Player $s, string $t): void {
+        $tName = $t;
         $conn = $this->bansDatabase->getConnection();
         $stmt = $conn->prepare("DELETE FROM bans WHERE player_name = ?");
         $stmt->bind_param("s", $tName);

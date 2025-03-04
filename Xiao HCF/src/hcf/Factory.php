@@ -188,19 +188,18 @@ class Factory{
         $contents = [];
         $crateItems = AirdropManager::getAirdrop()->getItems();
         $ItemNames = [];
-
+    
         foreach ($crateItems as $item) {
-            $contents[] = $item;
             $name = trim($item->getName());
             if ($name !== '') {
                 $ItemNames[] = $name;
             }
         }
-
+    
         $airdrop = VanillaBlocks::CHEST()->asItem();
         $airdrop->setCustomName("§l§3Airdrop");
         $airdrop->setCount($count);
-        $lore = implode("\n&r", array_map([TextFormat::class, 'colorize'], $ItemNames));
+        $lore = implode("\n", array_map([TextFormat::class, 'colorize'], $ItemNames));
         $airdrop->setLore([$lore]);
         $airdrop->getNamedTag()->setString("Airdrop_Item", "Airdrop");
         $player->getInventory()->addItem($airdrop);

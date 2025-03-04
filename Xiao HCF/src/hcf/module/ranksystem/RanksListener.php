@@ -12,6 +12,10 @@ use pocketmine\utils\TextFormat;
 
 class RanksListener implements Listener
 {
+    private array $topFactionsCache = [];
+    private int $cacheTime = 0;
+    private int $cacheDuration = 60; // Duración del caché en segundos
+
     public function onPlayerJoin(PlayerJoinEvent $event)
     {
         $player = $event->getPlayer();
@@ -22,28 +26,31 @@ class RanksListener implements Listener
     {
         $player = $event->getPlayer();
         if ($player instanceof Player) {
-            $rank = Loader::getInstance()->getRankManager()->getPlayerRank($player);
-            $prefix = $player->getSession()->getPrefix();
-            $PName = $prefix ? Loader::getInstance()->getPrefixManager()->getPrefix($prefix)->getFormat() : "";
-            $faction = $player->getSession()->getFaction();
-            $FName = $faction ? Loader::getInstance()->getFactionManager()->getFaction($faction)->getName() : "";
+            $rankManager = Loader::getInstance()->getRankManager();
+            $prefixManager = Loader::getInstance()->getPrefixManager();
+            $factionManager = Loader::getInstance()->getFactionManager();
+            $playerSession = $player->getSession();
 
-            $data = [];
-            foreach (Loader::getInstance()->getFactionManager()->getFactions() as $name => $factionObj) {
-                if (!in_array($factionObj->getName(), ['Spawn', 'North Road', 'South Road', 'East Road', 'West Road', 'Nether Spawn', 'End Spawn'])) {
-                    $data[$name] = $factionObj->getPoints();
-                }
+            $rank = $rankManager->getPlayerRank($player);
+            $prefix = $playerSession->getPrefix();
+            $PName = $prefix ? $prefixManager->getPrefix($prefix)->getFormat() : "";
+            $faction = $playerSession->getFaction();
+            $FName = $faction ? $factionManager->getFaction($faction)->getName() : "";
+
+            // Actualizar caché si es necesario
+            if (time() - $this->cacheTime > $this->cacheDuration) {
+                $this->updateTopFactionsCache();
             }
-            arsort($data);
-            $topFactions = array_slice($data, 0, 3, true);
 
             $position = "";
-            $factionPosition = array_search($FName, array_keys($topFactions)) + 1;
-            if ($factionPosition >= 1 && $factionPosition <= 3) {
-                $position = $factionPosition;
+            if (!empty($FName)) {
+                $topFactionNames = array_keys($this->topFactionsCache);
+                if (($factionPosition = array_search($FName, $topFactionNames)) !== false) {
+                    $position = TextFormat::GREEN . "#" . ($factionPosition + 1);
+                }
             }
 
-            $chatFormat = Loader::getInstance()->getRankManager()->getChatFormat($rank);
+            $chatFormat = $rankManager->getChatFormat($rank);
             $format = str_replace(
                 ["{top}", "{faction}", "{prefix}", "{player}", "{message}"],
                 [$position, $FName, $PName, $player->getName(), $event->getMessage()],
@@ -52,5 +59,21 @@ class RanksListener implements Listener
 
             $event->setFormatter(new LegacyRawChatFormatter(TextFormat::colorize($format)));
         }
+    }
+
+    private function updateTopFactionsCache(): void
+    {
+        $factionManager = Loader::getInstance()->getFactionManager();
+        $data = [];
+
+        foreach ($factionManager->getFactions() as $name => $factionObj) {
+            $factionName = $factionObj->getName();
+            if (!in_array($factionName, ['Spawn', 'North Road', 'South Road', 'East Road', 'West Road', 'Nether Spawn', 'End Spawn'])) {
+                $data[$factionName] = $factionObj->getPoints();
+            }
+        }
+        arsort($data);
+        $this->topFactionsCache = array_slice($data, 0, 3, true);
+        $this->cacheTime = time();
     }
 }

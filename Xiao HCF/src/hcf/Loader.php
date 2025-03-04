@@ -30,7 +30,6 @@ use hcf\command\pay\PayCommand;
 use hcf\command\pvp\PvPCommand;
 use hcf\handler\kit\command\KitCommand;
 use hcf\handler\kit\command\subcommand\GkitCommand;
-use hcf\handler\knockback\commands\KnockBackCommand;
 use hcf\module\enchantment\EnchantmentManager;
 use hcf\entity\CustomItemEntity;
 use hcf\player\disconnected\LogoutMob;
@@ -60,8 +59,6 @@ use pocketmine\utils\TextFormat;
 use pocketmine\entity\effect\EffectInstance;
 use pocketmine\entity\effect\VanillaEffects;
 use hcf\prefix\PrefixManager;
-use hcf\handler\knockback\KnockBackListener;
-use hcf\handler\knockback\KnockBackManager;
 use hcf\module\staffmode\commands\BanCommand;
 use hcf\module\staffmode\commands\MuteCommand;
 use hcf\module\staffmode\commands\StaffModeCommand;
@@ -154,9 +151,6 @@ class Loader extends PluginBase implements Listener
     /** @var Reach */
     public Reach $reach;
 
-    /** @var KnockBackManager */
-    public KnockBackManager $knockBackManager;
-
     /** @var StaffModeManager */
     public StaffModeManager $StaffModeManager;
 
@@ -241,7 +235,6 @@ class Loader extends PluginBase implements Listener
         $this->moduleManager = new ModuleManager;
         $this->rankManager = new RankManager();
         $this->anticheatManager = new AntiCheatManager($this);
-        $this->knockBackManager = new KnockBackManager();
         $this->StaffModeManager = new StaffModeManager();
         $this->bountyManager = new BountyManager();
         $this->autoClick = new AutoClick();
@@ -253,7 +246,6 @@ class Loader extends PluginBase implements Listener
         $this->getServer()->getPluginManager()->registerEvents(new HCFListener(), $this);
         $this->getServer()->getPluginManager()->registerEvents(new StaffListener(), $this);
         $this->getServer()->getPluginManager()->registerEvents(new Pots(), $this);
-        $this->getServer()->getPluginManager()->registerEvents(new KnockBackListener(), $this);
         $this->getServer()->getPluginManager()->registerEvents(new Fly(), $this);
         $this->getServer()->getPluginManager()->registerEvents(new DoubleClick(), $this);
         $this->getServer()->getCommandMap()->register("pvp", new PvPCommand("pvp", "Comando para quitar el pvp timer"));
@@ -271,11 +263,10 @@ class Loader extends PluginBase implements Listener
         $this->getServer()->getCommandMap()->register("kit", new KitCommand("kit", "Comandos de Kits"));
         $this->getServer()->getCommandMap()->register("gkit", new GkitCommand("gkit", "Comando de Kits"));
         $this->getServer()->getCommandMap()->register("Clear", new ClearLagCommand());
-        $this->getServer()->getCommandMap()->register("kb", new KnockBackCommand("kb", "Comando de KnockBack"));
         $this->getServer()->getCommandMap()->register("mute", new MuteCommand("mute", "Comando de Mute"));
         $this->getServer()->getCommandMap()->register("ban", new BanCommand("tban", "Comando de Ban"));
         $this->getServer()->getCommandMap()->register("mute", new UnMuteCommand("unmute", "Comando de UnMute"));
-        $this->getServer()->getCommandMap()->register("ban", new UnBanCommand("unban", "Comando de UnBan"));
+        $this->getServer()->getCommandMap()->register("unban", new UnBanCommand("unban", "Comando de UnBan"));
         $this->getServer()->getCommandMap()->register("anticheat", new AntiCheatCommand());
 
         #Loger
@@ -504,10 +495,6 @@ class Loader extends PluginBase implements Listener
 
     public function getRankManager(): RankManager {
         return $this->rankManager;
-    }
-
-    public function getKnockBackManager(): KnockBackManager {
-        return $this->knockBackManager;
     }
 
     public function getStaffModeManager(): StaffModeManager {

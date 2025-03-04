@@ -88,11 +88,11 @@ class TopKillsEntity extends Human
         $data = $this->getKills();
         arsort($data);
 
-        $text = TextFormat::colorize("&l&gLEADERBOARDS\n&r&fTop Kills\n");
+        $text = TextFormat::colorize("&l&aLEADERBOARDS\n&r&fTop Kills\n");
 
         $top = 1;
         foreach($data as $name => $kills){
-            $line = TextFormat::colorize("&g#{$top}. &f{$name} - &7[&a{$kills}&7]\n");
+            $line = TextFormat::colorize("&a#{$top}. &f{$name} - &7[&a{$kills}&7]\n");
             $text .= $line;
             if($top >= 10) {
                 break;

@@ -87,12 +87,12 @@ class TopFactionsEntity extends Human
         $data = $this->getFactions();
         arsort($data);
 
-        $text = TextFormat::colorize("&l&gLEADERBOARDS\n&r&fTop Factions\n");
+        $text = TextFormat::colorize("&l&aLEADERBOARDS\n&r&fTop Factions\n");
 
         $top = 1;
 
         foreach($data as $name => $points) {
-            $line = TextFormat::colorize("&g#{$top}. &f{$name} - &7[&a{$points}&7]\n");
+            $line = TextFormat::colorize("&a#{$top}. &f{$name} - &7[&a{$points}&7]\n");
             $text .= $line;
 
             if($top >= 10) {

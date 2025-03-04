@@ -10,6 +10,7 @@
 
 namespace hcf\handler\airdrop;
 
+use hcf\databases\AirdropDatabase;
 use hcf\Loader;
 use hcf\player\Player;
 use hcf\utils\serialize\Serialize;
@@ -32,38 +33,73 @@ class Airdrops
         $this->config = new Config(Loader::getInstance()->getDataFolder() . "airdrop.yml", Config::YAML);
     }
 
-    public function setItems(array $items)
+    public function setItems(array $items): void
     {
         $content = [];
-        foreach ($items as $item){
+        foreach ($items as $item) {
             $content[] = Serialize::serialize($item);
         }
-        $this->config->set("items", $content);
-        $this->config->save();
+    
+        if (empty($content)) return;
+    
+        $conn = AirdropDatabase::getInstance()->getConnection();
+        $jsonContent = json_encode($content);
+        $stmt = $conn->prepare("REPLACE INTO airdrops (items) VALUES (?)");
+        $stmt->bind_param("s", $jsonContent);
+        $stmt->execute();
+        $stmt->close();
     }
 
-    /**
-     * Get the value of items
-     */ 
-    public function getItems()
+    public function getItems(): array
     {
-        $content = [];
-        foreach ($this->config->get("items", []) as $items){
-            $content[] = Serialize::deserialize($items);
+        $conn = AirdropDatabase::getInstance()->getConnection();
+        $stmt = $conn->prepare("SELECT items FROM airdrops");
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        if($row = $result->fetch_assoc()) {
+            $content = json_decode($row['items'], true);
+            if(empty($content)) {
+                return [];
+            }
+            
+            $items = [];
+            foreach($content as $serializedItem) {
+                $items[] = Serialize::deserialize($serializedItem);
+            }
+            return $items;
         }
-        return $content;
+    
+        return [];
     }
 
     public function getRandomItems()
     {
-        $items = $this->getItems();
-
-        if (empty($items)){
-            return null;
+        $conn = AirdropDatabase::getInstance()->getConnection();
+        $stmt = $conn->prepare("SELECT items FROM airdrops");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if($row = $result->fetch_assoc()) {
+            $content = json_decode($row['items'], true);
+            if(empty($content)) {
+                return null;
+            }
+            
+            $items = [];
+            foreach($content as $serializedItem) {
+                $items[] = Serialize::deserialize($serializedItem);
+            }
+        
+            if(empty($items)) {
+                return null;
+            }
+        
+            $randomKey = array_rand($items);
+            return $items[$randomKey];
         }
-
-        $random = array_rand($items);
-        return $items[$random];
+        
+        return null;
     }
 
     public function sendMenu(Player $player): void {
@@ -72,7 +108,7 @@ class Airdrops
         $menu->setInventoryCloseListener(function (Player $player, Inventory $inventory): void {
             $this->items = $inventory->getContents();
             $this->setItems($this->items);
-            $player->sendMessage(TextFormat::colorize('&aYou haven edit the loot.'));
+            $player->sendMessage(TextFormat::colorize('&aYou have edited the loot.'));
         });
         $menu->send($player, TextFormat::colorize('&3Airdrop Loot'));
     }

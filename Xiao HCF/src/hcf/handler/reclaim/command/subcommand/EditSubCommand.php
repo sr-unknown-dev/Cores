@@ -37,12 +37,7 @@ class EditSubCommand implements ReclaimSubCommand
             $sender->sendMessage(TextFormat::colorize('&cThis reclaim does not exist'));
             return;
         }
-        
-        if (count($sender->getInventory()->getContents()) === 0) {
-            $sender->sendMessage(TextFormat::colorize('&cAssign contents to the reclaim. Put items in your inventory'));
-            return;
-        }
-        Loader::getInstance()->getHandlerManager()->getReclaimManager()->getReclaim($name)->setContents($sender->getInventory()->getContents());
+        Loader::getInstance()->getHandlerManager()->getReclaimManager()->getReclaim($name)->editContent($sender);
         $sender->sendMessage(TextFormat::colorize('&aYou have edited the content of the reclaim ' . $name));
     }
 }

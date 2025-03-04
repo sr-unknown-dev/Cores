@@ -12,107 +12,121 @@ use pocketmine\Server;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat as TF;
 
-class AntiCheatManager {
-    
+class AntiCheatManager
+{
     private Config $config;
     private Config $exemptConfig;
     private array $exemptPlayers = [];
     private array $alerts = [];
 
-    public function __construct() {
-        $this->config = Loader::getInstance()->getConfig();
-        $this->exemptConfig = new Config(Loader::getInstance()->getDataFolder() . "exempt.yml", Config::YAML);
+    public function __construct()
+    {
+        $loader = Loader::getInstance();
+        $this->config = $loader->getConfig();
+        $this->exemptConfig = new Config($loader->getDataFolder() . "exempt.yml", Config::YAML);
         $this->loadExemptPlayers();
     }
 
-    private function loadExemptPlayers(): void {
-        if ($this->exemptConfig->exists("players")) {
-            $this->exemptPlayers = $this->exemptConfig->get("players", []);
-        }
+    private function loadExemptPlayers(): void
+    {
+        $this->exemptPlayers = $this->exemptConfig->get("players", []);
     }
 
-    public function AlertStaff(Player $player, string $checkName, int $violations): void {
-        if (!$player->isOnline()) return;
+    public function alertStaff(Player $player, string $checkName, int $violations): void
+    {
+        if (!$player->isOnline()) {
+            return;
+        }
 
-        $message = TF::colorize("§8[§cAntiCheat§8] §f" . $player->getName() . " §7failed §f" . 
-                   $checkName . " §7(x" . $violations . ")");
+        $message = TF::colorize("§8[§cAntiCheat§8] §f" . $player->getName() . " §7ha fallado §f" .
+            $checkName . " §7(x" . $violations . ")");
 
-        foreach (Server::getInstance()->getOnlinePlayers() as $staff) {
-            if (!$staff instanceof Player) continue;
+        $onlinePlayers = Server::getInstance()->getOnlinePlayers();
+        foreach ($onlinePlayers as $staff) {
             if ($staff->hasPermission("anticheat.alerts") && $this->hasAlerts($staff)) {
                 $staff->sendMessage($message);
             }
         }
 
-        try {
-            $webhookUrl = $this->config->getNested("alerts.webhook");
-            if (!empty($webhookUrl)) {
+        $webhookUrl = $this->config->getNested("alerts.webhook");
+        if (!empty($webhookUrl)) {
+            try {
                 $webhook = new Webhook($webhookUrl);
                 $msg = new Message();
                 $embed = new Embed();
+
                 $embed->setTitle($checkName . " Alert");
                 $embed->setColor(0xf9ff1a);
                 $embed->setDescription(
-                    "Player: " . $player->getName() . 
+                    "Player: " . $player->getName() .
                     "\nPing: " . $player->getNetworkSession()->getPing() .
                     "\nViolations: " . $violations
                 );
                 $embed->setFooter("Server Network");
+
                 $msg->addEmbed($embed);
                 $webhook->send($msg);
+            } catch (\Exception $e) {
+                Server::getInstance()->getLogger()->error("Failed to send webhook: " . $e->getMessage());
             }
-        } catch (\Throwable $e) {
-            Server::getInstance()->getLogger()->error("Failed to send webhook: " . $e->getMessage());
         }
     }
 
-    public function toggleAlerts(Player $player): void {
+    public function toggleAlerts(Player $player): void
+    {
         $name = $player->getName();
-        
-        if (isset($this->alerts[$name])) {
+
+        if ($this->hasAlerts($player)) {
             unset($this->alerts[$name]);
-            $player->sendMessage(TF::colorize("§8[§gAntiCheat§8] §fAlerts have been disabled."));
+            $player->sendMessage(TF::colorize("§8[§gAntiCheat§8] §fLas alertas han sido desactivadas."));
         } else {
             $this->alerts[$name] = true;
-            $player->sendMessage(TF::colorize("§8[§gAntiCheat§8] §fAlerts have been enabled."));
+            $player->sendMessage(TF::colorize("§8[§gAntiCheat§8] §fLas alertas han sido activadas."));
         }
     }
 
-    public function hasAlerts(Player $player): bool {
+    public function hasAlerts(Player $player): bool
+    {
         return isset($this->alerts[$player->getName()]) && $player->hasPermission("anticheat.alerts");
     }
 
-    public function toggleExemption(Player $player): void {
+    public function toggleExemption(Player $player): void
+    {
         $name = $player->getName();
-        
-        if (isset($this->exemptPlayers[$name])) {
+
+        if ($this->hasExemption($player)) {
             unset($this->exemptPlayers[$name]);
-            $this->exemptConfig->set("players", $this->exemptPlayers);
-            $player->sendMessage(TF::colorize("§8[§gAntiCheat§8] §fExemption has been removed."));
+            $player->sendMessage(TF::colorize("§8[§gAntiCheat§8] §fLa exención ha sido removida."));
         } else {
             $this->exemptPlayers[$name] = true;
-            $this->exemptConfig->set("players", $this->exemptPlayers);
-            $player->sendMessage(TF::colorize("§8[§gAntiCheat§8] §fExemption has been added."));
+            $player->sendMessage(TF::colorize("§8[§gAntiCheat§8] §fLa exención ha sido añadida."));
         }
+
+        $this->exemptConfig->set("players", array_keys($this->exemptPlayers));
         $this->exemptConfig->save();
     }
 
-    public function hasExemption(Player $player): bool {
+    public function hasExemption(Player $player): bool
+    {
         return isset($this->exemptPlayers[$player->getName()]);
     }
 
-    public function punishments(Player $player, string $checkName): void {
-        if (!$player->isOnline()) return;
-        
-        $staffMode = Loader::getInstance()->getStaffModeManager();
-        if ($staffMode === null) return;
+    public function punishments(Player $player, string $checkName): void
+    {
+        if (!$player->isOnline()) {
+            return;
+        }
 
-        switch (strtolower($checkName)) {
-            case "speed":
-            case "autoclick":
-            case "reach":
-                $staffMode->addBanAntiCheat($player, ucfirst($checkName), "30d");
-                break;
+        $staffMode = Loader::getInstance()->getStaffModeManager();
+        if ($staffMode === null) {
+            return;
+        }
+
+        $checkNameLower = strtolower($checkName);
+        $banReasons = ["speed", "autoclick", "reach"];
+
+        if (in_array($checkNameLower, $banReasons, true)) {
+            $staffMode->addBanAntiCheat($player, ucfirst($checkNameLower), "30d");
         }
     }
 }

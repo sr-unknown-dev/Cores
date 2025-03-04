@@ -6,7 +6,11 @@ namespace hcf\handler\reclaim;
 
 use hcf\player\Player;
 use hcf\utils\serialize\Serialize;
+use muqsit\invmenu\InvMenu;
+use muqsit\invmenu\type\InvMenuTypeIds;
+use pocketmine\inventory\Inventory;
 use pocketmine\item\Item;
+use pocketmine\utils\TextFormat;
 
 class Reclaim
 {
@@ -93,5 +97,16 @@ class Reclaim
         foreach ($this->contents as $item)
             $data['contents'][] = Serialize::serialize($item);
         return $data;
+    }
+
+    public function editContent(Player $player): void {
+        $menu = InvMenu::create(InvMenuTypeIds::TYPE_CHEST);
+        $menu->getInventory()->setContents($this->contents);
+        $menu->setInventoryCloseListener(function (Player $player, Inventory $inventory): void {
+            $this->contents = $inventory->getContents();
+            $this->setContents($this->contents);
+            $player->sendMessage(TextFormat::colorize('&aYou have edited the reclaim loot.'));
+        });
+        $menu->send($player, TextFormat::colorize('&2Reclaim edit'));
     }
 }

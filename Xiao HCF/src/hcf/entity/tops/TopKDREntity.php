@@ -91,12 +91,12 @@ class TopKDREntity extends Human
         $kdrData = $this->getKDR();
         arsort($kdrData); 
 
-        $text = TextFormat::colorize("&l&gLEADERBOARDS\n&r&fTop KDR\n");
+        $text = TextFormat::colorize("&l&aLEADERBOARDS\n&r&fTop KDR\n");
 
         $top = 1;
 
         foreach($kdrData as $name => $kdr){
-            $line = TextFormat::colorize("&g#{$top}. &f{$name} - &7[&a{$kdr}&7]\n");
+            $line = TextFormat::colorize("&a#{$top}. &f{$name} - &7[&a{$kdr}&7]\n");
             $text .= $line;
 
             if($top >= 10){

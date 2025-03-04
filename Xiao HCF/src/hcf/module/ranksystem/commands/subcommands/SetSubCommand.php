@@ -5,8 +5,9 @@ namespace hcf\module\ranksystem\commands\subcommands;
 use CortexPE\Commando\BaseSubCommand;
 use CortexPE\Commando\args\RawStringArgument;
 use hcf\arguments\PlayersArgument;
+use hcf\module\ranksystem\forms\PlayerSetRankForm;
 use pocketmine\command\CommandSender;
-use pocketmine\player\Player;
+use hcf\player\Player;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 use hcf\Loader;
@@ -20,34 +21,12 @@ class SetSubCommand extends BaseSubCommand {
 
     protected function prepare(): void {
         $this->setPermission($this->getPermission());
-        $this->registerArgument(0, new PlayersArgument("player", false));
-        $this->registerArgument(1, new RawStringArgument("rank", false));
-        $this->registerArgument(2, new RawStringArgument("duration", true));
     }
 
     public function onRun(CommandSender $sender, string $label, array $args): void {
 
-        $player = $args["player"];
-        $rank = $args["rank"];
-        $durationStr = $args["duration"] ?? null;
-
-        $rankManager = Loader::getInstance()->getRankManager();
-
-        if ($rankManager->isExist($rank)) {
-            if ($durationStr !== null) {
-                $duration = $rankManager->parseDuration($durationStr);
-                if ($duration === null) {
-                    $sender->sendMessage(TextFormat::colorize("&cFormato de duración inválido. Usa 'Xm' para minutos."));
-                    return;
-                }
-                $rankManager->setPlayerRank($player, $rank, $duration);
-                $sender->sendMessage(TextFormat::colorize("&8[&6Ranks&8] &aHas agregado el rango: &g" . $rank . " &a a " . $player->getName() . "  &aTiempo: &g" . $durationStr));
-            } else {
-                $rankManager->setPlayerRank($player, $rank);
-                $sender->sendMessage(TextFormat::colorize("&8[&6Ranks&8] &aHas agregado el rango: &g" . $rank . " &a a " . $player->getName() . " &aTiempo: &gPermanente"));
-            }
-        } else {
-            $sender->sendMessage(TextFormat::colorize("&8[&6Ranks&8] &cRango no encontrado."));
+        if ($sender instanceof Player){
+            $sender->sendForm(new PlayerSetRankForm());
         }
     }
 

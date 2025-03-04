@@ -29,14 +29,13 @@ class RankManager
                 "permissions" => []
             ]
         ]);
-        
-        // Crear tabla para rangos de jugadores
+
         $this->database->getConnection()->query("CREATE TABLE IF NOT EXISTS player_ranks (
             player_name VARCHAR(32) PRIMARY KEY,
             rank_name VARCHAR(32),
             expiration_time INT DEFAULT 0
         )");
-        
+
         $commandMap = Loader::getInstance()->getServer()->getCommandMap();
         $commandMap->register("ranks", new RankCommands("ranks", "Ranks Command"));
         Loader::getInstance()->getServer()->getPluginManager()->registerEvents(new RanksListener(), Loader::getInstance());
@@ -88,13 +87,13 @@ class RankManager
         $conn = $this->database->getConnection();
         $playerName = $player->getName();
         $expirationTime = $duration > 0 ? time() + $duration : 0;
-        
+
         $stmt = $conn->prepare("REPLACE INTO player_ranks (player_name, rank_name, expiration_time) VALUES (?, ?, ?)");
         $stmt->bind_param("ssi", $playerName, $rank, $expirationTime);
         $stmt->execute();
-        
+
         $this->applyPermissions($player);
-        
+
         if ($duration > 0) {
             Loader::getInstance()->getScheduler()->scheduleDelayedTask(new ClosureTask(
                 function() use ($player) {
@@ -112,16 +111,16 @@ class RankManager
     public function getPlayerRank(Player $player): string {
         $conn = $this->database->getConnection();
         $playerName = $player->getName();
-        
+
         $stmt = $conn->prepare("SELECT rank_name FROM player_ranks WHERE player_name = ?");
         $stmt->bind_param("s", $playerName);
         $stmt->execute();
         $result = $stmt->get_result();
-        
+
         if($result->num_rows > 0) {
             return $result->fetch_assoc()["rank_name"];
         }
-        
+
         return $this->ranks->get("default");
     }
 
@@ -160,11 +159,11 @@ class RankManager
     public function removePlayerRank(Player $player): void {
         $conn = $this->database->getConnection();
         $playerName = $player->getName();
-        
+
         $stmt = $conn->prepare("DELETE FROM player_ranks WHERE player_name = ?");
         $stmt->bind_param("s", $playerName);
         $stmt->execute();
-        
+
         $this->applyPermissions($player);
     }
 
@@ -214,20 +213,20 @@ class RankManager
     public function userInfo(Player $s, Player $u): void {
         $conn = $this->database->getConnection();
         $playerName = $u->getName();
-        
+
         $stmt = $conn->prepare("SELECT rank_name, expiration_time FROM player_ranks WHERE player_name = ?");
         $stmt->bind_param("s", $playerName);
         $stmt->execute();
         $result = $stmt->get_result();
-        
+
         $rank = $this->getPlayerRank($u);
         $message = "§7Player Information §6" . $playerName . ":\n";
         $message .= "§7Rank§6: " . $rank . "\n";
-        
+
         if($result->num_rows > 0) {
             $data = $result->fetch_assoc();
             $expirationTime = $data["expiration_time"];
-            
+
             if($expirationTime > 0) {
                 $remainingTime = $expirationTime - time();
                 if($remainingTime > 0) {
@@ -241,7 +240,7 @@ class RankManager
         } else {
             $message .= "§7Expiración: §6Permanente\n";
         }
-        
+
         $s->sendMessage(TextFormat::colorize($message));
     }
 
@@ -251,12 +250,12 @@ class RankManager
     public function checkExpiredRanks(): void {
         $conn = $this->database->getConnection();
         $currentTime = time();
-        
+
         $stmt = $conn->prepare("SELECT player_name FROM player_ranks WHERE expiration_time > 0 AND expiration_time <= ?");
         $stmt->bind_param("i", $currentTime);
         $stmt->execute();
         $result = $stmt->get_result();
-        
+
         while($row = $result->fetch_assoc()) {
             $player = Loader::getInstance()->getServer()->getPlayerExact($row["player_name"]);
             if($player !== null) {
@@ -264,7 +263,7 @@ class RankManager
                 $player->sendMessage(TextFormat::colorize("&8[&6Ranks&8] &cTu rank ha expirado"));
             }
         }
-        
+
         $conn->query("DELETE FROM player_ranks WHERE expiration_time > 0 AND expiration_time <= $currentTime");
     }
 
@@ -276,12 +275,12 @@ class RankManager
         $days = floor($seconds / 86400);
         $hours = floor(($seconds % 86400) / 3600);
         $minutes = floor(($seconds % 3600) / 60);
-        
+
         $parts = [];
         if($days > 0) $parts[] = $days . "d";
         if($hours > 0) $parts[] = $hours . "h";
         if($minutes > 0) $parts[] = $minutes . "m";
-        
+
         return empty($parts) ? "menos de 1m" : implode(" ", $parts);
     }
 

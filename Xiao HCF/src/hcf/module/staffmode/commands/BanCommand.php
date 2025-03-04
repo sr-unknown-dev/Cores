@@ -23,7 +23,7 @@ class BanCommand extends BaseCommand {
         $this->setPermission($this->getPermission());
         $this->registerArgument(0, new PlayersArgument("player", true));
         $this->registerArgument(1, new RawStringArgument("time", true));
-        $this->registerArgument(2, new RawStringArgument("reason", true));
+        $this->registerArgument(2, new RawStringArgument("reason", true)); // Cambiado a false para permitir espacios
     }
 
     public function onRun(CommandSender $sender, string $label, array $args): void {
@@ -36,15 +36,15 @@ class BanCommand extends BaseCommand {
             $sender->sendMessage(TextFormat::colorize("&cUso: /ban <player> <time> <reason>"));
             return;
         }
-
+    
         $target = $args["player"];
         $time = $args["time"];
-        $reason = $args["reason"];
-
+        $reason = implode(" ", array_slice($args, 2)); // Esto combinará todas las palabras después del tiempo
+    
         if ($target instanceof Player) {
             Loader::getInstance()->getStaffModeManager()->addBan($sender, $target, $reason, $time);
         } else {
-            $sender->sendMessage(TextFormat::colorize("&cEl jugador " . $args["player"] . " no está en línea."));
+            $sender->sendMessage(TextFormat::colorize("&cEl jugador no está en línea."));
         }
     }
 

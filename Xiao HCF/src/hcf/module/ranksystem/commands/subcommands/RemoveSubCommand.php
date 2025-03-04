@@ -6,11 +6,11 @@ use CortexPE\Commando\BaseSubCommand;
 use CortexPE\Commando\args\RawStringArgument;
 use hcf\arguments\PlayersArgument;
 use pocketmine\command\CommandSender;
-use pocketmine\player\Player;
+use hcf\player\Player;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 use hcf\Loader;
-use hcf\module\ranksystem\forms\RankRemoveForm;
+use hcf\module\ranksystem\forms\PlayerRemoveRankForm;
 
 class RemoveSubCommand extends BaseSubCommand {
 
@@ -21,8 +21,6 @@ class RemoveSubCommand extends BaseSubCommand {
 
     protected function prepare(): void {
         $this->setPermission($this->getPermission());
-        $this->registerArgument(0, new PlayersArgument("player", false));
-        $this->registerArgument(1, new RawStringArgument("rank", false));
     }
 
     public function onRun(CommandSender $sender, string $label, array $args): void {
@@ -31,10 +29,8 @@ class RemoveSubCommand extends BaseSubCommand {
             return;
         }
 
-        $player = Server::getInstance()->getPlayerExact($args["player"]);
-
-        if ($sender instanceof Player) {
-            $sender->sendForm(new RankRemoveForm(Loader::getInstance()->getRankManager(), $player));
+        if ($sender instanceof Player){
+            $sender->sendForm(new PlayerRemoveRankForm());
         }
     }
 
