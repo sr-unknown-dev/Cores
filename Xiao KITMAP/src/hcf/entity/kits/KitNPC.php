@@ -57,6 +57,27 @@ class KitNPC extends Human
         $npc = new self($player->getLocation(), $player->getSkin(), $nbt);
         $npc->setKitName($kitName);
         $npc->setDisplayText($displayText);
+
+        $kit = Loader::getInstance()->getHandlerManager()->getKitManager()->getKit($kitName)
+            ?? Loader::getInstance()->getHandlerManager()->getKitPayManager()->getKit($kitName)
+            ?? Loader::getInstance()->getHandlerManager()->getKitOpManager()->getKit($kitName);
+
+        if ($kit !== null) {
+            $armorItems = $kit->getArmor();
+            if (isset($armorItems[0])) {
+                $npc->getArmorInventory()->setHelmet($armorItems[0]);
+            }
+            if (isset($armorItems[1])) {
+                $npc->getArmorInventory()->setChestplate($armorItems[1]);
+            }
+            if (isset($armorItems[2])) {
+                $npc->getArmorInventory()->setLeggings($armorItems[2]);
+            }
+            if (isset($armorItems[3])) {
+                $npc->getArmorInventory()->setBoots($armorItems[3]);
+            }
+        }
+
         return $npc;
     }
 
