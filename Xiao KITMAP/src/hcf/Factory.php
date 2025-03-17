@@ -185,11 +185,10 @@ class Factory{
 
     public static function getAirdrop(Player $player, int $count)
     {
-        $contents = [];
-        $crateItems = AirdropManager::getAirdrop()->getItems();
+        $lootboxItems = AirdropManager::getAirdrop()->getItems();
         $ItemNames = [];
     
-        foreach ($crateItems as $item) {
+        foreach ($lootboxItems as $item) {
             $name = trim($item->getName());
             if ($name !== '') {
                 $ItemNames[] = $name;

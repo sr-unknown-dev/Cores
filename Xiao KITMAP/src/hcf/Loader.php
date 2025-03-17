@@ -14,6 +14,8 @@ namespace hcf;
  */
 
 use hcf\handler\bounty\BountyManager;
+use hcf\handler\lootbox\Lootbox;
+use hcf\handler\lootbox\LootboxManager;
 use hcf\Tasks\AutoClickTask;
 use CortexPE\Commando\PacketHooker;
 use hcf\abilities\AbilitiesManager;
@@ -160,6 +162,9 @@ class Loader extends PluginBase implements Listener
     /** @var BountyManager  */
     public BountyManager $bountyManager;
 
+    /** @var LootboxManager */
+    public LootboxManager $lootboxManager;
+
     /** @var array */
     public static array $enderPearl = [];
 
@@ -239,6 +244,7 @@ class Loader extends PluginBase implements Listener
         $this->bountyManager = new BountyManager();
         $this->autoClick = new AutoClick();
         $this->reach = new Reach($this, $this->getServer());
+        $this->reach = new LootboxManager();
         #Register addons
         AddonsManager::init();
         
@@ -515,5 +521,13 @@ class Loader extends PluginBase implements Listener
 
     public function getReach(): Reach {
         return $this->reach;
+    }
+
+    /**
+     * @return LootboxManager
+     */
+    public function getLootboxManager(): LootboxManager
+    {
+        return $this->lootboxManager;
     }
 }

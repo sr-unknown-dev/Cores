@@ -5,7 +5,7 @@ motd: '§r§l§2Xiao'
 server: '§r§l§2Xiao§r'
 tebex: '§7xiao.tebex.io'
 ip: '§r§7xiao.ddns.net'
-tebex-crates: 'xiao.tebex.io'
+: 'xiao.tebex.io'
 
 camp.timer: 30
 amethyst.motion: 2
@@ -104,8 +104,8 @@ sotw:
     airdropall: 1800
 
 database:
-  host: "buf5w3dduwoovwsdpzeh-mysql.services.clever-cloud.com"
-  username: "uztblh187mfyfccj"
-  password: "RuQkxYWPgbjpeD6DmIBJ"
-  database: "buf5w3dduwoovwsdpzeh"
+  host: "buh5ktzmnvcgr0jwudak-mysql.services.clever-cloud.com"
+  username: "ug1ro4ssjbahf0v1"
+  password: "nLIePNFSubVJJl1T7Gg4"
+  database: "buh5ktzmnvcgr0jwudak"
   port: 3306

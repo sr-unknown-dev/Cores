@@ -2,17 +2,20 @@
 
 namespace hcf\handler\lootbox;
 
-use pocketmine\item\Item;
+use hcf\handler\lootbox\commands\LootboxCommand;
+use hcf\Loader;
 
 class LootboxManager{
 
-    public static $instance;
+    public $instance;
 
     public function __construct(){
-        self::$instance = new Lootbox();
+        $this->instance = new Lootbox();
+        Loader::getInstance()->getServer()->getCommandMap()->register("lootbox", new LootboxCommand("lootbox", "Lootbox commands"));
+        Loader::getInstance()->getServer()->getPluginManager()->registerEvents(new LootboxListener(), Loader::getInstance());
     }
 
-    public static function getLootbox(): Lootbox {
-        return self::$instance;
+    public function getLootbox(): Lootbox {
+        return $this->instance;
     }
 }
