@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="36be1915-7982-4332-968c-762ae75cce8e" name="Changes" comment="fix(Staffs): commands tban, mute, unban, unmute">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/XD.php" beforeDir="false" afterPath="$PROJECT_DIR$/XD.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CortexPE.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/Factory.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/Factory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/HCFListener.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/HCFListener.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/Loader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/Loader.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/StaffMode/Chat.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/StaffMode/Events.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/StaffMode/Freeze.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/StaffMode/FreezeChat.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/StaffMode/Good.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/StaffMode/ItemListener.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/StaffMode/MuteAndBansTask.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/StaffMode/PlayersForm.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/StaffMode/Staff.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/StaffMode/StaffManager.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/StaffMode/Vanish.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/StaffMode/items/Items.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/Tasks/AutoClickTask.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/abilities/AbilitiesCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/abilities/AbilitiesCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/abilities/items/FocusMode.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/abilities/items/FocusMode.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/abilities/items/Thor.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/abilities/items/Thor.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/anticheat/AutoClick.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/anticheat/DoubleClick.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/anticheat/Fly.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/anticheat/Reach.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/claim/ClaimListener.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/claim/ClaimListener.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/command/ReportCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/command/ReportCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/command/faction/subcommands/CampSubCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/command/faction/subcommands/CampSubCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/command/faction/subcommands/HomeSubCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/command/faction/subcommands/HomeSubCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/command/moderador/AlertCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/command/moderador/AlertCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/command/moderador/GodCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/command/moderador/GodCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/command/moderador/PortableKitsCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/command/moderador/PortableKitsCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/command/staffmode/FreezeCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/command/staffmode/StaffChatCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/command/staffmode/StaffModeCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/command/staffs/BanCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/command/staffs/MuteCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/command/staffs/UnBanCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/command/staffs/UnMuteCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/entity/server/InfoEntity.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/entity/server/InfoEntity.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/faction/command/subcommand/CampSubCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/faction/command/subcommand/CampSubCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/faction/command/subcommand/HomeSubCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/faction/command/subcommand/HomeSubCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/handler/HandlerManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/handler/HandlerManager.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/handler/crate/tile/CrateTile.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/handler/crate/tile/CrateTile.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/handler/rollback/Rollback.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/handler/rollback/RollbackListener.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/handler/rollback/RollbackManager.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/handler/rollback/commands/RollbackCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/kits/ArcherOp.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/kits/ArcherOp.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/kits/BardOp.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/kits/BardOp.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/kits/Extreme.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/kits/Extreme.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/kits/KitsListener.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/kits/KitsListener.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/kits/Leviathan.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/kits/Leviathan.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/kits/RogueOp.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/kits/RogueOp.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/kits/Supreme.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/kits/Supreme.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/kits/Titan.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/kits/Titan.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/kits/TitanPlus.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/kits/TitanPlus.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/module/ModuleManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/module/ModuleManager.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/module/blockshop/command/BlockShopCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/module/blockshop/command/BlockShopCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/player/Player.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/player/Player.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/player/disconnected/LogoutMob.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/player/disconnected/LogoutMob.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/prefix/entity/PrefixEntity.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/prefix/entity/PrefixEntity.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/ranks/RankManager.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/ranks/RanksListener.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/ranks/RanksTask.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/ranks/commands/RanksCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/ranks/commands/subcommands/CreateRankSubCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/ranks/commands/subcommands/RemoveRankSubCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/ranks/commands/subcommands/SetRankSubCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/ranks/commands/subcommands/SetTempRankCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/timer/Task/KeyOPTask.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/timer/Task/KeyOPTask.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/timer/Task/KeyTask.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/timer/Task/KeyTask.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/timer/command/AirdropCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/timer/command/AirdropCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/timer/command/FreeKitsSubCommands/EnableSubCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/timer/command/FreeKitsSubCommands/EnableSubCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/timer/command/KeyallCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/timer/command/KeyallCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/timer/command/KeyallopCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/timer/command/KeyallopCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/timer/command/LooboxCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/timer/command/LooboxCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/timer/command/MysteryCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/timer/command/MysteryCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/timer/command/PkgallCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/timer/command/PkgallCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hcf/utils/inventorie/Inventories.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/hcf/utils/inventorie/Inventories.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jasonw4331.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/muqsit.zip" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="Idk-zzz &lt;idk811959@gmail.com&gt;" />
+      </list>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Idk-zzz&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Idk-zzz/Titan.git&quot;,
+    &quot;accountId&quot;: &quot;0026e006-a5ba-4a6d-b795-5cd6d2f50280&quot;
+  }
+}</component>
+  <component name="PhpDebugGeneral" listening_started="true" />
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\php\php.exe">
+    <include_path>
+      <path value="$PROJECT_DIR$" />
+      <path value="$USER_HOME$/Documents/PocketMine-MP-5.11.0" />
+      <path value="$PROJECT_DIR$/../../../../../Documentos/PocketMine-MP-5.11.0" />
+      <path value="$PROJECT_DIR$/../../../../../Documentos/Pocketmine/PocketMine-MP-stable" />
+      <path value="$PROJECT_DIR$/../../../../../Documentos/Pocketmine" />
+    </include_path>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2kCPBa6rDiUAAbJvSw2HhX21ZgZ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JavaScript Debug.HCFListener.php.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.jetbrains.php.phpunit.codeGeneration.PhpNewTestDialog.defaultLibrary": "PHPUnit",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/conej/Desktop/Titan/Titan",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="HCFListener.php" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Titan/src/hcf/HCFListener.php" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.HCFListener.php" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-PS-243.22562.233" />
+        <option value="bundled-php-predefined-a98d8de5180a-7980c7aaca61-com.jetbrains.php.sharedIndexes-PS-243.22562.233" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="36be1915-7982-4332-968c-762ae75cce8e" name="Changes" comment="" />
+      <created>1722784459287</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1722784459287</updated>
+      <workItem from="1722784462113" duration="14518000" />
+      <workItem from="1722833129804" duration="7223000" />
+      <workItem from="1722911321004" duration="17290000" />
+      <workItem from="1723001158966" duration="2941000" />
+      <workItem from="1723006664211" duration="812000" />
+      <workItem from="1723084947608" duration="138000" />
+      <workItem from="1723137312439" duration="1483000" />
+      <workItem from="1723143743634" duration="994000" />
+      <workItem from="1723144922406" duration="4322000" />
+      <workItem from="1723150238141" duration="3778000" />
+      <workItem from="1723156003718" duration="11063000" />
+      <workItem from="1723259683943" duration="945000" />
+      <workItem from="1723395197578" duration="496000" />
+      <workItem from="1723912835007" duration="1729000" />
+      <workItem from="1723932961081" duration="480000" />
+      <workItem from="1724170163020" duration="536000" />
+      <workItem from="1724171061069" duration="203000" />
+      <workItem from="1724171462661" duration="310000" />
+      <workItem from="1724560382381" duration="61000" />
+      <workItem from="1725058974274" duration="626000" />
+      <workItem from="1725077206147" duration="139000" />
+      <workItem from="1725077393827" duration="592000" />
+      <workItem from="1725118206685" duration="10156000" />
+      <workItem from="1725140782135" duration="37066000" />
+      <workItem from="1725332270981" duration="5891000" />
+      <workItem from="1725397881452" duration="6479000" />
+      <workItem from="1725480315779" duration="3716000" />
+      <workItem from="1725584801921" duration="1549000" />
+      <workItem from="1725596192491" duration="24312000" />
+      <workItem from="1725822282889" duration="36000" />
+      <workItem from="1725912656351" duration="1610000" />
+      <workItem from="1725914549787" duration="3537000" />
+      <workItem from="1725920681892" duration="158000" />
+      <workItem from="1725925408781" duration="1797000" />
+      <workItem from="1726000348285" duration="491000" />
+      <workItem from="1726003440245" duration="1527000" />
+      <workItem from="1726005693007" duration="33000" />
+      <workItem from="1726007654527" duration="581000" />
+      <workItem from="1726085984303" duration="1283000" />
+      <workItem from="1726171216047" duration="673000" />
+      <workItem from="1726172104258" duration="204000" />
+      <workItem from="1726172536266" duration="19000" />
+      <workItem from="1726172865346" duration="10120000" />
+      <workItem from="1726269920131" duration="2696000" />
+      <workItem from="1726329875956" duration="1732000" />
+      <workItem from="1726526456964" duration="26897000" />
+      <workItem from="1726698313020" duration="116000" />
+      <workItem from="1726706173525" duration="14000" />
+      <workItem from="1732855567248" duration="23494000" />
+      <workItem from="1733084099900" duration="858000" />
+      <workItem from="1733110148847" duration="1828000" />
+      <workItem from="1733194607169" duration="840000" />
+      <workItem from="1736448855728" duration="1723000" />
+      <workItem from="1737064375279" duration="1076000" />
+    </task>
+    <task id="LOCAL-00001" summary="update: Abilitys and FactionCommands">
+      <option name="closed" value="true" />
+      <created>1725320228262</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1725320228266</updated>
+    </task>
+    <task id="LOCAL-00002" summary="fix: Items(StaffMode)">
+      <option name="closed" value="true" />
+      <created>1725320652449</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1725320652449</updated>
+    </task>
+    <task id="LOCAL-00003" summary="fix: JoinSubCommand">
+      <option name="closed" value="true" />
+      <created>1725406635858</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1725406635858</updated>
+    </task>
+    <task id="LOCAL-00004" summary="All">
+      <option name="closed" value="true" />
+      <created>1732856119513</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1732856119513</updated>
+    </task>
+    <task id="LOCAL-00005" summary="feat(Staffs): Added command Ban and Mute">
+      <option name="closed" value="true" />
+      <created>1732904539418</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1732904539419</updated>
+    </task>
+    <task id="LOCAL-00006" summary="feat(Staffs): Fixed Mute and Bans">
+      <option name="closed" value="true" />
+      <created>1732943628797</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1732943628797</updated>
+    </task>
+    <task id="LOCAL-00007" summary="feat(Staffs): Added commands tban, mute, unban, unmute">
+      <option name="closed" value="true" />
+      <created>1732991836874</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1732991836875</updated>
+    </task>
+    <task id="LOCAL-00008" summary="fix(Staffs): commands tban, mute, unban, unmute">
+      <option name="closed" value="true" />
+      <created>1733111525646</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1733111525646</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="asd" />
+    <MESSAGE value="update: Abilitys and FactionCommands" />
+    <MESSAGE value="fix: Items(StaffMode)" />
+    <MESSAGE value="update FactionSitem" />
+    <MESSAGE value="update JoinSubCommand" />
+    <MESSAGE value="fix: JoinSubCommand" />
+    <MESSAGE value="All" />
+    <MESSAGE value="feat(Staffs): Added command Ban and Mute" />
+    <MESSAGE value="feat(Staffs): Fixed Mute and Bans" />
+    <MESSAGE value="feat(Staffs): Added commands tban, mute, unban, unmute" />
+    <MESSAGE value="fix(Staffs): commands tban, mute, unban, unmute" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix(Staffs): commands tban, mute, unban, unmute" />
+  </component>
+</project>

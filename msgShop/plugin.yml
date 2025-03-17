@@ -1,0 +1,13 @@
+name: ShopMsg
+author: Unknown
+version: 0.0.1
+api: 5.0.0
+main: Santy\Main
+
+commands:
+  shopalert:
+    permission: msgshop.perms
+
+permissions:
+  msgshop.perms:
+    default: op
