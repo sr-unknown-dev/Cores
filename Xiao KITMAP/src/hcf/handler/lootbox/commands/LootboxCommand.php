@@ -8,12 +8,11 @@ use hcf\handler\lootbox\commands\subcommands\GiveSubCommand;
 use hcf\Loader;
 use pocketmine\command\CommandSender;
 use pocketmine\lang\Translatable;
-use pocketmine\plugin\Plugin;
 use pocketmine\utils\TextFormat;
 
 class LootboxCommand extends BaseCommand
 {
-    public function __construct(string $name, string $description = "")
+    public function __construct(string $name, Translatable|string $description = "")
     {
         parent::__construct(Loader::getInstance(), $name, $description);
     }
@@ -27,7 +26,7 @@ class LootboxCommand extends BaseCommand
 
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
     {
-        $sender->sendMessage(TextFormat::GREEN."Use /lootbox [edit|give]"));
+        $sender->sendMessage(TextFormat::GREEN . "Use /lootbox [edit|give]");
     }
 
     public function getPermission(): ?string

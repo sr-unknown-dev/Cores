@@ -239,3 +239,9 @@ permissions:
     default: op
   anticheat.alerts:
     default: op
+  lootbox.command:
+    default: op
+  lootbox.edit:
+    default: op
+  lootbox.give:
+    default: op

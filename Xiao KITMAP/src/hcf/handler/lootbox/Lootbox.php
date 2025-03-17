@@ -65,7 +65,7 @@ class Lootbox
         }
         $randomKeys = array_rand($items, min($count, count($items)));
         $randomItems = [];
-        foreach ((array) $randomKeys as $key) {
+        foreach ((array)$randomKeys as $key) {
             $randomItems[] = $items[$key];
         }
         return $randomItems;
@@ -99,7 +99,7 @@ class Lootbox
             "§r",
             implode("\n", array_map([TextFormat::class, 'colorize'], $ItemNames)),
             "§r",
-            "§r§7Tebex Store: §f".Loader::getInstance()->getConfig()->get("tebex-crates")
+            "§r§7Tebex Store: §f" . Loader::getInstance()->getConfig()->get("tebex-crates")
         ]);
         $lootbox->getNamedTag()->setString('Lootbox_Item', 'Lootbox');
         $player->getInventory()->addItem($lootbox);

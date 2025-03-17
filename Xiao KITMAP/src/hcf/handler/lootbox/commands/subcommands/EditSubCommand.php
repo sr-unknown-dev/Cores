@@ -7,10 +7,11 @@ use hcf\Loader;
 use hcf\player\Player;
 use pocketmine\command\CommandSender;
 
-class EditSubCommand extends BaseSubCommand{
-    public function __construct(string $name, string $description = "", array $aliases = [])
+class EditSubCommand extends BaseSubCommand
+{
+    public function __construct(string $name, string $description = "")
     {
-        parent::__construct($name, $description, $aliases);
+        parent::__construct($name, $description);
     }
 
     protected function prepare(): void
