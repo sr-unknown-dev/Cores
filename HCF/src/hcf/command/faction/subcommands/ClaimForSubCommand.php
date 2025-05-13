@@ -6,7 +6,7 @@ use CortexPE\Commando\args\RawStringArgument;
 use CortexPE\Commando\BaseSubCommand;
 use hcf\Loader;
 use hcf\player\Player;
-use hcf\Server\ClaimSe;
+use hcf\Server\ServerA;
 use pocketmine\command\CommandSender;
 use pocketmine\item\VanillaItems;
 use pocketmine\utils\TextFormat;
@@ -103,7 +103,7 @@ class ClaimForSubCommand extends BaseSubCommand
            ]);
         $item = VanillaItems::GOLDEN_HOE()->setCustomName(TextFormat::colorize('&eClaim selector'));
         $item->setNamedTag($item->getNamedTag()->setString('claim_type', $claimType));
-        ClaimSe::$claim[$sender->getName()] = true;
+        ServerA::$claim[$sender->getName()] = true;
         
         if (!$sender->getInventory()->canAddItem($item)) {
             $sender->sendMessage(TextFormat::colorize('&cYou cannot add the item to make the claim to your inventory'));

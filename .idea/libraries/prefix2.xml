@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="prefix2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Xiao HCF/src/hcf/prefix.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

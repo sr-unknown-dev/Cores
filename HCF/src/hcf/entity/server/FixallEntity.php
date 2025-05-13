@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace hcf\entity\server;
 
+use Exception;
 use hcf\command\moderador\TopKDREntity;
 use hcf\player\Player;
 use Himbeer\LibSkin\SkinConverter;
@@ -64,7 +65,7 @@ class FixallEntity extends Human
      * @param int $currentTick
      *
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function onUpdate(int $currentTick): bool
     {

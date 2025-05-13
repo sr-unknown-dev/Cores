@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="bossbar2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Xiao HCF/src/hcf/utils/bossbar.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -5,7 +5,7 @@ namespace hcf\command\fix\subcommand;
 use CortexPE\Commando\BaseSubCommand;
 use hcf\Loader;
 use hcf\player\Player;
-use hcf\Server\AutoFix;
+use hcf\Server\ServerA;
 use hcf\Tasks\AutoFixTask;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat as TF;
@@ -25,9 +25,9 @@ class AutoSubCommand extends BaseSubCommand {
         }
 
         $playerName = $sender->getName();
-        $isAutoFixEnabled = isset(AutoFix::$fix[$playerName]);
-        
-        AutoFix::$fix[$playerName] = !$isAutoFixEnabled;
+        $isAutoFixEnabled = isset(ServerA::$fix[$playerName]);
+
+        ServerA::$fix[$playerName] = !$isAutoFixEnabled;
         
         $message = $isAutoFixEnabled ? 
             TF::RED . "Has desactivado el AutoFix." : 

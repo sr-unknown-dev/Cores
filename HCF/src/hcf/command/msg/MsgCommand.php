@@ -5,10 +5,9 @@ namespace hcf\command\msg;
 use CortexPE\Commando\BaseCommand;
 use hcf\arguments\MsgArgument;
 use hcf\arguments\PlayersArgument;
-use hcf\Factory;
 use hcf\Loader;
 use hcf\player\Player;
-use hcf\Server\Chatr;
+use hcf\Server\ServerA;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
@@ -49,7 +48,7 @@ class MsgCommand extends BaseCommand
         $sender->sendMessage(TextFormat::colorize("&8(&gTo&8) &g".$player->getName().": &7".$msg));
         $player->sendMessage(TextFormat::colorize("&8(&gFrom&8) &g".$sender->getName().": &7".$msg));
 
-        Chatr::$chatr[$sender->getName()] = [
+        ServerA::$chatr[$sender->getName()] = [
             'sender' => $player->getName(),
             'receiver' => $sender->getName()
         ];

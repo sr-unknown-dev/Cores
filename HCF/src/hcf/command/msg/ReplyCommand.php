@@ -2,16 +2,11 @@
 
 namespace hcf\command\msg;
 
-use CortexPE\Commando\args\RawStringArgument;
-use CortexPE\Commando\args\TextArgument;
 use CortexPE\Commando\BaseCommand;
 use hcf\arguments\MsgArgument;
-use hcf\arguments\PlayersArgument;
-use hcf\command\pvp\subcommands\Enable;
-use hcf\Factory;
 use hcf\Loader;
 use hcf\player\Player;
-use hcf\Server\Chatr;
+use hcf\Server\ServerA;
 use pocketmine\command\CommandSender;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
@@ -36,16 +31,16 @@ class ReplyCommand extends BaseCommand
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
     {
         $msg = $args["message"];
-        
-        if (isset(Chatr::$chatr[$sender->getName()])) {
-            $receiverName = Chatr::$chatr[$sender->getName()]['sender'];
+
+        if (isset(ServerA::$chatr[$sender->getName()])) {
+            $receiverName = ServerA::$chatr[$sender->getName()]['sender'];
             $receiver = Server::getInstance()->getPlayerExact($receiverName);
             
             if ($receiver instanceof Player && $receiver->isOnline()) {
                 $sender->sendMessage(TextFormat::colorize("&8(&gTo&8) &g".$receiver->getName().": &7".$msg));
                 $receiver->sendMessage(TextFormat::colorize("&8(&gFrom&8) &g".$sender->getName().": &7".$msg));
-                
-                Chatr::$chatr[$receiver->getName()] = [
+
+                ServerA::$chatr[$receiver->getName()] = [
                     'sender' => $sender->getName(),
                     'receiver' => $receiver->getName()
                 ];

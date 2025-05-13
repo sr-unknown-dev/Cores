@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="muqsit2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Xiao KITMAP/src/muqsit/tebex.zip!/" />
+      <root url="jar://$PROJECT_DIR$/Xiao KITMAP/src/muqsit/simplepackethandler-2.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -2,7 +2,7 @@ name: HCF
 version: 0.0.1
 api: [ 5.0.0 ]
 main: hcf\Loader
-author: Edited and improved by(Sr.Idk)
+author: Edited and improved by(Sr.Unkn0wn)
 
 permissions:
   fury.command:

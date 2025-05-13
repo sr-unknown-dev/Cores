@@ -3,15 +3,11 @@
 namespace hcf\command\faction\subcommands;
 
 use CortexPE\Commando\args\RawStringArgument;
-use CortexPE\Commando\BaseCommand;
 use CortexPE\Commando\BaseSubCommand;
-use hcf\arguments\FactionsArgument;
 use hcf\faction\Faction;
 use hcf\Loader;
 use hcf\player\Player;
-use hcf\Server\ClaimSe;
 use pocketmine\command\CommandSender;
-use pocketmine\item\VanillaItems;
 use pocketmine\utils\TextFormat;
 
 class WhoSubCommand extends BaseSubCommand
