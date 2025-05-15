@@ -14,6 +14,7 @@ class ChatMuteCommand extends Command
     public function __construct()
     {
         parent::__construct("mchat", "Mute chat");
+        $this->setPermission("admin.perms");
     }
     
     public function execute(CommandSender $player, string $label, array $args)

@@ -7,3 +7,5 @@ author: Sr_Unkn0wn
 permissions:
   set.whitelist.perms:
     default: op
+  admin.perms:
+    default: op

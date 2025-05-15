@@ -14,6 +14,7 @@ class UnMuteChatCommand extends Command
     public function __construct()
     {
         parent::__construct("umchat", "Un Mute chat");
+        $this->setPermission("admin.perms");
     }
 
     public function execute(CommandSender $player, string $label, array $args)

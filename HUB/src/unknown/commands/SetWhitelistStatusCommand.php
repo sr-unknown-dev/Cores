@@ -14,6 +14,7 @@ class SetWhitelistStatusCommand extends Command
     public function __construct()
     {
         parent::__construct("swhitelist", "active or desactive the whitelist");
+        $this->setPermission("admin.perms");
     }
 
     public function execute(CommandSender $sender, string $label, array $args): void
