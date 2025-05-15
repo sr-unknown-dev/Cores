@@ -1,6 +1,6 @@
 <?php
 
-namespace unknown\task;
+namespace unknown\scoreboard;
 
 use pocketmine\scheduler\Task;
 use unknown\Loader;

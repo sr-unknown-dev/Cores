@@ -7,7 +7,8 @@ use unknown\Loader;
 
 class QueryTask extends Task {
 
-    public function onRun(): void {
+    public function onRun(): void
+    {
         Loader::getInstance()->getQueryManager()->update();
     }
 }
