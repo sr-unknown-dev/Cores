@@ -2,35 +2,34 @@
 
 namespace unknown\menu;
 
-use hcf\utils\item\Items;
 use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\transaction\InvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransactionResult;
 use muqsit\invmenu\type\InvMenuTypeIds;
-use pocketmine\item\VanillaItems;
-use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\StringTag;
+use pocketmine\block\VanillaBlocks;
 use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
 use unknown\Loader;
 
-class Menu {
+class Menu
+{
 
-    public function send(Player $player): void {
+    public static function send(Player $player): void
+    {
         $menu = InvMenu::create(InvMenuTypeIds::TYPE_CHEST);
         $menu->setName(TextFormat::colorize("&l&gServer Selector"));
 
         $items = [
-            'hcf' => $this->createServerItem("HCF"),
-            'kitmap' => $this->createServerItem("KitMap"),
-            'practice' => $this->createServerItem("Practice"),
+            'hcf' => self::createServerItem("HCF"),
+            'kitmap' => self::createServerItem("KitMap"),
+            'practice' => self::createServerItem("Practice"),
         ];
 
         $menu->getInventory()->setItem(10, $items['hcf']);
         $menu->getInventory()->setItem(13, $items['kitmap']);
         $menu->getInventory()->setItem(16, $items['practice']);
 
-        $menu->setListener(function(InvMenuTransaction $transaction): InvMenuTransactionResult {
+        $menu->setListener(function (InvMenuTransaction $transaction): InvMenuTransactionResult {
             $player = $transaction->getPlayer();
             $item = $transaction->getItemClicked();
             $name = strtolower(TextFormat::clean($item->getCustomName()));
@@ -65,10 +64,34 @@ class Menu {
         $menu->send($player);
     }
 
-    private function createServerItem(string $name){
-        $item = VanillaItems::PLAYER_HEAD();
-        $item->setCustomName(TextFormat::colorize("&r&b{$name}"));
+    private static function createServerItem(string $name)
+    {
+        $hcfstatus = Loader::getInstance()->getQueryManager()->getStatus('hcf');
+        $kitmapstatus = Loader::getInstance()->getQueryManager()->getStatus('kitmap');
+        $practicestatus = Loader::getInstance()->getQueryManager()->getStatus('practice');
+        $hcf = $hcfstatus !== null ? "&7" . $hcfstatus['online'] . "/" . $hcfstatus['max'] : "&cOffline";
+        $kitmap = $kitmapstatus !== null ? "&7" . $kitmapstatus['online'] . "/" . $kitmapstatus['max'] : "&cOffline";
+        $practice = $practicestatus !== null ? "&7" . $practicestatus['online'] . "/" . $practicestatus['max'] : "&cOffline";
+        $item = VanillaBlocks::MOB_HEAD()->asItem();
+        $item->setCustomName(TextFormat::colorize('&l&g'.$name));
 
-        $item->setLore([]);
+        if ($name === "HCF") {
+            $item->setLore([
+                '§l§gPlayers: §7' .$hcf,
+                '§gMap Kit: Prot 1, Sharp 1'
+        ]);
+        }elseif ($name === "KitMap") {
+            $item->setLore([
+                '§l§gPlayers: §7' .$kitmap,
+                '§gMap Kit: Prot 1, Sharp 1'
+            ]);
+        }elseif ($name === "Practice") {
+            $item->setLore([
+                '§l§gPlayers: §7' .$practice,
+                '§gMap Kit: Prot 1, Sharp 1'
+            ]);
+        }
+
+        return $item;
     }
 }

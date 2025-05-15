@@ -12,7 +12,6 @@ use unknown\scoreboard\Scoreboard;
 class Events implements Listener
 {
 
-
     public function handleJoin(PlayerJoinEvent $e): void
     {
         $player = $e->getPlayer();
@@ -40,5 +39,8 @@ class Events implements Listener
     {
         $player = $e->getPlayer();
 
+        if (Loader::getInstance()->chatMuteStatus === true){
+
+        }
     }
 }

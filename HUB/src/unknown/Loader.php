@@ -2,10 +2,10 @@
 
 namespace unknown;
 
-use daily\Events;
 use daily\Task\Tasks;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\SingletonTrait;
+use unknown\events\Events;
 use unknown\query\QueryManager;
 use unknown\query\QueryTask;
 use unknown\scoreboard\ScoreboardManager;
