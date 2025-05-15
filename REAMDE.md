@@ -42,58 +42,6 @@ experiencia PvP competitiva y emocionante.
 
 ## ⚙️ Configuración
 
-### Configuración de KitMap
-
-```yaml
-kitmap:
-  # Configuración general
-  settings:
-    combat-tag: 30
-    pearl-cooldown: 15
-    killstreak-rewards: true
-
-  # Configuración de kits
-  kits:
-    pvp:
-      cooldown: 3600
-      items:
-        - "diamond_sword:1:sharpness:3"
-        - "diamond_helmet:1:protection:3"
-        # ... más items
-
-    archer:
-      cooldown: 7200
-      permission: "kit.archer"
-      items:
-        - "bow:1:power:3"
-        - "leather_helmet:1:protection:2"
-        # ... más items
-
-  # Configuración de killstreaks
-  killstreaks:
-    5:
-      - "effect:strength:30:1"
-    10:
-      - "command:give {player} golden_apple 5"
-```
-
-### Configuración de Scoreboard
-
-```yaml
-scoreboard:
-  title: "§l§6KITMAP"
-  lines:
-    - "§7Jugador: §f{player}"
-    - "§7Kills: §a{kills}"
-    - "§7Deaths: §c{deaths}"
-    - "§7KDR: §e{kdr}"
-    - "§7Killstreak: §6{killstreak}"
-    - ""
-    - "§7Combat: §c{combat}"
-    - "§7Online: §a{online}"
-    - "§7FPS: §e{fps}"
-```
-
 ## 📌 Comandos
 
 ### Comandos de KitMap
@@ -101,41 +49,13 @@ scoreboard:
 ```
 /kit [nombre] - Selecciona un kit
 /kits - Muestra todos los kits disponibles
-/createkit [nombre] - Crea un nuevo kit
-/savekit [nombre] - Guarda tu kit actual
-/killstreak - Muestra tu racha actual
-/stats [jugador] - Muestra estadísticas
 ```
 
 ### Comandos de Administración
 
 ```
-/kitmap reload - Recarga la configuración
-/setspawn - Establece el punto de spawn
-/setwarp [nombre] - Crea un nuevo warp
 /airdrop give [jugador] [cantidad] - Da airdrops
-/autofix toggle - Activa/desactiva el auto fix
-```
-
-## 🔒 Permisos
-
-```yaml
-permisos:
-  kitmap.kit.*:
-    descripción: Acceso a todos los kits
-    default: op
-  kitmap.kit.vip:
-    descripción: Acceso a kits VIP
-    default: false
-  kitmap.admin:
-    descripción: Comandos administrativos
-    default: op
-  hcf.airdrop.give:
-    descripción: Dar airdrops
-    default: op
-  hcf.autofix:
-    descripción: Usar auto fix
-    default: op
+/fix auto - Activa/desactiva el auto fix
 ```
 
 ## 📊 Características de Estadísticas

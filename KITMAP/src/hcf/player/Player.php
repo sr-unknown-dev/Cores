@@ -156,7 +156,7 @@ class Player extends BasePlayer
         # Scoretag & Nametag setup
         if ($this->getSession()->getFaction() !== null) {
             $faction = $this->getSession()->getFaction();
-            $FName = $faction ? Loader::getInstance()->getFactionManager()->getFaction($faction)->getName() : "";
+            $FName = $faction ? Loader::getInstance()->getFactionManager()->getFaction($faction)->getName() : '';
 
             $data = [];
             foreach (Loader::getInstance()->getFactionManager()->getFactions() as $name => $factionObj) {
@@ -167,13 +167,13 @@ class Player extends BasePlayer
             arsort($data);
             $topFactions = array_slice($data, 0, 3, true);
 
-            $position = "";
+            $position = '';
             $factionPosition = array_search($FName, array_keys($topFactions)) + 1;
             if ($factionPosition >= 1 && $factionPosition <= 3) {
                 $position = $factionPosition;
             }
             $dtr = Loader::getInstance()->getFactionManager()->getFaction($this->getSession()->getFaction());
-            $this->setNameTag(TextFormat::colorize("&c" . $this->getName() . "\n&r&7[&c" . $this->getSession()->getFaction() . " &7| &c" . $dtr->getDtr() . " &7]"));
+            $this->setNameTag(TextFormat::colorize('&c' . $this->getName() . "\n&r&7[&c" . $this->getSession()->getFaction() . ' &7| &c' . $dtr->getDtr() . ' &7]'));
         } else {
             $this->setNameTag(TextFormat::colorize('&c' . $this->getName()));
         }
@@ -221,13 +221,25 @@ class Player extends BasePlayer
         $this->scoreboard->updateTitles();
         // $lines = [ TextFormat::colorize(Loader::getInstance()->getConfig()->get('scoreboard.placeholder'))
         // ];
+        $online = count(array_filter(Server::getInstance()->getOnlinePlayers()));
+
+
+        /** Kitmap Stats */
+        $lines[] = TextFormat::colorize('💋');
+
+        $lines[] = TextFormat::colorize('§7Player: §3' . $this->getName());
+        $lines[] = TextFormat::colorize('§7Kills: §3' . $this->getSession()->getKills());
+        $lines[] = TextFormat::colorize('§7Deaths: §3' . $this->getSession()->getDeaths());
+        $lines[] = TextFormat::colorize('§7Online: §3' . $online);
+        $lines[] = TextFormat::colorize('💋');
+
+
         $lines[] = TextFormat::colorize('💋');
         $name = $this->getName();
-        $online = count(array_filter(Server::getInstance()->getOnlinePlayers()));
         $current = Server::getInstance()->getTicksPerSecond();
         $lines[] = TextFormat::colorize('💋');
 
-        $god = Loader::getInstance()->getStaffModeManager()->isGod($this) ? " §l§7×§r &aGood: §aEnable" : "";
+        $god = Loader::getInstance()->getStaffModeManager()->isGod($this) ? ' §l§7×§r &aGood: §aEnable' : '';
         $lines[] = TextFormat::colorize('💋');
         $lines[] = TextFormat::colorize($god);
         $lines[] = TextFormat::colorize('💋');
@@ -235,12 +247,12 @@ class Player extends BasePlayer
         # StaffMode
         $lines[] = TextFormat::colorize('💋');
         if (Loader::getInstance()->getStaffModeManager()->isStaff($this)) {
-            $lines[] = TextFormat::colorize(" §l§7×§r §l&aStaffMode&r&7:&r");
+            $lines[] = TextFormat::colorize(' §l§7×§r §l&aStaffMode&r&7:&r');
             $staffchat = Loader::getInstance()->getStaffModeManager()->isStaffChat($this) ? ' §l§7×§r &aStaffChat: §aStaffTeam' : ' §l§7×§r &aStaffChat: §cPublic';
             $lines[] = TextFormat::colorize($staffchat);
             $vanish = Loader::getInstance()->getStaffModeManager()->isVanish($this) ? ' §l§7×§r &aVanish: §aEnable' : ' §l§7×§r &aVanish: §cDisable';
             $lines[] = TextFormat::colorize($vanish);
-            $lines[] = TextFormat::colorize(" §l§7×§r &aOnline: &f" . $online);
+            $lines[] = TextFormat::colorize(' §l§7×§r &aOnline: &f' . $online);
             $lines[] = TextFormat::colorize('💋');
         }
 
@@ -248,16 +260,16 @@ class Player extends BasePlayer
         $bountyManager = Loader::getInstance()->getBountyManager();
         if ($bountyManager->hasTrackedBounty($this)) {
             $bounty = $bountyManager->getTrackedBountyData($this);
-            $target = Loader::getInstance()->getServer()->getPlayerByPrefix($bounty["target"]);
+            $target = Loader::getInstance()->getServer()->getPlayerByPrefix($bounty['target']);
 
             if ($target !== null) {
                 $pos = $target->getPosition();
                 $x = (int)$pos->getX();
                 $z = (int)$pos->getZ();
                 $lines[] = TextFormat::colorize('💋');
-                $lines[] = TextFormat::colorize("         &l&aBounty");
-                $lines[] = TextFormat::colorize(" §l§7×§r &aTarget: &f" . $bounty["target"]);
-                $lines[] = TextFormat::colorize(" §l§7×§r &aCoords: &7(" . $x . ", " . $z . "&7)");
+                $lines[] = TextFormat::colorize('         &l&aBounty');
+                $lines[] = TextFormat::colorize(' §l§7×§r &aTarget: &f' . $bounty['target']);
+                $lines[] = TextFormat::colorize(' §l§7×§r &aCoords: &7(' . $x . ', ' . $z . '&7)');
                 $lines[] = TextFormat::colorize('💋');
             }
         }
@@ -307,7 +319,7 @@ class Player extends BasePlayer
 
             if ($koth !== null) {
                 $lines[] = TextFormat::colorize(' §l§7×§r &4' . $koth->getName() . '&r&f: &r&e' . Timer::format($koth->getProgress()));
-                $line[] = TextFormat::colorize(" §l§7×§r &7(" . $koth->getCoords() . "&7)");
+                $line[] = TextFormat::colorize(' §l§7×§r &7(' . $koth->getCoords() . '&7)');
             }
         }
         # Others
@@ -358,7 +370,7 @@ class Player extends BasePlayer
                     } else {
                         $lines[] = TextFormat::colorize(' §l§7×§r §l&aDTR&r&7: &a' . $targetFaction->getDtr());
                     }
-                    $lines[] = TextFormat::colorize(' §l§7×§r §l&aOnline&r&7: &f' . count($targetFaction->getOnlineMembers()) . "/" . count($targetFaction->getMembers()));
+                    $lines[] = TextFormat::colorize(' §l§7×§r §l&aOnline&r&7: &f' . count($targetFaction->getOnlineMembers()) . '/' . count($targetFaction->getMembers()));
                 }
             }
 
@@ -518,12 +530,12 @@ class Player extends BasePlayer
             $deg += 360;
 
         if (22.5 <= $deg && $deg < 157.5)
-            return "N";
+            return 'N';
         elseif (157.5 <= $deg && $deg < 202.5)
-            return "E";
+            return 'E';
         elseif (202.5 <= $deg && $deg < 337.5)
-            return "S";
+            return 'S';
         else
-            return "W";
+            return 'W';
     }
 }
