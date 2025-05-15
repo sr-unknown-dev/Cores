@@ -39,10 +39,10 @@ class ScoreboardManager {
 
         $this->lines[$name] = [];
 
-        $score = count($lines);
+        $score = 0;
         foreach ($lines as $line) {
-            $this->lines[$name][$score] = TextFormat::colorize($line);
-            $score--;
+          $this->lines[$name][$score] = TextFormat::colorize($line);
+          $score++;
         }
 
         $this->sendLines($player);
