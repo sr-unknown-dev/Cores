@@ -6,7 +6,7 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\utils\SingletonTrait;
 use unknown\commands\ChatMuteCommand;
 use unknown\commands\SetWhitelistStatusCommand;
-use unknown\commands\UnChatMuteCommand;
+use unknown\commands\UnMuteChatCommand;
 use unknown\events\Events;
 use unknown\query\QueryManager;
 use unknown\query\QueryTask;
@@ -32,7 +32,7 @@ class Loader extends PluginBase
         $this->getServer()->getCommandMap()->registerAll('admin', [
             new ChatMuteCommand(),
             new SetWhitelistStatusCommand(),
-            new UnChatMuteCommand()
+            new UnMuteChatCommand()
         ]);
     }
 

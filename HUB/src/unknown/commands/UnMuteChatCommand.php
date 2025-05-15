@@ -9,7 +9,7 @@ use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 use unknown\Loader;
 
-class UnChatMuteCommand extends Command
+class UnMuteChatCommand extends Command
 {
     public function __construct()
     {
