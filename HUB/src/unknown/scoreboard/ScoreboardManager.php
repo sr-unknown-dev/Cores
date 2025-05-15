@@ -2,8 +2,10 @@
 
 namespace unknown\scoreboard;
 
-use pocketmine\network\mcpe\protocol\{RemoveObjectivePacket, SetDisplayObjectivePacket, SetScorePacket};
-use pocketmine\network\mcpe\protocol\types\scoreboard\ScorePacketEntry;
+use pocketmine\network\mcpe\protocol\{RemoveObjectivePacket,
+    SetDisplayObjectivePacket,
+    SetScorePacket,
+    types\ScorePacketEntry};
 use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
 
