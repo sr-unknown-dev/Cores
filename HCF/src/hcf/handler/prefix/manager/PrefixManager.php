@@ -13,6 +13,11 @@ class PrefixManager
     public array $prefixes = [];
 
     public array $tags = [
+
+        # TIP
+        # §8[ AAA §r§8]§r
+        # §8! AAA §r§8!§r
+
         # Países
         "MEX" => "§8[ §l§a|§f|§4| §r§8]§r",
         "USA" => "§8[ §l§f|§b|§4| §r§8]§r",

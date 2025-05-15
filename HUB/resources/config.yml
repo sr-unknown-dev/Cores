@@ -1,0 +1,26 @@
+scoreboard:
+  title:
+    - "&gHUB"
+    - "&bHUB"
+    - "&dHUB"
+    - "&eHUB"
+  stri:
+  - "play.hub.sytes"
+  - "hub.tebex.io"
+
+servers:
+  hcf:
+    ip: 127.0.0.1
+    port: 19132
+    whitelist: off
+  kitmap:
+    ip: 127.0.0.1
+    port: 19132
+    whitelist: off
+  practice:
+    ip: 127.0.0.1
+    port: 19132
+    whitelist: off
+
+player-join: "&a{player} &7join the server"
+player-quit: "&4{player} &7quit the server"

@@ -1,0 +1,9 @@
+name: HubSystem
+main: unknown\Loader
+version: 0.0.1
+api: 5.0.0
+author: Sr_Unkn0wn
+
+permissions:
+  set.whitelist.perms:
+    default: op
