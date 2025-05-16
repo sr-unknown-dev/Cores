@@ -29,11 +29,9 @@ class Loader extends PluginBase
     {
         if (!InvMenuHandler::isRegistered()) InvMenuHandler::register($this);
         $this->scoreboardManager = new ScoreboardManager();
-        $this->queryManager = new QueryManager();
         $this->rankManage = new RankManage();
         $this->getServer()->getPluginManager()->registerEvents(new Events(), $this);
         $this->getScheduler()->scheduleRepeatingTask(new ScoreboardTask(), 20);
-        $this->getScheduler()->scheduleRepeatingTask(new QueryTask(), 100);
         $this->getServer()->getCommandMap()->registerAll('admin', [
             new ChatMuteCommand(),
             new SetWhitelistStatusCommand(),

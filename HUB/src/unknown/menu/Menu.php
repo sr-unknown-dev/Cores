@@ -10,6 +10,7 @@ use pocketmine\block\VanillaBlocks;
 use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
 use unknown\Loader;
+use unknown\query\QueryStatus;
 
 class Menu
 {
@@ -66,12 +67,18 @@ class Menu
 
     private static function createServerItem(string $name)
     {
-        $hcfstatus = Loader::getInstance()->getQueryManager()->getStatus('hcf');
-        $kitmapstatus = Loader::getInstance()->getQueryManager()->getStatus('kitmap');
-        $practicestatus = Loader::getInstance()->getQueryManager()->getStatus('practice');
-        $hcf = $hcfstatus !== null ? "&7" . $hcfstatus['online'] . "/" . $hcfstatus['max'] : "&cOffline";
-        $kitmap = $kitmapstatus !== null ? "&7" . $kitmapstatus['online'] . "/" . $kitmapstatus['max'] : "&cOffline";
-        $practice = $practicestatus !== null ? "&7" . $practicestatus['online'] . "/" . $practicestatus['max'] : "&cOffline";
+        $queryhcf = new QueryStatus($config->getNested("server.hcf.ip"), $config->getNested("server.hcf.port"));
+        $hcfstatus = $queryhcf->getStatus();
+
+        $querykitmap = new QueryStatus($config->getNested("server.kitmap.ip"), $config->getNested("server.kitmap.port"));
+        $kitmapstatus = $querykitmap->getStatus();
+
+        $querypractice = new QueryStatus($config->getNested("server.practice.ip"), $config->getNested("server.practice.port"));
+        $practicestatus = $querypractice->getStatus();
+
+        $hcf = $hcfstatus['status'] === 'online' ? "&7" . $hcfstatus['players_online'] . "/" . $hcfstatus['max_players'] : "&cOffline";
+        $kitmap = $kitmapstatus['status'] === 'online' ? "&7" . $kitmapstatus['players_online'] . "/" . $kitmapstatus['max_players'] : "&cOffline";
+        $practice = $practicestatus['status'] === 'online' ? "&7" . $practicestatus['players_online'] . "/" . $practicestatus['max_players'] : "&cOffline";
         $item = VanillaBlocks::MOB_HEAD()->asItem();
         $item->setCustomName(TextFormat::colorize('&l&g'.$name));
 
