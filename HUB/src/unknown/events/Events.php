@@ -32,6 +32,7 @@ class Events implements Listener
         Scoreboard::send($player);
         $msg = str_replace("{player}", $player->getName(), Loader::getInstance()->getConfig()->get('join-message') ?? "");;
         $e->setJoinMessage($msg);
+        $this->giveItems($player);
     }
 
     public function handleQuit(PlayerQuitEvent $e): void
@@ -63,7 +64,7 @@ class Events implements Listener
         } elseif ($this->jump[$name] >= 2) {
             $direction = $player->getDirectionVector()->multiply(1.2);
             $player->setMotion($direction);
-            unset($this->jump[$name]); // Reiniciar contador
+            unset($this->jump[$name]);
         }
     }
 
