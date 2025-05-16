@@ -10,15 +10,15 @@ scoreboard:
 
 servers:
   hcf:
-    ip: "clarymc.ddns.net"
+    ip: 198.96.93.169
     port: 19132
     whitelist: off
   kitmap:
-    ip: "clarymc.ddns.net"
+    ip: 198.96.93.169
     port: 19132
     whitelist: off
   practice:
-    ip: "clarymc.ddns.net"
+    ip: 198.96.93.169
     port: 19132
     whitelist: off
 
