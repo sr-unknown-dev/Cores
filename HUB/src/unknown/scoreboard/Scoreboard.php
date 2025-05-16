@@ -25,11 +25,12 @@ class Scoreboard {
         $hcf = $hcfstatus !== null ? "&7" . $hcfstatus['online'] . "/" . $hcfstatus['max'] : "&cOffline";
         $kitmap = $kitmapstatus !== null ? "&7" . $kitmapstatus['online'] . "/" . $kitmapstatus['max'] : "&cOffline";
         $practice = $practicestatus !== null ? "&7" . $practicestatus['online'] . "/" . $practicestatus['max'] : "&cOffline";
+        $rank = RankManager::getInstance()->getRank($player->getName());
 
         $lines = [];
 
         $lines[] = "&e&m---------------------";
-        $lines[] = "&l&gRank: &aJugador";
+        $lines[] = "&l&gRank: &a" . $rank;
         $lines[] = "&e&r";
 
         $lines[] = "&l&gPing: &r&a" . $player->getNetworkSession()->getPing() . "ms";
