@@ -25,7 +25,7 @@ class Scoreboard {
         $hcf = $hcfstatus !== null ? "&7" . $hcfstatus['online'] . "/" . $hcfstatus['max'] : "&cOffline";
         $kitmap = $kitmapstatus !== null ? "&7" . $kitmapstatus['online'] . "/" . $kitmapstatus['max'] : "&cOffline";
         $practice = $practicestatus !== null ? "&7" . $practicestatus['online'] . "/" . $practicestatus['max'] : "&cOffline";
-        $rank = RankManager::getInstance()->getRank($player->getName());
+        $rank = Loader::getInstance()->getRankManage()->getRank($player->getName());
 
         $lines = [];
 

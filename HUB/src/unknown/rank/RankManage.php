@@ -1,13 +1,13 @@
 <?php
 
-namespace unknown\utils;
+namespace unknown\rank;
 
 use mysqli;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 use unknown\Loader;
 
-class RankManager {
+class RankManage {
     private ?mysqli $connection = null;
 
     public function __construct() {
