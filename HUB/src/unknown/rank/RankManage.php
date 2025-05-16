@@ -54,13 +54,10 @@ class RankManage {
 
     private function formatRank(string $rank): string {
         return match(strtolower($rank)) {
-            "founder" => "&cAdmin",
-            "owner" => "&2Mod",
-            "manager" => "&4Owner",
-            "" => "&9Builder",
-            "youtube" => "&cYou&fTube",
-            "vip" => "&6VIP",
-            "default", "jugador" => "&7Jugador",
+            "founder" => "&l&0Founder",
+            "owner" => "&l&4Owner",
+            "manager" => "&l&6Manager",
+            "default", "jugador" => "&l&aGuest",
             default => "&f" . ucfirst($rank)
         };
     }
