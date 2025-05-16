@@ -10,15 +10,15 @@ scoreboard:
 
 servers:
   hcf:
-    ip: 127.0.0.1
+    ip: clarymc.ddns.net
     port: 19132
     whitelist: off
   kitmap:
-    ip: 127.0.0.1
+    ip: clarymc.ddns.net
     port: 19132
     whitelist: off
   practice:
-    ip: 127.0.0.1
+    ip: clarymc.ddns.net
     port: 19132
     whitelist: off
 

@@ -21,10 +21,7 @@ class UnMuteChatCommand extends Command
     {
         if (!$player instanceof Player) return;
 
-        foreach (Server::getInstance()->getOnlinePlayers() as $players) {
-            unset(Loader::getInstance()->chatMute[$players->getName()]);
-            Loader::getInstance()->chatMuteStatus = false;
-        }
+        Loader::getInstance()->chatMuteStatus = false;
         $player->sendMessage(TextFormat::colorize("&aChat as been muted"));
     }
 }

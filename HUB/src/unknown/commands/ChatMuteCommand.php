@@ -16,15 +16,12 @@ class ChatMuteCommand extends Command
         parent::__construct("mchat", "Mute chat");
         $this->setPermission("admin.perms");
     }
-    
+
     public function execute(CommandSender $player, string $label, array $args)
     {
         if (!$player instanceof Player) return;
 
-        foreach (Server::getInstance()->getOnlinePlayers() as $players) {
-            Loader::getInstance()->chatMute[$players->getName()] = true;
-            Loader::getInstance()->chatMuteStatus = true;
-        }
+        Loader::getInstance()->chatMuteStatus = true;
         $player->sendMessage(TextFormat::colorize("&aChat as been muted"));
     }
 }
