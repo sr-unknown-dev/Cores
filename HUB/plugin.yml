@@ -6,6 +6,6 @@ author: Sr_Unkn0wn
 
 permissions:
   set.whitelist.perms:
-    default: op
+    default: true
   admin.perms:
-    default: op
+    default: true
