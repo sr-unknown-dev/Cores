@@ -8,6 +8,7 @@ use pocketmine\network\mcpe\protocol\{RemoveObjectivePacket,
     types\ScorePacketEntry};
 use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
+use unknown\Loader;
 
 class ScoreboardManager {
 
@@ -34,15 +35,19 @@ class ScoreboardManager {
         $name = $player->getName();
 
         if (!isset($this->titles[$name])) {
-            $this->create($player, "§6§lScoreboard");
+            $hubAnimations = Loader::getInstance()->getConfig()->getNested('scoreboard.title') ?? ["&aHUB"];
+            $hubText = $hubAnimations[Scoreboard::$tick % count($hubAnimations)];
+            $this->create($player, $hubText);
         }
 
         $this->lines[$name] = [];
 
         $score = count($lines);
+        $score = 0;
         foreach ($lines as $line) {
             $this->lines[$name][$score] = TextFormat::colorize($line);
             $score--;
+            $score++;
         }
 
         $this->sendLines($player);

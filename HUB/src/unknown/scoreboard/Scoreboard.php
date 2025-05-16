@@ -9,7 +9,7 @@ use unknown\Loader;
 
 class Scoreboard {
 
-    private static int $tick = 0;
+    public static int $tick = 0;
 
     public static function send(Player $player): void {
         $config = Loader::getInstance()->getConfig();
