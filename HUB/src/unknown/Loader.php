@@ -2,6 +2,7 @@
 
 namespace unknown;
 
+use muqsit\invmenu\InvMenuHandler;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\SingletonTrait;
 use unknown\commands\ChatMuteCommand;
@@ -26,6 +27,7 @@ class Loader extends PluginBase
 
     protected function onEnable(): void
     {
+        if (!InvMenuHandler::isRegistered()) InvMenuHandler::register($this);
         $this->scoreboardManager = new ScoreboardManager();
         $this->queryManager = new QueryManager();
         $this->rankManage = new RankManage();

@@ -6,6 +6,7 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerInteractEvent;
+use pocketmine\event\player\PlayerItemUseEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerJumpEvent;
 use pocketmine\event\player\PlayerQuitEvent;
@@ -66,7 +67,7 @@ class Events implements Listener
         }
     }
 
-    public function handleInteract(PlayerInteractEvent $e): void
+    public function handleItemUse(PlayerItemUseEvent $e): void
     {
         $player = $e->getPlayer();
         $item = $e->getItem();
@@ -78,8 +79,10 @@ class Events implements Listener
         if ($tag === "enderpearl") {
             $direction = $player->getDirectionVector()->multiply(1.2);
             $player->setMotion($direction);
+            $e->cancel();
         } elseif ($tag === "selector") {
             Menu::send($player);
+            $e->cancel();
         }
     }
     public function onDamage(EntityDamageEvent $event): void {
