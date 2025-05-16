@@ -19,7 +19,6 @@ class AirdropListener implements Listener
     {
         $item = $event->getItem();
 
-        // Verificar primero si es un Airdrop para evitar procesamiento innecesario
         if (!$item->getNamedTag()->getTag("Airdrop_Item") ||
             $item->getNamedTag()->getString("Airdrop_Item") !== "Airdrop") {
             return;
@@ -29,7 +28,6 @@ class AirdropListener implements Listener
         $targetBlock = $player->getTargetBlock(3);
         $location = $targetBlock->getPosition();
 
-        // Validar items al inicio
         $airdropItems = AirdropManager::getAirdrop()->getItems();
         if ($airdropItems === null) {
             $player->sendMessage(TextFormat::RED . "No se pudo colocar el airdrop, avisa a un staff o owner para que solucione el problema");
@@ -39,10 +37,8 @@ class AirdropListener implements Listener
         $chestPos = $location->add(0, 1, 0);
         $world = $player->getWorld();
 
-        // Colocar el bloque
         $world->setBlock($chestPos, VanillaBlocks::CHEST());
 
-        // Agrupar efectos
         $world->addSound($chestPos, new ExplodeSound());
         $world->addParticle($chestPos, new ExplodeParticle());
 
@@ -53,7 +49,6 @@ class AirdropListener implements Listener
             return;
         }
 
-        // Llenar inventario de forma más eficiente
         $inventory = $tile->getInventory();
         $items = [];
         for ($i = 0; $i < 27; $i++) {
@@ -65,16 +60,13 @@ class AirdropListener implements Listener
         $inventory->setContents($items);
         $tile->setName("§l§3Airdrop");
 
-        // Actualizar item en mano
         $item->pop();
         $player->getInventory()->setItemInHand($item);
 
-        // Texto flotante
         $TextPosition = $chestPos->add(0.5, 1.5, 0.5);
         $floatingText = new FloatingTextParticle("§l§3Airdrop", "");
         $world->addParticle($TextPosition, $floatingText);
 
-        // Programar limpieza del texto
         Loader::getInstance()->getScheduler()->scheduleDelayedTask(new ClosureTask(
             function () use ($world, $TextPosition, $floatingText): void {
                 $floatingText->setText("");
