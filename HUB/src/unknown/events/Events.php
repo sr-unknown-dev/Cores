@@ -17,6 +17,8 @@ use unknown\scoreboard\Scoreboard;
 class Events implements Listener
 {
 
+    private array $jump = [];
+
     public function handleJoin(PlayerJoinEvent $e): void
     {
         $player = $e->getPlayer();
@@ -52,14 +54,16 @@ class Events implements Listener
     public function handleJump(PlayerJumpEvent $e): void
     {
         $player = $e->getPlayer();
-        $jump = [];
+        $name = $player->getName();
 
-        if ($jump[$player->getName()] < 1) {
-            $jump[$player->getName()] = $jump[$player->getName()] + 1;;
-        } elseif ($jump[$player->getName()] >= 2) {
+        if (!isset($this->jump[$name])) {
+            $this->jump[$name] = 1;
+        } elseif ($this->jump[$name] < 2) {
+            $this->jump[$name]++;
+        } elseif ($this->jump[$name] >= 2) {
             $direction = $player->getDirectionVector()->multiply(1.2);
             $player->setMotion($direction);
-            unset($jump[$player->getName()]);
+            unset($this->jump[$name]); // Reiniciar contador
         }
     }
 
