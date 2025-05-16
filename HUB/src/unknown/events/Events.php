@@ -2,6 +2,7 @@
 
 namespace unknown\events;
 
+use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerInteractEvent;
@@ -84,6 +85,10 @@ class Events implements Listener
             Menu::send($player);
         }
     }
+    public function onDamage(EntityDamageEvent $event): void {
+        $event->cancel();
+    }
+
 
     public function giveItems(Player $player): void
     {
