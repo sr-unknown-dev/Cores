@@ -37,6 +37,8 @@ class Loader extends PluginBase
             new SetWhitelistStatusCommand(),
             new UnMuteChatCommand()
         ]);
+
+        $this->saveDefaultConfig();
     }
 
     /**
