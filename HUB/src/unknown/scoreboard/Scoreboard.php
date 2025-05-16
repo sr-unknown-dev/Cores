@@ -14,14 +14,12 @@ class Scoreboard {
     public static function send(Player $player): void {
         $config = Loader::getInstance()->getConfig();
 
-        $hubAnimations = $config->get('scoreboard')['title'] ?? ["&aHUB"];
         $ipAnimations = $config->get('scoreboard')['stri'] ?? ["play.hub.sytes"];
 
         $hcfstatus = Loader::getInstance()->getQueryManager()->getStatus('hcf');
         $kitmapstatus = Loader::getInstance()->getQueryManager()->getStatus('kitmap');
         $practicestatus = Loader::getInstance()->getQueryManager()->getStatus('practice');
 
-        $hubText = $hubAnimations[self::$tick % count($hubAnimations)];
         $ipText = $ipAnimations[self::$tick % count($ipAnimations)];
 
         $hcf = $hcfstatus !== null ? "&7" . $hcfstatus['online'] . "/" . $hcfstatus['max'] : "&cOffline";
@@ -30,16 +28,15 @@ class Scoreboard {
 
         $lines = [];
 
-        $lines[] = "      &l" . $hubText;
         $lines[] = "&e&m---------------------";
         $lines[] = "&l&gRank: &aJugador";
         $lines[] = "&e&r";
 
-        $lines[] = "&l&gPing: &a" . $player->getNetworkSession()->getPing() . "ms";
-        $lines[] = "&l&gOnline: &b" . count(Server::getInstance()->getOnlinePlayers());
+        $lines[] = "&l&gPing: &r&a" . $player->getNetworkSession()->getPing() . "ms";
+        $lines[] = "&l&gOnline: &r&b" . count(Server::getInstance()->getOnlinePlayers());
         $lines[] = "&e&r";
         $lines[] = "      &l&gStatus";
-        $lines[] = "&lHCF&7: " . $hcf;
+        $lines[] = "&lHCF&7: &r&7" . $hcf;
         $lines[] = "&lKITMAP&7: " . $kitmap;
         $lines[] = "&lPRACTICE&7: " . $practice;
         $lines[] = "&e&m--------" . $ipText . "--------";
