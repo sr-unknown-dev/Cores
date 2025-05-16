@@ -26,10 +26,7 @@ class Events implements Listener
 
         if (Loader::getInstance()->chatMuteStatus === true) {
             Loader::getInstance()->chatMute[$player->getName()] = true;
-        } else {
-            return;
         }
-
         Scoreboard::send($player);
         $msg = str_replace("{player}", $player->getName(), Loader::getInstance()->getConfig()->get('join-message') ?? "");;
         $e->setJoinMessage($msg);
