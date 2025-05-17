@@ -15,20 +15,27 @@ use unknown\query\QueryStatus;
 class Menu
 {
 
-    public static function send(Player $player): void
-    {
-        $menu = InvMenu::create(InvMenuTypeIds::TYPE_CHEST);
+    public static function send(Player $player): void {
+        $menu = InvMenu::create(InvMenu::TYPE_CHEST);
         $menu->setName(TextFormat::colorize("&l&gServer Selector"));
 
-        $items = [
-            'hcf' => self::createServerItem("HCF"),
-            'kitmap' => self::createServerItem("KitMap"),
-            'practice' => self::createServerItem("Practice"),
+        $config = Loader::getInstance()->getConfig();
+
+        $servers = [
+            'hcf' => ["name" => "HCF", "query" => new QueryStatus($config->getNested('servers.hcf.ip'), $config->getNested('servers.hcf.port'))],
+            'kitmap' => ["name" => "KitMap", "query" => new QueryStatus($config->getNested('servers.kitmap.ip'), $config->getNested('servers.kitmap.port'))],
+            'practice' => ["name" => "Practice", "query" => new QueryStatus($config->getNested('servers.practice.ip'), $config->getNested('servers.practice.port'))]
         ];
 
-        $menu->getInventory()->setItem(10, $items['hcf']);
-        $menu->getInventory()->setItem(13, $items['kitmap']);
-        $menu->getInventory()->setItem(16, $items['practice']);
+        foreach ($servers as $key => $server) {
+            $queryResult = $server["query"]->query();
+            $status = $queryResult["status"] === "On" ? "&7{$queryResult['players_online']}/{$queryResult['max_players']}" : "&cOffline";
+            $servers[$key]["item"] = self::createServerItem($server["name"], $status);
+        }
+
+        $menu->getInventory()->setItem(10, $servers['hcf']["item"]);
+        $menu->getInventory()->setItem(13, $servers['kitmap']["item"]);
+        $menu->getInventory()->setItem(16, $servers['practice']["item"]);
 
         $menu->setListener(function (InvMenuTransaction $transaction): InvMenuTransactionResult {
             $player = $transaction->getPlayer();
@@ -36,7 +43,6 @@ class Menu
             $name = strtolower(TextFormat::clean($item->getCustomName()));
 
             $config = Loader::getInstance()->getConfig();
-            $queryManager = Loader::getInstance()->getQueryManager();
 
             if (!isset($config->get("servers")[$name])) {
                 $player->sendMessage(TextFormat::colorize("&cServidor no encontrado."));
@@ -44,9 +50,10 @@ class Menu
             }
 
             $serverConfig = $config->get("servers")[$name];
-            $status = $queryManager->getStatus($name);
+            $queryStatus = new QueryStatus($serverConfig["ip"], $serverConfig["port"]);
+            $queryResult = $queryStatus->query();
 
-            if ($status === null) {
+            if ($queryResult["status"] !== "On") {
                 $player->sendMessage(TextFormat::colorize("&cEl servidor &4$name &cestá offline."));
                 return $transaction->discard();
             }
@@ -64,6 +71,7 @@ class Menu
 
         $menu->send($player);
     }
+
 
     private static function createServerItem(string $name)
     {
