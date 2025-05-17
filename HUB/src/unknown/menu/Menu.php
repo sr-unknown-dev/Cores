@@ -67,35 +67,36 @@ class Menu
 
     private static function createServerItem(string $name)
     {
-        $queryhcf = new QueryStatus($config->getNested("server.hcf.ip"), $config->getNested("server.hcf.port"));
-        $hcfstatus = $queryhcf->getStatus();
+        $config = Loader::getInstance()->getConfig();
 
-        $querykitmap = new QueryStatus($config->getNested("server.kitmap.ip"), $config->getNested("server.kitmap.port"));
-        $kitmapstatus = $querykitmap->getStatus();
+        $hcfQuery = new QueryStatus($config->getNested('servers.hcf.ip'), $config->getNested('servers.hcf.port'));
+        $kitmapQuery = new QueryStatus($config->getNested('servers.kitmap.ip'), $config->getNested('servers.kitmap.port'));
+        $practiceQuery = new QueryStatus($config->getNested('servers.practice.ip'), $config->getNested('servers.practice.port'));
 
-        $querypractice = new QueryStatus($config->getNested("server.practice.ip"), $config->getNested("server.practice.port"));
-        $practicestatus = $querypractice->getStatus();
 
-        $hcf = $hcfstatus['status'] === 'online' ? "&7" . $hcfstatus['players_online'] . "/" . $hcfstatus['max_players'] : "&cOffline";
-        $kitmap = $kitmapstatus['status'] === 'online' ? "&7" . $kitmapstatus['players_online'] . "/" . $kitmapstatus['max_players'] : "&cOffline";
-        $practice = $practicestatus['status'] === 'online' ? "&7" . $practicestatus['players_online'] . "/" . $practicestatus['max_players'] : "&cOffline";
+        $hcf = $hcfQuery->query()['status'] === "On" ? "&7" . $hcfQuery->query()['players_online'] . "/" . $hcfQuery->query()['max_players'] : "&cOffline";
+        $kitmap = $kitmapQuery->query()['status'] === "On" ? "&7" . $kitmapQuery->query()['players_online'] . "/" . $kitmapQuery->query()['max_players'] : "&cOffline";
+        $practice = $practiceQuery->query()['status'] === "On" ? "&7" . $practiceQuery->query()['players_online'] . "/" . $practiceQuery->query()['max_players'] : "&cOffline";
         $item = VanillaBlocks::MOB_HEAD()->asItem();
         $item->setCustomName(TextFormat::colorize('&l&g'.$name));
 
         if ($name === "HCF") {
             $item->setLore([
                 '§l§gPlayers: §7' .$hcf,
-                '§gMap Kit: Prot 1, Sharp 1'
+                '§gMap Kit: Prot 1, Sharp 1',
+                '§gStatus&7: '.$hcfQuery->query()['status'],
         ]);
         }elseif ($name === "KitMap") {
             $item->setLore([
                 '§l§gPlayers: §7' .$kitmap,
-                '§gMap Kit: Prot 1, Sharp 1'
+                '§gMap Kit: Prot 1, Sharp 1',
+                '§gStatus&7: '.$kitmapQuery->query()['status'],
             ]);
         }elseif ($name === "Practice") {
             $item->setLore([
                 '§l§gPlayers: §7' .$practice,
-                '§gMap Kit: Prot 1, Sharp 1'
+                '§gMap Kit: Prot 1, Sharp 1',
+                '§gStatus&7: '.$practiceQuery->query()['status'],
             ]);
         }
 
