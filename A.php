@@ -1,48 +1,29 @@
-<?php
+// En tu plugin principal
+use unknown\query\QueryStatus;
 
-namespace HubCore\Commands;
+// Crear una instancia para consultar un servidor
+$queryStatus = new QueryStatus("play.example.com", 19132);
 
-use pocketmine\command\Command;
-use pocketmine\command\CommandSender;
-use pocketmine\player\Player;
-use pocketmine\plugin\PluginBase;
-use pocketmine\utils\Config;
-use pocketmine\scoreboard\Scoreboard;
-use HubCore\Query\ServerQuery;
+// Establecer tiempo de caché (opcional)
+$queryStatus->setCacheTime(30); // 30 segundos
 
-class NetworkCommand extends Command {
-    private $plugin;
+// Programar actualizaciones automáticas (opcional)
+$queryStatus->scheduleUpdates($this, 1200); // Cada 1200 ticks (1 minuto)
 
-    public function __construct(PluginBase $plugin) {
-        parent::__construct("network", "Ver el estado de la red", "/network", []);
-        $this->plugin = $plugin;
-    }
+// Obtener el estado del servidor
+$serverStatus = $queryStatus->query();
 
-    public function execute(CommandSender $sender, string $label, array $args): void {
-        if (!$sender instanceof Player) {
-            $sender->sendMessage("§cEste comando solo puede ser usado dentro del juego.");
-            return;
-        }
-
-        $config = new Config($this->plugin->getDataFolder() . "config.yml", Config::YAML);
-        $servers = $config->get("servers", []);
-
-        $scoreboard = new Scoreboard();
-        $scoreboard->setTitle("§bNetwork Status");
-
-        foreach ($servers as $name => $info) {
-            $query = new ServerQuery($info["ip"], $info["port"]);
-            $status = $query->query();
-
-            $online = $status["players_online"] ?? 0;
-            $maxPlayers = $status["max_players"] ?? 0;
-            $serverStatus = $status["status"] === "On" ? "§aOnline" : "§cOffline";
-
-            $scoreboard->addLine("§7{$name}: {$serverStatus} ({$online}/{$maxPlayers})");
-        }
-
-        $scoreboard->sendToPlayer($sender);
-    }
+// Verificar si el servidor está en línea
+if ($serverStatus["status"] === "On") {
+    $playersOnline = $serverStatus["players_online"];
+    $maxPlayers = $serverStatus["max_players"];
+    $serverName = $serverStatus["server_name"];
+    
+    // Hacer algo con la información...
+    $this->getLogger()->info("Servidor: $serverName - Jugadores: $playersOnline/$maxPlayers");
+} else {
+    $this->getLogger()->warning("El servidor está offline");
 }
 
-?>
+// O simplemente obtener un texto formateado
+$statusText = $queryStatus->getFormattedStatus();

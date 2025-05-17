@@ -78,21 +78,30 @@ class Menu
         $config = Loader::getInstance()->getConfig();
 
         $hcfQuery = new QueryStatus($config->getNested('servers.hcf.ip'), $config->getNested('servers.hcf.port'));
+        $kitmapQuery = new QueryStatus($config->getNested('servers.kitmap.ip'), $config->getNested('servers.kitmap.port'));
+        $practiceQuery = new QueryStatus($config->getNested('servers.practice.ip'), $config->getNested('servers.practice.port'));
+
+        $hcfQuery->setCacheTime(30);
+        $kitmapQuery->setCacheTime(30);
+        $practiceQuery->setCacheTime(30);
+
         $hcfData = $hcfQuery->query();
+        $kitmapData = $kitmapQuery->query();
+        $practiceData = $practiceQuery->query();
+
         $hcfStatus = $hcfData['status'] ?? "Off";
         $hcfOnline = $hcfData['players_online'] ?? 0;
         $hcfMax = $hcfData['max_players'] ?? 0;
-        $kitmapQuery = new QueryStatus($config->getNested('servers.kitmap.ip'), $config->getNested('servers.kitmap.port'));
-        $kitmapData = $kitmapQuery->query();
+
         $kitmapStatus = $kitmapData['status'] ?? "Off";
         $kitmapOnline = $kitmapData['players_online'] ?? 0;
         $kitmapMax = $kitmapData['max_players'] ?? 0;
-        $practiceQuery = new QueryStatus($config->getNested('servers.practice.ip'), $config->getNested('servers.practice.port'));
-        $practiceData = $practiceQuery->query();
+
         $practiceStatus = $practiceData['status'] ?? "Off";
         $practiceOnline = $practiceData['players_online'] ?? 0;
         $practiceMax = $practiceData['max_players'] ?? 0;
 
+        $ipText = $ipAnimations[self::$tick % count($ipAnimations)];
 
         $hcf = ($hcfStatus === "On") ? "&7{$hcfOnline}/{$hcfMax}" : "&cOffline";
         $kitmap = ($kitmapStatus === "On") ? "&7{$kitmapOnline}/{$kitmapMax}" : "&cOffline";
