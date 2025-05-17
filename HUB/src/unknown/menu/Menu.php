@@ -70,13 +70,25 @@ class Menu
         $config = Loader::getInstance()->getConfig();
 
         $hcfQuery = new QueryStatus($config->getNested('servers.hcf.ip'), $config->getNested('servers.hcf.port'));
+        $hcfData = $hcfQuery->query();
+        $hcfStatus = $hcfData['status'] ?? "Off";
+        $hcfOnline = $hcfData['players_online'] ?? 0;
+        $hcfMax = $hcfData['max_players'] ?? 0;
         $kitmapQuery = new QueryStatus($config->getNested('servers.kitmap.ip'), $config->getNested('servers.kitmap.port'));
+        $kitmapData = $kitmapQuery->query();
+        $kitmapStatus = $kitmapData['status'] ?? "Off";
+        $kitmapOnline = $kitmapData['players_online'] ?? 0;
+        $kitmapMax = $kitmapData['max_players'] ?? 0;
         $practiceQuery = new QueryStatus($config->getNested('servers.practice.ip'), $config->getNested('servers.practice.port'));
+        $practiceData = $practiceQuery->query();
+        $practiceStatus = $practiceData['status'] ?? "Off";
+        $practiceOnline = $practiceData['players_online'] ?? 0;
+        $practiceMax = $practiceData['max_players'] ?? 0;
 
 
-        $hcf = $hcfQuery->query()['status'] === "On" ? "&7" . $hcfQuery->query()['players_online'] . "/" . $hcfQuery->query()['max_players'] : "&cOffline";
-        $kitmap = $kitmapQuery->query()['status'] === "On" ? "&7" . $kitmapQuery->query()['players_online'] . "/" . $kitmapQuery->query()['max_players'] : "&cOffline";
-        $practice = $practiceQuery->query()['status'] === "On" ? "&7" . $practiceQuery->query()['players_online'] . "/" . $practiceQuery->query()['max_players'] : "&cOffline";
+        $hcf = ($hcfStatus === "On") ? "&7{$hcfOnline}/{$hcfMax}" : "&cOffline";
+        $kitmap = ($kitmapStatus === "On") ? "&7{$kitmapOnline}/{$kitmapMax}" : "&cOffline";
+        $practice = ($practiceStatus === "On") ? "&7{$practiceOnline}/{$practiceMax}" : "&cOffline";
         $item = VanillaBlocks::MOB_HEAD()->asItem();
         $item->setCustomName(TextFormat::colorize('&l&g'.$name));
 

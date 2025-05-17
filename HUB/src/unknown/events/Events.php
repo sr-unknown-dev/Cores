@@ -37,6 +37,7 @@ class Events implements Listener
 
         $msg = str_replace("{player}", $player->getName(), Loader::getInstance()->getConfig()->get('quit-message') ?? "");;
         $e->setQuitMessage($msg);
+        Loader::getInstance()->getScoreboardManager()->remove($player);
     }
 
     public function handleChat(PlayerChatEvent $e): void

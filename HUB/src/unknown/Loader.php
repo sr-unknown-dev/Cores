@@ -50,14 +50,6 @@ class Loader extends PluginBase
     }
 
     /**
-     * @return QueryManager
-     */
-    public function getQueryManager(): QueryManager
-    {
-        return $this->queryManager;
-    }
-
-    /**
      * @return RankManage
      */
     public function getRankManage(): RankManage
