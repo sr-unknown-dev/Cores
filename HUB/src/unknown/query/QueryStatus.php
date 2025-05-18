@@ -15,17 +15,10 @@ use unknown\Loader;
 class QueryStatus
 {
 
-    public static Config $config;
-
-    public function __construct()
-    {
-        self::$config = Loader::getInstance()->getConfig();
-    }
-
     public static function infoHCF(): array
     {
         try {
-            $query = PMQuery::query(self::$config->getNested('servers.hcf.ip'), self::$config->getNested('servers.hcf.port'));
+            $query = PMQuery::query(Loader::getInstance()->getConfig()->getNested('servers.hcf.ip'), Loader::getInstance()->getConfig()->getNested('servers.hcf.port'));
             $players = (int)$query['Players'];
             $maxPlayers = (int)$query['MaxPlayers'];
 
@@ -45,7 +38,7 @@ class QueryStatus
     public static function infoKitMap(): array
     {
         try {
-            $query = PMQuery::query(self::$config->getNested('servers.kitmap.ip'), self::$config->getNested('servers.kitmap.port'));
+            $query = PMQuery::query(Loader::getInstance()->getConfig()->getNested('servers.kitmap.ip'), Loader::getInstance()->getConfig()->getNested('servers.kitmap.port'));
             $players = (int)$query['Players'];
             $maxPlayers = (int)$query['MaxPlayers'];
 
@@ -65,7 +58,7 @@ class QueryStatus
     public static function infoPractice(): array
     {
         try {
-            $query = PMQuery::query(self::$config->getNested('servers.practice.ip'), self::$config->getNested('servers.practice.port'));
+            $query = PMQuery::query(Loader::getInstance()->getConfig()->getNested('servers.practice.ip'), Loader::getInstance()->getConfig()->getNested('servers.practice.port'));
             $players = (int)$query['Players'];
             $maxPlayers = (int)$query['MaxPlayers'];
 
