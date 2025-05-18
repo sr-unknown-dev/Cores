@@ -24,7 +24,7 @@ class QueryStatus
 
             return [
                 "players" => TextFormat::GRAY . $players . "/" . $maxPlayers,
-                "status" => TextFormat::GREEN.$query['Status'],
+                "status" => TextFormat::GREEN."Online",
             ];
 
         } catch (PmQueryException $e) {
@@ -44,7 +44,7 @@ class QueryStatus
 
             return [
                 "players" => TextFormat::GRAY . $players . "/" . $maxPlayers,
-                "status" => TextFormat::GREEN.$query['Status'],
+                "status" => TextFormat::GREEN."Online",
             ];
 
         } catch (PmQueryException $e) {
@@ -64,7 +64,7 @@ class QueryStatus
 
             return [
                 "players" => TextFormat::GRAY . $players . "/" . $maxPlayers,
-                "status" => TextFormat::GREEN.$query['Status'],
+                "status" => TextFormat::GREEN."Online",
             ];
         } catch (PmQueryException $e) {
             return [
