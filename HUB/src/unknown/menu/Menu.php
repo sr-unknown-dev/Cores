@@ -5,7 +5,6 @@ namespace unknown\menu;
 use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\transaction\InvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransactionResult;
-use muqsit\invmenu\type\InvMenuTypeIds;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
@@ -14,28 +13,15 @@ use unknown\query\QueryStatus;
 
 class Menu
 {
-
-    public static function send(Player $player): void {
+    public static function send(Player $player): void
+    {
         $menu = InvMenu::create(InvMenu::TYPE_CHEST);
         $menu->setName(TextFormat::colorize("&l&gServer Selector"));
 
-        $config = Loader::getInstance()->getConfig();
-
-        $servers = [
-            'hcf' => ["name" => "HCF", "query" => new QueryStatus($config->getNested('servers.hcf.ip'), $config->getNested('servers.hcf.port'))],
-            'kitmap' => ["name" => "KitMap", "query" => new QueryStatus($config->getNested('servers.kitmap.ip'), $config->getNested('servers.kitmap.port'))],
-            'practice' => ["name" => "Practice", "query" => new QueryStatus($config->getNested('servers.practice.ip'), $config->getNested('servers.practice.port'))]
-        ];
-
-        foreach ($servers as $key => $server) {
-            $queryResult = $server["query"]->query();
-            $status = $queryResult["status"] === "On" ? "&7{$queryResult['players_online']}/{$queryResult['max_players']}" : "&cOffline";
-            $servers[$key]["item"] = self::createServerItem($server["name"], $status);
-        }
-
-        $menu->getInventory()->setItem(10, $servers['hcf']["item"]);
-        $menu->getInventory()->setItem(13, $servers['kitmap']["item"]);
-        $menu->getInventory()->setItem(16, $servers['practice']["item"]);
+        // Crear los ítems de cada servidor
+        $menu->getInventory()->setItem(10, self::createServerItem("HCF"));
+        $menu->getInventory()->setItem(13, self::createServerItem("KitMap"));
+        $menu->getInventory()->setItem(16, self::createServerItem("Practice"));
 
         $menu->setListener(function (InvMenuTransaction $transaction): InvMenuTransactionResult {
             $player = $transaction->getPlayer();
@@ -49,14 +35,28 @@ class Menu
                 return $transaction->discard();
             }
 
-            $serverConfig = $config->get("servers")[$name];
-            $queryStatus = new QueryStatus($serverConfig["ip"], $serverConfig["port"]);
-            $queryResult = $queryStatus->query();
+            // Obtener el estado del servidor según el nombre
+            switch ($name) {
+                case "hcf":
+                    $queryResult = QueryStatus::infoHCF();
+                    break;
+                case "kitmap":
+                    $queryResult = QueryStatus::infoKitMap();
+                    break;
+                case "practice":
+                    $queryResult = QueryStatus::infoPractice();
+                    break;
+                default:
+                    $queryResult = ["status" => "§4Offline"];
+                    break;
+            }
 
-            if ($queryResult["status"] !== "On") {
+            if ($queryResult["status"] !== TextFormat::GREEN . "Online") {
                 $player->sendMessage(TextFormat::colorize("&cEl servidor &4$name &cestá offline."));
                 return $transaction->discard();
             }
+
+            $serverConfig = $config->get("servers")[$name];
 
             if ($serverConfig["whitelist"] === true || $serverConfig["whitelist"] === "on") {
                 $player->sendMessage(TextFormat::colorize("&cEl servidor &4$name &cestá en whitelist."));
@@ -72,31 +72,31 @@ class Menu
         $menu->send($player);
     }
 
-
     private static function createServerItem(string $name)
     {
         $item = VanillaBlocks::MOB_HEAD()->asItem();
-        $item->setCustomName(TextFormat::colorize('&l&g'.$name));
+        $item->setCustomName(TextFormat::colorize('&l&g' . $name));
 
-        if ($name === "HCF") {
-            $item->setLore([
-                '§l§gPlayers: §7' .QueryStatus::infoHCF()['players'],
-                '§gMap Kit: Prot 1, Sharp 1',
-                '§gStatus&7: '.QueryStatus::infoHCF()['status'],
-        ]);
-        }elseif ($name === "KitMap") {
-            $item->setLore([
-                '§l§gPlayers: §7' . QueryStatus::infoKitMap()['players'],
-                '§gMap Kit: Prot 1, Sharp 1',
-                '§gStatus&7: '.QueryStatus::infoKitMap()['status'],
-            ]);
-        }elseif ($name === "Practice") {
-            $item->setLore([
-                '§l§gPlayers: §7' . QueryStatus::infoPractice()['players'],
-                '§gMap Kit: Prot 1, Sharp 1',
-                '§gStatus&7: '.QueryStatus::infoPractice()['status'],
-            ]);
+        switch ($name) {
+            case "HCF":
+                $info = QueryStatus::infoHCF();
+                break;
+            case "KitMap":
+                $info = QueryStatus::infoKitMap();
+                break;
+            case "Practice":
+                $info = QueryStatus::infoPractice();
+                break;
+            default:
+                $info = ["players" => "0/0", "status" => "§4Offline"];
+                break;
         }
+
+        $item->setLore([
+            '§l§gPlayers: §7' . $info['players'],
+            '§gMap Kit: Prot 1, Sharp 1',
+            '§gStatus&7: ' . $info['status'],
+        ]);
 
         return $item;
     }
