@@ -37,7 +37,7 @@ class ScoreboardManager {
         if (!isset($this->titles[$name])) {
             $hubAnimations = Loader::getInstance()->getConfig()->getNested('scoreboard.title') ?? ["&aHUB"];
             $hubText = $hubAnimations[Scoreboard::$tick % count($hubAnimations)];
-            $this->create($player, $hubText);
+            $this->create($player, TextFormat::colorize($hubText));
         }
 
         $this->lines[$name] = [];
