@@ -35,7 +35,6 @@ class Menu
                 return $transaction->discard();
             }
 
-            // Obtener el estado del servidor según el nombre
             switch ($name) {
                 case "hcf":
                     $queryResult = QueryStatus::infoHCF();

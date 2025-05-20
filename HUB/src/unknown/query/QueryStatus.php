@@ -10,7 +10,7 @@ use unknown\Loader;
 class QueryStatus
 {
     private static array $cache = [];
-    private static int $cacheTime = 3; // segundos
+    private static int $cacheTime = 10;
 
     private static function getCached(string $key, callable $callback): array {
         $now = time();
