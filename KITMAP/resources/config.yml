@@ -30,12 +30,6 @@ faction.regeneration.offline: true
 # Scoreboard Config
 scoreboard.title:
 - '§r'
-- '§r§l§2X'
-- '§r§l§2X'
-- '§r§l§2Xi'
-- '§r§l§2Xi'
-- '§r§l§2Xia'
-- '§r§l§2Xia'
 - '§r§l§gkitmap'
 - '§r§l§gkitmap'
 - '§r§l§fkitmap'
