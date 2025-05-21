@@ -14,8 +14,9 @@ namespace hcf;
  */
 
 use hcf\handler\bounty\BountyManager;
-use hcf\handler\lootbox\Lootbox;
-use hcf\handler\lootbox\LootboxManager;
+use hcf\handler\prefix\command\PrefixCommand;
+use hcf\handler\prefix\command\PrefixsCommand;
+use hcf\handler\prefix\manager\PrefixManager;
 use hcf\Tasks\AutoClickTask;
 use CortexPE\Commando\PacketHooker;
 use hcf\abilities\AbilitiesManager;
@@ -60,7 +61,6 @@ use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 use pocketmine\entity\effect\EffectInstance;
 use pocketmine\entity\effect\VanillaEffects;
-use hcf\prefix\PrefixManager;
 use hcf\module\staffmode\commands\BanCommand;
 use hcf\module\staffmode\commands\MuteCommand;
 use hcf\module\staffmode\commands\StaffModeCommand;
@@ -131,8 +131,6 @@ class Loader extends PluginBase implements Listener
     public TimerManager $TimerManager;
     /** @var FactionManager */
     public FactionManager $factionManager;
-    /** @var PrefixManager */
-    public PrefixManager $prefixManager;
     /** @var KothManager */
     public KothManager $kothManager;
     /** @var DisconnectedManager */
@@ -162,8 +160,8 @@ class Loader extends PluginBase implements Listener
     /** @var BountyManager  */
     public BountyManager $bountyManager;
 
-    /** @var LootboxManager */
-    public LootboxManager $lootboxManager;
+    /** @var PrefixManager */
+    public PrefixManager $prefixManager;
 
     /** @var array */
     public static array $enderPearl = [];
@@ -230,7 +228,6 @@ class Loader extends PluginBase implements Listener
         $this->enchantmentManager = new EnchantmentManager;
         $this->TimerManager = new TimerManager;
         $this->factionManager = new FactionManager;
-        $this->prefixManager = new PrefixManager();
         $this->kothManager = new KothManager;
         $this->disconnectedManager = new DisconnectedManager;
         $this->sessionManager = new SessionManager;
@@ -244,7 +241,7 @@ class Loader extends PluginBase implements Listener
         $this->bountyManager = new BountyManager();
         $this->autoClick = new AutoClick();
         $this->reach = new Reach($this, $this->getServer());
-        $this->reach = new LootboxManager();
+        $this->prefixManager = new PrefixManager();
         #Register addons
         AddonsManager::init();
         
@@ -254,26 +251,40 @@ class Loader extends PluginBase implements Listener
         $this->getServer()->getPluginManager()->registerEvents(new Pots(), $this);
         $this->getServer()->getPluginManager()->registerEvents(new Fly(), $this);
         $this->getServer()->getPluginManager()->registerEvents(new DoubleClick(), $this);
-        $this->getServer()->getCommandMap()->register("pvp", new PvPCommand("pvp", "Comando para quitar el pvp timer"));
-        $this->getServer()->getCommandMap()->register("f", new FactionCommand("f", "Comando para crear una faction"));
-        $this->getServer()->getCommandMap()->register("fix", new FixCommand("fix", "Comando para reparar items"));
-        $this->getServer()->getCommandMap()->register("pay", new PayCommand("pay", "Comando para darle dinero a un jugador"));
-        $this->getServer()->getCommandMap()->register("events", new EventsCommand("events", "Comando para los eventos"));
-        $this->getServer()->getCommandMap()->register("crate", new CrateCommand("crate", "Comando para las crates"));
-        $this->getServer()->getCommandMap()->register("msg", new MsgCommand("msg", "Para mandar un mensaje privado a un jugador "));
-        $this->getServer()->getCommandMap()->register("r", new ReplyCommand("r", "Para responder mensajes"));
-        $this->getServer()->getCommandMap()->register("staff", new StaffModeCommand("staff", "Activa el staff mode"));
-        #$this->getServer()->getCommandMap()->register("freeze", new FreezeCommand("freeze", "Para frozear a un jugador"));
-        $this->getServer()->getCommandMap()->register("sc", new StaffChatCommand("sc", "Activa el staff chat"));
-        $this->getServer()->getCommandMap()->register("sotw", new SotwCommand("sotw", "Comandos de Sotw"));
-        $this->getServer()->getCommandMap()->register("kit", new KitCommand("kit", "Comandos de Kits"));
-        $this->getServer()->getCommandMap()->register("gkit", new GkitCommand("gkit", "Comando de Kits"));
-        $this->getServer()->getCommandMap()->register("Clear", new ClearLagCommand());
-        $this->getServer()->getCommandMap()->register("mute", new MuteCommand("mute", "Comando de Mute"));
-        $this->getServer()->getCommandMap()->register("ban", new BanCommand("tban", "Comando de Ban"));
-        $this->getServer()->getCommandMap()->register("mute", new UnMuteCommand("unmute", "Comando de UnMute"));
-        $this->getServer()->getCommandMap()->register("unban", new UnBanCommand("unban", "Comando de UnBan"));
-        $this->getServer()->getCommandMap()->register("anticheat", new AntiCheatCommand());
+        $commands = [
+            ["pvp", PvPCommand::class, "Comando para quitar el pvp timer"],
+            ["f", FactionCommand::class, "Comando para crear una faction"],
+            ["fix", FixCommand::class, "Comando para reparar items"],
+            ["pay", PayCommand::class, "Comando para darle dinero a un jugador"],
+            ["events", EventsCommand::class, "Comando para los eventos"],
+            ["crate", CrateCommand::class, "Comando para las crates"],
+            ["msg", MsgCommand::class, "Para mandar un mensaje privado a un jugador"],
+            ["r", ReplyCommand::class, "Para responder mensajes"],
+            ["staff", StaffModeCommand::class, "Activa el staff mode"],
+            // ["freeze", FreezeCommand::class, "Para frozear a un jugador"],
+            ["sc", StaffChatCommand::class, "Activa el staff chat"],
+            ["sotw", SotwCommand::class, "Comandos de Sotw"],
+            ["kit", KitCommand::class, "Comandos de Kits"],
+            ["gkit", GkitCommand::class, "Comando de Kits"],
+            ["Clear", ClearLagCommand::class],
+            ["mute", MuteCommand::class, "Comando de Mute"],
+            ["unmute", UnMuteCommand::class, "Comando de UnMute"],
+            ["tban", BanCommand::class, "Comando de Ban"],
+            ["unban", UnBanCommand::class, "Comando de UnBan"],
+            ["anticheat", AntiCheatCommand::class],
+        ];
+
+        foreach ($commands as $cmd) {
+            $name = $cmd[0];
+            $class = $cmd[1];
+            $description = $cmd[2] ?? "";
+            $this->getServer()->getCommandMap()->register($name, new $class($name, $description));
+        }
+        $this->getServer()->getCommandMap()->registerAll("prefixsystem", [
+            new PrefixCommand(),
+            new PrefixsCommand()
+        ]);
+
 
         #Loger
         $this->getLogger()->info("  ____ _               _   _          ____               ");
@@ -408,11 +419,6 @@ class Loader extends PluginBase implements Listener
         return $this->provider;
     }
     
-    public function getPrefixManager(): PrefixManager
-    {
-        return $this->prefixManager;
-    }
-    
     /**
      * @return EntityManager
      */
@@ -524,10 +530,10 @@ class Loader extends PluginBase implements Listener
     }
 
     /**
-     * @return LootboxManager
+     * @return PrefixManager
      */
-    public function getLootboxManager(): LootboxManager
+    public function getPrefixManager(): PrefixManager
     {
-        return $this->lootboxManager;
+        return $this->prefixManager;
     }
 }

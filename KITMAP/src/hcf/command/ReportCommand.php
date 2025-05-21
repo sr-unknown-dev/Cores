@@ -68,7 +68,7 @@ class ReportCommand extends Command
             $embed->setTitle("New Report");
             $embed->setColor(0xD87200);
             $embed->setDescription("``👮Name:`` ".$name."\n``Reason:`` ".$reason."\n``Reported by:`` ".$sender->getName());
-            $embed->setFooter("Report Xiao");
+            $embed->setFooter("Report kitmap");
             $msg->setContent("<@&1184267327538212924>");
             $msg->addEmbed($embed);
 

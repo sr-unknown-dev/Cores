@@ -10,8 +10,8 @@ use hcf\kits\Extreme;
 use hcf\kits\Leviathan;
 use hcf\kits\RogueOp;
 use hcf\kits\Supreme;
-use hcf\kits\Xiao;
-use hcf\kits\XiaoPlus;
+use hcf\kits\hcf;
+use hcf\kits\hcfPlus;
 use hcf\player\Player;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
@@ -32,11 +32,11 @@ class PortableKitsCommand extends Command{
 
         if ($sender instanceof Player) {
         switch ($args[0]) {
-            case 'Xiao+':
-                Factory::XiaoPlus($sender);
+            case 'hcf+':
+                Factory::hcfPlus($sender);
                 break;
-            case 'Xiao':
-                Factory::Xiao($sender);
+            case 'hcf':
+                Factory::hcf($sender);
                 break;
             case 'leviathan':
                 Factory::Leviathan($sender);

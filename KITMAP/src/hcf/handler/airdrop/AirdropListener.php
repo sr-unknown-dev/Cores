@@ -15,54 +15,66 @@ use pocketmine\world\sound\ExplodeSound;
 
 class AirdropListener implements Listener
 {
-    public function handlePlace(BlockPlaceEvent $event): void{
+    public function handlePlace(BlockPlaceEvent $event): void
+    {
         $item = $event->getItem();
+
+        if (!$item->getNamedTag()->getTag("Airdrop_Item") ||
+            $item->getNamedTag()->getString("Airdrop_Item") !== "Airdrop") {
+            return;
+        }
+
         $player = $event->getPlayer();
         $targetBlock = $player->getTargetBlock(3);
         $location = $targetBlock->getPosition();
 
-        if (AirdropManager::getAirdrop()->getItems() === null){
-            $player->sendMessage(TextFormat::RED."No se puedo colocar el airdrop, avisa a un staff o owner para que solucione el problema");
+        $airdropItems = AirdropManager::getAirdrop()->getItems();
+        if ($airdropItems === null) {
+            $player->sendMessage(TextFormat::RED . "No se pudo colocar el airdrop, avisa a un staff o owner para que solucione el problema");
             return;
         }
 
-        if ($item->getNamedTag()->getTag("Airdrop_Item") && $item->getNamedTag()->getString("Airdrop_Item") === "Airdrop"){
-            $chestPos = $location->add(0, 1, 0);
-            $player->getWorld()->setBlock($chestPos, VanillaBlocks::CHEST());
-            $location->getWorld()->addSound($chestPos, new ExplodeSound());
-            $location->getWorld()->addParticle($chestPos, new ExplodeParticle());
-            $tile = $player->getWorld()->getTile($chestPos);
+        $chestPos = $location->add(0, 1, 0);
+        $world = $player->getWorld();
 
-            if ($tile instanceof Chest) {
-                $inventory = $tile->getInventory();
-                for ($i=0; $i < 27; $i++){
-                    $items = AirdropManager::getAirdrop()->getRandomItems();
+        $world->setBlock($chestPos, VanillaBlocks::CHEST());
 
-                    if ($items !== null){
-                        $inventory->setItem($i, $items);
-                        $tile->setName("§l§3Airdrop");
-                    }
+        $world->addSound($chestPos, new ExplodeSound());
+        $world->addParticle($chestPos, new ExplodeParticle());
 
-                    $item = $event->getItem();
-                    $item->pop();
-                    $player->getInventory()->setItemInHand($item);
-                }
+        $tile = $world->getTile($chestPos);
 
-                $world = $player->getWorld();
-                $TextPosition = $chestPos->add(0.5, 1.5, 0.5);
-                $floatingText = new FloatingTextParticle("§l§3Airdrop", "");
-                $world->addParticle($TextPosition, $floatingText);
+        if (!($tile instanceof Chest)) {
+            $player->sendMessage(TextFormat::RED . "No se pudo colocar el airdrop");
+            return;
+        }
 
-                Loader::getInstance()->getScheduler()->scheduleDelayedTask(new ClosureTask(function() use ($world, $TextPosition, $floatingText): void {
-                    $floatingText->setText("");
-                    $floatingText->setTitle("");
-                    $world->addParticle($TextPosition, $floatingText);
-                }), 120);
-                $event->cancel();
-            }else{
-                $player->sendMessage(TextFormat::RED."No se pudo colocar el airdrop");
+        $inventory = $tile->getInventory();
+        $items = [];
+        for ($i = 0; $i < 27; $i++) {
+            $randomItem = AirdropManager::getAirdrop()->getRandomItems();
+            if ($randomItem !== null) {
+                $items[$i] = $randomItem;
             }
-            return;
         }
+        $inventory->setContents($items);
+        $tile->setName("§l§3Airdrop");
+
+        $item->pop();
+        $player->getInventory()->setItemInHand($item);
+
+        $TextPosition = $chestPos->add(0.5, 1.5, 0.5);
+        $floatingText = new FloatingTextParticle("§l§3Airdrop", "");
+        $world->addParticle($TextPosition, $floatingText);
+
+        Loader::getInstance()->getScheduler()->scheduleDelayedTask(new ClosureTask(
+            function () use ($world, $TextPosition, $floatingText): void {
+                $floatingText->setText("");
+                $floatingText->setTitle("");
+                $world->addParticle($TextPosition, $floatingText);
+            }
+        ), 120);
+
+        $event->cancel();
     }
 }

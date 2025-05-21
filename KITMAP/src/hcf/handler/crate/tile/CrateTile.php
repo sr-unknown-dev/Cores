@@ -252,7 +252,7 @@ class CrateTile extends ShulkerBox
                     if ($crate !== null) {
                         $textPos = $this->getPosition()->add(0.5, 1.1, 0.5);
                         if (isset($crate->floatingTexts[$textPos->__toString()])) {
-                            $crate->floatingTexts[$textPos->__toString()]->setNameTag(TextFormat::colorize($crate->getNameFormat() . " Crate\n" . "\n&7Left click to view crate rewards.\n". "&7Right click to open the crate.\n\n&gXiao.tebex.io"));
+                            $crate->floatingTexts[$textPos->__toString()]->setNameTag(TextFormat::colorize($crate->getNameFormat() . " Crate\n" . "\n&7Left click to view crate rewards.\n". "&7Right click to open the crate.\n\n&gkitmap.tebex.io"));
                         }
                         $player->sendMessage(TextFormat::colorize('&aThe text of the crate ' . $this->getCrateName() . ' has been updated'));
                     } else $player->sendMessage(TextFormat::colorize('&cThere is no crate that is defined in the Tile'));

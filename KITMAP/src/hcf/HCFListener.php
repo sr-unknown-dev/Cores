@@ -7,25 +7,23 @@ namespace hcf;
 use CortexPE\DiscordWebhookAPI\Message;
 use CortexPE\DiscordWebhookAPI\Webhook;
 use hcf\anticheat\DataBase;
-use hcf\handler\airdrop\AirdropManager;
-use hcf\Server\ChatCooldown;
-use hcf\Tasks\ChatTask;
-use hcf\Tasks\ThorTask;
-use pocketmine\block\tile\Chest;
-use pocketmine\block\VanillaBlocks;
 use hcf\entity\default\EnderpearlEntity;
 use hcf\item\Fireworks;
 use hcf\player\Player;
+use hcf\StaffMode\Chat;
+use hcf\Tasks\ChatTask;
 use partneritems\type\SurprisePresent;
 use pocketmine\block\tile\Sign;
 use pocketmine\block\Water;
 use pocketmine\entity\Location;
+use pocketmine\event\block\PlayerBucketEmptyEvent;
 use pocketmine\event\entity\EntityDamageByChildEntityEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityItemPickupEvent;
 use pocketmine\event\entity\ProjectileLaunchEvent;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerBucketEmptyEvent as PlayerPlayerBucketEmptyEvent;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerCreationEvent;
 use pocketmine\event\player\PlayerDeathEvent;
@@ -45,24 +43,7 @@ use pocketmine\item\Shovel;
 use pocketmine\item\Tool;
 use pocketmine\item\VanillaItems;
 use pocketmine\utils\TextFormat;
-use pocketmine\world\particle\ExplodeParticle;
-use pocketmine\world\particle\FloatingTextParticle;
-use pocketmine\world\sound\ExplodeSound;
 use pocketmine\world\sound\ThrowSound;
-use pocketmine\event\block\PlayerBucketEmptyEvent;
-use hcf\Server\Nick;
-use hcf\StaffMode\Chat;
-use IvanCraft623\RankSystem\rank\Rank;
-use IvanCraft623\RankSystem\rank\RankManager;
-use IvanCraft623\RankSystem\RankSystem;
-use IvanCraft623\RankSystem\session\RankWrapper;
-use pocketmine\event\block\BlockPlaceEvent;
-use pocketmine\event\player\PlayerBucketEmptyEvent as PlayerPlayerBucketEmptyEvent;
-use pocketmine\scheduler\ClosureTask;
-use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\nbt\tag\DoubleTag;
-use pocketmine\nbt\tag\FloatTag;
-use pocketmine\nbt\tag\ListTag;
 
 class HCFListener implements Listener
 {
@@ -209,8 +190,8 @@ class HCFListener implements Listener
 
                 if (Loader::getInstance()->getTimerManager()->getDeath()->isActive()) {
                     $damagerName = $damager->getName();
-                    $Xiao = Loader::getInstance()->getHandlerManager()->getCrateManager()->getCrate("Xiao");
-                    $Xiao->giveKey($player, 10);
+                    $kitmap = Loader::getInstance()->getHandlerManager()->getCrateManager()->getCrate("kitmap");
+                    $kitmap->giveKey($player, 10);
                 }
 
                 if ($damager->getSession()->getKillStreak() > $damager->getSession()->getHighestKillStreak())
@@ -412,7 +393,6 @@ class HCFListener implements Listener
             return;
         }
 
-        // Integramos la verificación del evento de vaciado de agua del segundo código
         if ($event instanceof PlayerPlayerBucketEmptyEvent) {
             $claim = Loader::getInstance()->getClaimManager()->insideClaim($block->getPosition());
 
@@ -500,7 +480,6 @@ class HCFListener implements Listener
             Loader::getInstance()->getSessionManager()->addSession($player->getXuid(), [
                 'name' => $player->getName(),
                 'faction' => null,
-                'prefix' => null,
                 'balance' => 0,
                 'crystals' => 0,
                 'cooldowns' => [],
@@ -544,10 +523,8 @@ class HCFListener implements Listener
             if ($player->getCurrentClaim() !== null) {
                 $claim = Loader::getInstance()->getClaimManager()->getClaim($player->getCurrentClaim());
             } else {
-                // Asegurarse de que la entidad de desconexión se agregue correctamente
                 $disconnectedManager->addDisconnected($player);
                 if ($disconnectedManager->getDisconnected($player->getXuid()) === null) {
-                    // Intentar agregar la entidad de nuevo si no se agregó correctamente
                     $disconnectedManager->addDisconnected($player);
                 }
             }

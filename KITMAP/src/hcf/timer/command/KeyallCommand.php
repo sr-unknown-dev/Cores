@@ -59,7 +59,7 @@ class KeyallCommand extends Command {
                 $sender->sendMessage("§aKeyall has started");
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7███&a█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7██&a█&7██ &r&7[&2&lXiao &l&aKEYALL&r&7]"));
+                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7██&a█&7██ &r&7[&2&lkitmap &l&aKEYALL&r&7]"));
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a███&7███ &r&aKeyall &ghas starter for: &f".Timer::Format($time)));
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7██&a█&7██ "));
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7███&a█&7█"));
@@ -71,9 +71,9 @@ class KeyallCommand extends Command {
                 $embed = new Embed();
                 $embed->setTitle("Keyall has started");
                 $embed->setColor(0xf9ff1a);
-                $embed->setDescription("⏳Time: ".Timer::Format($time)."\nIp: Xiaohcf.ddns.net\nPort: 25576\nStore: https://Xiao.tebex.io/");
+                $embed->setDescription("⏳Time: ".Timer::Format($time)."\nIp: kitmap.ddns.net\nPort: 25576\nStore: https://kitmap.tebex.io/");
          
-                $embed->setFooter("XiaoHCF");
+                $embed->setFooter("kitmap");
                 $msg->addEmbed($embed);
                 
                 $webHook->send($msg);

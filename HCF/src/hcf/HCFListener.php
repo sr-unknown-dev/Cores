@@ -190,8 +190,8 @@ class HCFListener implements Listener
 
                 if (Loader::getInstance()->getTimerManager()->getDeath()->isActive()) {
                     $damagerName = $damager->getName();
-                    $Xiao = Loader::getInstance()->getHandlerManager()->getCrateManager()->getCrate("Xiao");
-                    $Xiao->giveKey($player, 10);
+                    $hcf = Loader::getInstance()->getHandlerManager()->getCrateManager()->getCrate("hcf");
+                    $hcf->giveKey($player, 10);
                 }
 
                 if ($damager->getSession()->getKillStreak() > $damager->getSession()->getHighestKillStreak())
@@ -393,7 +393,6 @@ class HCFListener implements Listener
             return;
         }
 
-        // Integramos la verificación del evento de vaciado de agua del segundo código
         if ($event instanceof PlayerPlayerBucketEmptyEvent) {
             $claim = Loader::getInstance()->getClaimManager()->insideClaim($block->getPosition());
 
@@ -524,10 +523,8 @@ class HCFListener implements Listener
             if ($player->getCurrentClaim() !== null) {
                 $claim = Loader::getInstance()->getClaimManager()->getClaim($player->getCurrentClaim());
             } else {
-                // Asegurarse de que la entidad de desconexión se agregue correctamente
                 $disconnectedManager->addDisconnected($player);
                 if ($disconnectedManager->getDisconnected($player->getXuid()) === null) {
-                    // Intentar agregar la entidad de nuevo si no se agregó correctamente
                     $disconnectedManager->addDisconnected($player);
                 }
             }

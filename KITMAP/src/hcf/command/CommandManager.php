@@ -9,7 +9,6 @@ use hcf\command\moderador\CooldownCommand as ModeradorCooldownCommand;
 use hcf\command\moderador\EnchantAllCommand;
 use hcf\command\moderador\GiveMoneyCommand;
 use hcf\command\moderador\GodCommand;
-use hcf\command\moderador\kitsnpc\KitNPCCommand;
 use hcf\command\moderador\NickCommand;
 use hcf\command\moderador\PortableKitsCommand;
 use hcf\command\moderador\TpallCommand;
@@ -62,7 +61,6 @@ class CommandManager
             new NickCommand(),
             new ModeradorCooldownCommand(),
             new EnchantAllCommand(),
-            new KitNPCCommand(),
         ]);
     }
 }

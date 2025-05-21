@@ -61,6 +61,7 @@ abstract class HCFClass
             $inventory->getChestplate()->getTypeId() === $items[1]->getTypeId() and
             $inventory->getLeggings()->getTypeId() === $items[2]->getTypeId() and
             $inventory->getBoots()->getTypeId() === $items[3]->getTypeId())
+
             return true;
         return false;
     }
@@ -108,42 +109,90 @@ abstract class HCFClass
     {
         if (!$this->isActive($player)) {
             $player->setClass(null);
-            
-            if ($this->getTypeId() === self::BARD) {
-                if ($player->getSession()->getEnergy('bard.energy') !== null)
-                    $player->getSession()->removeEnergy('bard.energy');
+
+            switch ($this->getTypeId()) {
+                case self::ARCHER:
+                    if (ClassScoreboard::isArcher($player->getName())) {
+                        ClassScoreboard::removeArcher($player->getName());
+                    }
+                    break;
+                case self::BARD:
+                    if (ClassScoreboard::isBard($player->getName())) {
+                        ClassScoreboard::removeBard($player->getName());
+                    }
+                    if ($player->getSession()->getEnergy('bard.energy') !== null) {
+                        $player->getSession()->removeEnergy('bard.energy');
+                    }
+                    break;
+                case self::MAGE:
+                    if (ClassScoreboard::isMage($player->getName())) {
+                        ClassScoreboard::removeMage($player->getName());
+                    }
+                    if ($player->getSession()->getEnergy('mage.energy') !== null) {
+                        $player->getSession()->removeEnergy('mage.energy');
+                    }
+                    break;
+                case self::MINER:
+                    if (ClassScoreboard::isMiner($player->getName())) {
+                        ClassScoreboard::removeMiner($player->getName());
+                    }
+                    break;
+                case self::ROGUE:
+                    if (ClassScoreboard::isRogue($player->getName())) {
+                        ClassScoreboard::removeRogue($player->getName());
+                    }
+                    break;
             }
-            
-            if ($this->getTypeId() === self::MAGE) {
-                if ($player->getSession()->getEnergy('mage.energy') !== null)
-                    $player->getSession()->removeEnergy('mage.energy');
-            }
+
             return;
         }
-        
-        foreach($this->getEffects() as $effect)
+
+        if ($player->getClass() === null) {
+            $player->setClass($this);
+
+            switch ($this->getTypeId()) {
+                case self::ARCHER:
+                    if (!ClassScoreboard::isArcher($player->getName())) {
+                        ClassScoreboard::setArcher($player->getName());
+                    }
+                    break;
+                case self::BARD:
+                    if (!ClassScoreboard::isBard($player->getName())) {
+                        ClassScoreboard::setBard($player->getName());
+                    }
+                    break;
+                case self::MAGE:
+                    if (!ClassScoreboard::isMage($player->getName())) {
+                        ClassScoreboard::setMage($player->getName());
+                    }
+                    break;
+                case self::MINER:
+                    if (!ClassScoreboard::isMiner($player->getName())) {
+                        ClassScoreboard::setMiner($player->getName());
+                    }
+                    break;
+                case self::ROGUE:
+                    if (!ClassScoreboard::isRogue($player->getName())) {
+                        ClassScoreboard::setRogue($player->getName());
+                    }
+                    break;
+            }
+        }
+
+        foreach ($this->getEffects() as $effect) {
             $player->getEffects()->add($effect);
+        }
 
         if ($this->getTypeId() === self::BARD) {
-            if ($player->getSession()->getEnergy('bard.energy') === null ) {
+            if ($player->getSession()->getEnergy('bard.energy') === null) {
                 $player->getSession()->addEnergy('bard.energy', '&l&9Bard Energy&r&7: &r&c');
-            }
-            
-            if ($player->getSession()->getEnergy('bard.energy')->getEnergy() >= 120 ) {
-                // $player->getSession()->getEnergy('bard.energy')->setPaused(true);
-                return;
             }
             $player->getSession()->getEnergy('bard.energy')->update();
         }
-        
+
         if ($this->getTypeId() === self::MAGE) {
-            if ($player->getSession()->getEnergy('mage.energy') === null ) {
+            if ($player->getSession()->getEnergy('mage.energy') === null) {
                 $player->getSession()->addEnergy('mage.energy', '&l&1Mage Energy&r&7: &r&c');
-            }
-            
-            if ($player->getSession()->getEnergy('mage.energy')->getEnergy() >= 120 ) {
-                // $player->getSession()->getEnergy('bard.energy')->setPaused(true);
-                return;
             }
             $player->getSession()->getEnergy('mage.energy')->update();
         }

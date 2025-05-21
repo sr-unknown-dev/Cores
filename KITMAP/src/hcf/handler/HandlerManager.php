@@ -9,6 +9,7 @@ use hcf\handler\kit\op\KitManagerOp;
 use hcf\handler\kit\pay\KitManagerPay;
 use hcf\handler\KnockBack\KnockBackManager;
 use hcf\handler\package\PackageManager;
+use hcf\handler\prefix\manager\PrefixManager;
 use hcf\handler\reclaim\ReclaimManager;
 use hcf\handler\rollback\RollbackListener;
 use hcf\handler\rollback\RollbackManager;
@@ -24,6 +25,7 @@ class HandlerManager {
     public AirdropManager $airdropManager;
     public ReclaimManager $reclaimManager;
     public KitManagerOp $kitManagerOp;
+    public PrefixManager $prefixManager;
 
     public function __construct(){
         $this->kitManager = new KitManager;
@@ -33,6 +35,15 @@ class HandlerManager {
         $this->packageManager = new PackageManager;
         $this->airdropManager = new AirdropManager;
         $this->reclaimManager = new ReclaimManager;
+        $this->prefixManager = new PrefixManager;
+    }
+
+    /**
+     * @return PrefixManager
+     */
+    public function getPrefixManager(): PrefixManager
+    {
+        return $this->prefixManager;
     }
 
     public function getKitManager(): KitManager {

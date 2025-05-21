@@ -24,7 +24,6 @@ class Session
     /** @var string|null */
     private ?string $faction = null;
 
-    private ?string $prefix = null;
 
     /** @var int */
     private int $balance;
@@ -70,7 +69,6 @@ class Session
         if ($data['faction'] !== null && Loader::getInstance()->getFactionManager()->getFaction($data['faction']) !== null)
             $this->faction = $data['faction'];
 
-        $this->prefix = $data['prefix'];
 
         $this->balance = (int) $data['balance'];
         $this->crystals = (int) $data['crystals'];
@@ -134,11 +132,6 @@ class Session
     public function getFaction(): ?string
     {
         return $this->faction;
-    }
-
-    public function getPrefix(): ?string
-    {
-        return $this->prefix;
     }
 
     /**
@@ -267,11 +260,6 @@ class Session
     public function setFaction(?string $factionName): void
     {
         $this->faction = $factionName;
-    }
-
-    public function setPrefix(?string $prefixName): void
-    {
-        $this->prefix = $prefixName;
     }
 
     /**
@@ -429,7 +417,6 @@ class Session
         $data = [
             'name' => $this->getName(),
             'faction' => $this->getFaction(),
-            'prefix' => $this->getPrefix(),
             'balance' => $this->getBalance(),
             'crystals' => $this->getCrystals(),
             'cooldowns' => [],

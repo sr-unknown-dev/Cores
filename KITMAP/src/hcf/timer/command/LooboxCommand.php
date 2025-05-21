@@ -64,7 +64,7 @@ class LooboxCommand extends Command {
 				$sender->sendMessage("§aLootbox All has been started");
 				Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&5███&7█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7██&5█&7██ &r&7[&2&lXiao &l&bLootboxAll&r&7]"));
+                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7██&5█&7██ &r&7[&2&lkitmap &l&bLootboxAll&r&7]"));
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&5██&5█&7██ &r&5Ppall &ghas starter for: &f".Timer::Format($time)));
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7███&7█&7█"));
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7███&7█&7█"));
@@ -75,9 +75,9 @@ class LooboxCommand extends Command {
 				$embed = new Embed();
 				$embed->setTitle("LootboxAll has started");
 				$embed->setColor(0xf9ff1a);
-				$embed->setDescription("⏳Time: ".Timer::Format($time)."\nIp: Xiaohcf.ddns.net\nPort: 25576\nStore: https://Xiao.tebex.io/");
+				$embed->setDescription("⏳Time: ".Timer::Format($time)."\nIp: kitmap.ddns.net\nPort: 25576\nStore: https://kitmap.tebex.io/");
 
-				$embed->setFooter("XiaoHCF");
+				$embed->setFooter("kitmap");
 				$msg->addEmbed($embed);
 
 				$webHook->send($msg);

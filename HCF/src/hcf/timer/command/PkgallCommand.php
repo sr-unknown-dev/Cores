@@ -64,7 +64,7 @@ class PkgallCommand extends Command {
 				$sender->sendMessage("§aPPALL has been started");
 				Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&5███&7█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7██&5█&7██ &r&7[&2&lXiao &l&5PPALL&r&7]"));
+                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7██&5█&7██ &r&7[&2&lhcf &l&5PPALL&r&7]"));
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&5██&5█&7██ &r&5Ppall &ghas starter for: &f".Timer::Format($time)));
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7███&7█&7█"));
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7███&7█&7█"));
@@ -75,9 +75,9 @@ class PkgallCommand extends Command {
 				$embed = new Embed();
 				$embed->setTitle("PPALL has started");
 				$embed->setColor(0xf9ff1a);
-				$embed->setDescription("⏳Time: ".Timer::Format($time)."\nIp: nd-3.hydrahost.fun\nPort: 25576\nStore: https://Xiao.tebex.io/");
+				$embed->setDescription("⏳Time: ".Timer::Format($time)."\nIp: nd-3.hydrahost.fun\nPort: 25576\nStore: https://hcf.tebex.io/");
 
-				$embed->setFooter("XiaoHCF");
+				$embed->setFooter("hcf");
 				$msg->addEmbed($embed);
 
 				$webHook->send($msg);

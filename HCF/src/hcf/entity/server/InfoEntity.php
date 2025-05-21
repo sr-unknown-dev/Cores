@@ -74,7 +74,7 @@ class InfoEntity extends Human
     public function onUpdate(int $currentTick): bool
     {
         $text = TextFormat::colorize(Loader::getInstance()->getConfig()->get('server') . " &r&7; &l&fHCF&r\n");
-        $line = TextFormat::colorize("\n\n&l&bMap Information&r\n\n&fProtection 3 Sharpnes 3\n\n&7Members for faction: &f10\n\n&7F TOP 1: &7x1 Rank &2&lXiao (8d)\n\n".Loader::getInstance()->getConfig()->get('ip')."  ".Loader::getInstance()->getConfig()->get('port'));
+        $line = TextFormat::colorize("\n\n&l&bMap Information&r\n\n&fProtection 3 Sharpnes 3\n\n&7Members for faction: &f10\n\n&7F TOP 1: &7x1 Rank &2&lhcf (8d)\n\n".Loader::getInstance()->getConfig()->get('ip')."  ".Loader::getInstance()->getConfig()->get('port'));
         $text .= $line;
 
         $this->setNameTagAlwaysVisible(true);

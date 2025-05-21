@@ -185,7 +185,7 @@ final class Inventories
                     $player->sendMessage(TE::colorize("&aKeyall has starter"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7███&a█&7█"));
-                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7██&a█&7██ &r&7[&2&lXiao &l&aKEYALL&r&7]"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7██&a█&7██ &r&7[&2&lhcf &l&aKEYALL&r&7]"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a███&7███ &r&aKeyall &ghas starter for: &f" . Timer::Format($time)));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7██&a█&7██ "));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7███&a█&7█"));
@@ -197,9 +197,9 @@ final class Inventories
                     $embed = new Embed();
                     $embed->setTitle("KeyAll has started");
                     $embed->setColor(0xf9ff1a);
-                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: hcf.ddns.net\nPort: 19120\nStore: https://hcf.tebex.io/");
 
-                    $embed->setFooter("Xiao Network");
+                    $embed->setFooter("hcf Network");
                     $msg->addEmbed($embed);
 
                     $webHook->send($msg);
@@ -209,7 +209,7 @@ final class Inventories
                     $player->sendMessage(TE::colorize("&9OpKeyall &ahas starter"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7███&3█&7█"));
-                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7██&3█&7██ &r&7[&2&lXiao &l&3OPKYEALL&r&7]"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7██&3█&7██ &r&7[&2&lhcf &l&3OPKYEALL&r&7]"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3███&7███ &r&3OpKeyall &ghas starter for: &f" . Timer::Format($time)));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7██&3█&7██ "));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7███&3█&7█"));
@@ -222,9 +222,9 @@ final class Inventories
                     $embed = new Embed();
                     $embed->setTitle("OpKeyAll has started");
                     $embed->setColor(0xf9ff1a);
-                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: hcf.ddns.net\nPort: 19120\nStore: https://hcf.tebex.io/");
 
-                    $embed->setFooter("Xiao Network");
+                    $embed->setFooter("hcf Network");
                     $msg->addEmbed($embed);
 
                     $webHook->send($msg);
@@ -238,9 +238,9 @@ final class Inventories
                     $embed = new Embed();
                     $embed->setTitle("AirdropAll has started");
                     $embed->setColor(0xf9ff1a);
-                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: hcf.ddns.net\nPort: 19120\nStore: https://hcf.tebex.io/");
 
-                    $embed->setFooter("Xiao Network");
+                    $embed->setFooter("hcf Network");
                     $msg->addEmbed($embed);
 
                     $webHook->send($msg);
@@ -250,7 +250,7 @@ final class Inventories
                     $player->sendMessage(TE::colorize("&5Pkgall &ahas starter"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&5███&7█&7█"));
-                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7██&5█&7██ &r&7[&2&lXiao &l&5PPALL&r&7]"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7██&5█&7██ &r&7[&2&lhcf &l&5PPALL&r&7]"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&5██&5█&7██ &r&5Ppall &ghas starter for: &f" . Timer::Format($time)));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7███&7█&7█"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&5█&7███&7█&7█"));
@@ -261,9 +261,9 @@ final class Inventories
                     $embed = new Embed();
                     $embed->setTitle("PkgAll has started");
                     $embed->setColor(0xf9ff1a);
-                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: hcf.ddns.net\nPort: 19120\nStore: https://hcf.tebex.io/");
 
-                    $embed->setFooter("Xiao Network");
+                    $embed->setFooter("hcf Network");
                     $msg->addEmbed($embed);
 
                     $webHook->send($msg);
@@ -277,9 +277,9 @@ final class Inventories
                     $embed = new Embed();
                     $embed->setTitle("MysteryAll has started");
                     $embed->setColor(0xf9ff1a);
-                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: hcf.ddns.net\nPort: 19120\nStore: https://hcf.tebex.io/");
 
-                    $embed->setFooter("Xiao Network");
+                    $embed->setFooter("hcf Network");
                     $msg->addEmbed($embed);
 
                     $webHook->send($msg);
@@ -293,9 +293,9 @@ final class Inventories
                     $embed = new Embed();
                     $embed->setTitle("LootboxAll has started");
                     $embed->setColor(0xf9ff1a);
-                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: hcf.ddns.net\nPort: 19120\nStore: https://hcf.tebex.io/");
 
-                    $embed->setFooter("Xiao Network");
+                    $embed->setFooter("hcf Network");
                     $msg->addEmbed($embed);
 
                     $webHook->send($msg);
@@ -345,7 +345,7 @@ final class Inventories
                     $player->sendMessage(TE::colorize("&4Eotw &ahas starter"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█████&7█"));
-                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7██&7█&7██ &r&7[&2&lXiao &l&4EOTW&r&7]"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7██&7█&7██ &r&7[&2&lhcf &l&4EOTW&r&7]"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█████&7█ &r&4EOTW &ghas starter for: &f" . Timer::Format($time)));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7██&7█&7██ "));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7███&7█&7█"));
@@ -357,7 +357,7 @@ final class Inventories
                     $embed = new Embed();
                     $embed->setTitle("Eotw Start");
                     $embed->setColor(0xf9ff1a);
-                    $embed->setDescription("⏳ Duration: " . Timer::Format($time) . "\n⏳ Purge Durarion: 20m\nIp: \nStore: https://Xiao.tebex.io/");
+                    $embed->setDescription("⏳ Duration: " . Timer::Format($time) . "\n⏳ Purge Durarion: 20m\nIp: \nStore: https://hcf.tebex.io/");
 
                     $embed->setFooter("HCF");
                     $msg->addEmbed($embed);
@@ -372,7 +372,7 @@ final class Inventories
                     $player->sendMessage(TE::colorize("&4Purge &ahas starter"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&4███&7█&7█"));
-                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7██&4█&7██ &r&7[&2&lXiao &l&4PURGE&r&7]"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7██&4█&7██ &r&7[&2&lhcf &l&4PURGE&r&7]"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&4██&4█&7██ &r&4Purge &ghas starter for: &f" . Timer::Format($time)));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7███&7█&7█"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&4█&7███&7█&7█"));
@@ -383,7 +383,7 @@ final class Inventories
                     $embed = new Embed();
                     $embed->setTitle("Purge Start");
                     $embed->setColor(0xf9ff1a);
-                    $embed->setDescription("⏳ Duration: " . Timer::Format($time) . "\n\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                    $embed->setDescription("⏳ Duration: " . Timer::Format($time) . "\n\nIp: hcf.ddns.net\nPort: 19120\nStore: https://hcf.tebex.io/");
 
                     $embed->setFooter("HCF");
                     $msg->addEmbed($embed);
@@ -399,9 +399,9 @@ final class Inventories
                     $embed = new Embed();
                     $embed->setTitle("Death has started");
                     $embed->setColor(0xf9ff1a);
-                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: hcf.ddns.net\nPort: 19120\nStore: https://hcf.tebex.io/");
 
-                    $embed->setFooter("Xiao Network");
+                    $embed->setFooter("hcf Network");
                     $msg->addEmbed($embed);
 
                     $webHook->send($msg);
@@ -417,9 +417,9 @@ final class Inventories
                     $embed = new Embed();
                     $embed->setTitle("X2Points has started");
                     $embed->setColor(0xf9ff1a);
-                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\n\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\n\nIp: hcf.ddns.net\nPort: 19120\nStore: https://hcf.tebex.io/");
 
-                    $embed->setFooter("Xiao Network");
+                    $embed->setFooter("hcf Network");
                     $msg->addEmbed($embed);
 
                     $webHook->send($msg);
@@ -431,7 +431,7 @@ final class Inventories
                     $player->sendMessage("§aFFA has been started");
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&a███&a█&7█"));
-                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7██&7█&7██ &r&7[&2&lXiao &l&aFFA&r&7]"));
+                    Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7██&7█&7██ &r&7[&2&lhcf &l&aFFA&r&7]"));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a███&a█&7██ &r&aFFA &ghas starter for: &f" . Timer::Format($time)));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7██&7█&7██ "));
                     Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&a█&7███&7█&7█"));
@@ -443,9 +443,9 @@ final class Inventories
                     $embed = new Embed();
                     $embed->setTitle("FFA has started");
                     $embed->setColor(0xf9ff1a);
-                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: Xiao.ddns.net\nPort: 19120\nStore: https://Xiao.tebex.io/");
+                    $embed->setDescription("⏳Time: " . Timer::Format($time) . "\nIp: hcf.ddns.net\nPort: 19120\nStore: https://hcf.tebex.io/");
 
-                    $embed->setFooter("Xiao Network");
+                    $embed->setFooter("hcf Network");
                     $msg->addEmbed($embed);
 
                     $webHook->send($msg);
@@ -535,8 +535,8 @@ final class Inventories
     public static function PortableKits(Player $player): void
     {
         $menu = InvMenu::create(InvMenu::TYPE_DOUBLE_CHEST);
-        $menu->getInventory()->setItem(4, new XiaoPlus);
-        $menu->getInventory()->setItem(11, new Xiao);
+        $menu->getInventory()->setItem(4, new hcfPlus);
+        $menu->getInventory()->setItem(11, new hcf);
         $menu->getInventory()->setItem(12, new Leviathan);
         $menu->getInventory()->setItem(13, new Supreme);
         $menu->getInventory()->setItem(14, new Extreme);

@@ -63,9 +63,9 @@ class AirdropCommand extends Command {
                 $embed = new Embed();
                 $embed->setTitle("AirdropAll has started");
                 $embed->setColor(0xf9ff1a);
-                $embed->setDescription("⏳Time: ".Timer::Format($time)."\nIp: Xiaohcf.ddns.net\nPort: 25576\nStore: https://Xiao.tebex.io/");
+                $embed->setDescription("⏳Time: ".Timer::Format($time)."\nIp: kitmap.ddns.net\nPort: 25576\nStore: https://kitmap.tebex.io/");
          
-                $embed->setFooter("XiaoHCF");
+                $embed->setFooter("kitmap");
                 $msg->addEmbed($embed);
                 
                 $webHook->send($msg);

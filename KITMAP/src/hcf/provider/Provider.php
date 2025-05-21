@@ -31,9 +31,6 @@ class Provider
 
         if (!is_dir($plugin->getDataFolder() . 'database' . DIRECTORY_SEPARATOR . 'factions'))
             @mkdir($plugin->getDataFolder() . 'database' . DIRECTORY_SEPARATOR . 'factions');
-        
-        if (!is_dir($plugin->getDataFolder() . 'database' . DIRECTORY_SEPARATOR . 'prefixes'))
-            @mkdir($plugin->getDataFolder() . 'database' . DIRECTORY_SEPARATOR . 'prefixes');
 
         # Save default config
         $plugin->saveDefaultConfig();
@@ -54,7 +51,6 @@ class Provider
     public function save(): void {
         $this->savePlayers();
         $this->saveFactions();
-        $this->savePrefixes();
         $this->saveKoths();
         $this->saveClaims();
         $this->saveKits();
@@ -207,15 +203,6 @@ class Provider
             $factions[basename($file, '.yml')] = (new Config(Loader::getInstance()->getDataFolder() . 'database' . DIRECTORY_SEPARATOR . 'factions' . DIRECTORY_SEPARATOR . basename($file), Config::YAML))->getAll();
         return $factions;
     }
-    
-    public function getPrefixes(): array
-    {
-        $prefixes = [];
-
-        foreach (glob(Loader::getInstance()->getDataFolder() . 'database' . DIRECTORY_SEPARATOR . 'prefixes' . DIRECTORY_SEPARATOR . '*.yml') as $file)
-            $prefixes[basename($file, '.yml')] = (new Config(Loader::getInstance()->getDataFolder() . 'database' . DIRECTORY_SEPARATOR . 'prefixes' . DIRECTORY_SEPARATOR . basename($file), Config::YAML))->getAll();
-        return $prefixes;
-    }
 
 
     /**
@@ -358,15 +345,6 @@ class Provider
         foreach (Loader::getInstance()->getFactionManager()->getFactions() as $name => $faction) {
             $config = new Config(Loader::getInstance()->getDataFolder() . 'database' . DIRECTORY_SEPARATOR . 'factions' . DIRECTORY_SEPARATOR . $name . '.yml', Config::YAML);
             $config->setAll($faction->getData());
-            $config->save();
-        }
-    }
-    
-    public function savePrefixes(): void
-    {
-        foreach (Loader::getInstance()->getPrefixManager()->getPrefixes() as $name => $prefix) {
-            $config = new Config(Loader::getInstance()->getDataFolder() . 'database' . DIRECTORY_SEPARATOR . 'prefixes' . DIRECTORY_SEPARATOR . $name . '.yml', Config::YAML);
-            $config->setAll($prefix->getData());
             $config->save();
         }
     }

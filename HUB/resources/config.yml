@@ -26,8 +26,8 @@ player-join: "&a{player} &7join the server"
 player-quit: "&4{player} &7quit the server"
 
 database:
-  host: "buf5w3dduwoovwsdpzeh-mysql.services.clever-cloud.com"
-  username: "uztblh187mfyfccj"
-  password: "RuQkxYWPgbjpeD6DmIBJ"
-  database: "buf5w3dduwoovwsdpzeh"
-  port: 3306
+  host: ""
+  username: ""
+  password: ""
+  database: ""
+  port: 

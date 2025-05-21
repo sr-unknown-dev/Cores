@@ -60,7 +60,7 @@ class KeyallopCommand extends Command {
                 $sender->sendMessage("§aOpKeyall has started");
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7███████"));
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7███&3█&7█"));
-                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7██&3█&7██ &r&7[&2&lXiao &l&3OPKYEALL&r&7]"));
+                Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7██&3█&7██ &r&7[&2&lhcf &l&3OPKYEALL&r&7]"));
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3███&7███ &r&3OpKeyall &ghas starter for: &f".Timer::Format($time)));
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7██&3█&7██ "));
                 Loader::getInstance()->getServer()->broadcastMessage(TE::colorize("&7█&3█&7███&3█&7█"));
@@ -72,9 +72,9 @@ class KeyallopCommand extends Command {
                 $embed = new Embed();
                 $embed->setTitle("OpKeyall has started");
                 $embed->setColor(0xf9ff1a);
-                $embed->setDescription("⏳Time: ".Timer::Format($time)."\nIp: Xiaohcf.ddns.net\nPort: 25576\nStore: https://Xiao.tebex.io/");
+                $embed->setDescription("⏳Time: ".Timer::Format($time)."\nIp: hcf.ddns.net\nPort: 25576\nStore: https://hcf.tebex.io/");
          
-                $embed->setFooter("XiaoHCF");
+                $embed->setFooter("hcf");
                 $msg->addEmbed($embed);
                 
                 

@@ -7,7 +7,7 @@ namespace hcf\claim;
 use hcf\entity\EnderpearlEntity;
 use hcf\Loader;
 use hcf\player\Player;
-use hcf\Server\ClaimSe;
+use hcf\Server\ServerA;
 use pocketmine\block\Air;
 use pocketmine\block\Chest;
 use pocketmine\block\Door;
@@ -278,7 +278,7 @@ public function handleTeleport(EntityTeleportEvent $event): void
             }
         }
 
-        if (isset(ClaimSe::$claim[$player->getName()])) {
+        if (isset(ServerA::$claim[$player->getName()])) {
             if ($action === PlayerInteractEvent::LEFT_CLICK_BLOCK && $block instanceof Air && $player->isSneaking()) {
                 if (($creator = Loader::getInstance()->getClaimManager()->getCreator($player->getName())) !== null) {
                     if (!$creator->isValid()) return;
@@ -291,7 +291,7 @@ public function handleTeleport(EntityTeleportEvent $event): void
                         }
                         $faction->setBalance($balance);
                     }
-                    unset(ClaimSe::$claim[$player->getName()]);
+                    unset(ServerA::$claim[$player->getName()]);
                     $creator->deleteCorners($player);
                     Loader::getInstance()->getClaimManager()->createClaim($creator->getName(), $creator->getType(), $creator->getMinX(), $creator->getMaxX(), $creator->getMinZ(), $creator->getMaxZ(), $creator->getWorld());
                     $player->sendMessage(TextFormat::colorize('§8[§b!§8]§cYou have made the &aclaim§cthe opclaim !' . $creator->getName()));
@@ -391,7 +391,7 @@ public function handleTeleport(EntityTeleportEvent $event): void
                     }
 
                     $player->sendMessage(TextFormat::colorize('§8[§g!§8]§cYou have successfully selected the &3second §cposition.'));
-                    ClaimSe::$claim[$player->getName()] = true;
+                    ServerA::$claim[$player->getName()] = true;
 
                     if ($creator->getType() === 'faction') {
                         $player->sendMessage(TextFormat::colorize('§4» &cThe price of your claim is §a$' . $creator->calculateValue() . '. §cHit the pillar while you bend down to accept'));
