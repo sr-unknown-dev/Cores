@@ -11,9 +11,8 @@ class RankManage {
     private ?mysqli $connection = null;
 
     public function __construct() {
-
         try {
-            $config =Loader::getInstance()->getConfig();
+            $config = Loader::getInstance()->getConfig();
 
             mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
             $this->connection = new mysqli(
@@ -36,29 +35,34 @@ class RankManage {
         }
 
         try {
+            // Obtener el nombre del rango del jugador
             $stmt = $this->connection->prepare("SELECT rank_name FROM player_ranks WHERE player_name = ?");
             $stmt->bind_param("s", $playerName);
             $stmt->execute();
-            $stmt->bind_result($rank);
+            $stmt->bind_result($rankName);
+
             if ($stmt->fetch()) {
                 $stmt->close();
-                return TextFormat::colorize($this->formatRank($rank));
+
+                // Obtener el formato del rango desde la tabla ranks
+                $formatStmt = $this->connection->prepare("SELECT format FROM ranks WHERE rank_name = ?");
+                $formatStmt->bind_param("s", $rankName);
+                $formatStmt->execute();
+                $formatStmt->bind_result($format);
+
+                if ($formatStmt->fetch()) {
+                    $formatStmt->close();
+                    return TextFormat::colorize($format);
+                }
+
+                $formatStmt->close();
+            } else {
+                $stmt->close();
             }
-            $stmt->close();
         } catch (\Throwable $e) {
-            Server::getInstance()->getLogger()->warning("Error al obtener el rango de $playerName: " . $e->getMessage());
+            Server::getInstance()->getLogger()->warning("Error al obtener el formato del rango de $playerName: " . $e->getMessage());
         }
 
         return TextFormat::colorize("&7Jugador");
-    }
-
-    private function formatRank(string $rank): string {
-        return match(strtolower($rank)) {
-            "founder" => "&l&0Founder",
-            "owner" => "&l&4Owner",
-            "manager" => "&l&6Manager",
-            "default", "jugador" => "&l&aGuest",
-            default => "&f" . ucfirst($rank)
-        };
     }
 }
