@@ -21,7 +21,7 @@ class Menu
         // Crear los ítems de cada servidor
         $menu->getInventory()->setItem(10, self::createServerItem("HCF"));
         $menu->getInventory()->setItem(13, self::createServerItem("KitMap"));
-        $menu->getInventory()->setItem(16, self::createServerItem("Practice"));
+        $menu->getInventory()->setItem(16, self::createServerItem("PRACTICE"));
 
         $menu->setListener(function (InvMenuTransaction $transaction): InvMenuTransactionResult {
             $player = $transaction->getPlayer();
