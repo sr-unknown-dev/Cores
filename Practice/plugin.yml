@@ -1,0 +1,11 @@
+name: PracticeCore
+version: 0.0.1
+author: Sr_Unknown
+api: 5.0.0
+main: unknown\practice\Loader
+
+permissions:
+  player.use:
+    default: true
+  kits.commands:
+    default: op
